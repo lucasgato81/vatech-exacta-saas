@@ -1,0 +1,742 @@
+[
+  {
+    "x": 238.5,
+    "y": 778,
+    "text": "            Feedback cliente"
+  },
+  {
+    "x": 64.2,
+    "y": 770.2,
+    "text": "Data de "
+  },
+  {
+    "x": 108.7,
+    "y": 770.2,
+    "text": "2026-09-30"
+  },
+  {
+    "x": 160,
+    "y": 770.2,
+    "text": "Técnico "
+  },
+  {
+    "x": 216.8,
+    "y": 770.2,
+    "text": "Lucas Gato"
+  },
+  {
+    "x": 274.1,
+    "y": 770.2,
+    "text": "Empresa "
+  },
+  {
+    "x": 397.3,
+    "y": 770.6,
+    "text": "EXACTA MANUTENCOES"
+  },
+  {
+    "x": 52.1,
+    "y": 760.4,
+    "text": "1. Informações do Cliente"
+  },
+  {
+    "x": 56.8,
+    "y": 745.2,
+    "text": "Local/ Clínica"
+  },
+  {
+    "x": 97.5,
+    "y": 745.5,
+    "text": "SOUZA & CARVALHO ODONTOLOGIA LTDA"
+  },
+  {
+    "x": 219.7,
+    "y": 745.1,
+    "text": "Cliente"
+  },
+  {
+    "x": 373.9,
+    "y": 745.5,
+    "text": "GABRIEL LEITE SOUZA"
+  },
+  {
+    "x": 61.7,
+    "y": 733.8,
+    "text": "Endereço"
+  },
+  {
+    "x": 97.5,
+    "y": 734.3,
+    "text": " Rua Barão de Cascalho 554, Centro"
+  },
+  {
+    "x": 60,
+    "y": 727.1,
+    "text": "Nº Contato"
+  },
+  {
+    "x": 97.5,
+    "y": 727.5,
+    "text": "35-98897-5567"
+  },
+  {
+    "x": 214.4,
+    "y": 726.7,
+    "text": "Cidade/ UF"
+  },
+  {
+    "x": 386.2,
+    "y": 727.5,
+    "text": "LIMEIRA/SP"
+  },
+  {
+    "x": 52.1,
+    "y": 720.8,
+    "text": "2. Informações do Equipamento"
+  },
+  {
+    "x": 59.8,
+    "y": 714.5,
+    "text": "Equipamento"
+  },
+  {
+    "x": 97.5,
+    "y": 713.7,
+    "text": "PaX-i"
+  },
+  {
+    "x": 179.1,
+    "y": 713.7,
+    "text": "n. Série:"
+  },
+  {
+    "x": 197.5,
+    "y": 714.2,
+    "text": "047-024913"
+  },
+  {
+    "x": 52.1,
+    "y": 701.4,
+    "text": "Avaliação do treinamento pós instalação"
+  },
+  {
+    "x": 59.3,
+    "y": 693.2,
+    "text": "Nº"
+  },
+  {
+    "x": 155.5,
+    "y": 693.7,
+    "text": "Questão"
+  },
+  {
+    "x": 385.8,
+    "y": 693.7,
+    "text": "Avaliação"
+  },
+  {
+    "x": 61,
+    "y": 685.5,
+    "text": "1"
+  },
+  {
+    "x": 74.9,
+    "y": 686,
+    "text": "Qual sua opinião sobre o treinamento em geral?"
+  },
+  {
+    "x": 271.5,
+    "y": 685.5,
+    "text": "Ótimo     \\"
+  },
+  {
+    "x": 325,
+    "y": 685.5,
+    "text": "Bom     \\"
+  },
+  {
+    "x": 371.1,
+    "y": 685.5,
+    "text": "Neutro     \\"
+  },
+  {
+    "x": 431.2,
+    "y": 685.5,
+    "text": "Ruim     \\"
+  },
+  {
+    "x": 490.8,
+    "y": 685.5,
+    "text": "Péssimo     \\"
+  },
+  {
+    "x": 271.9,
+    "y": 678.3,
+    "text": "Processo de início do exame - Confirm/Ready "
+  },
+  {
+    "x": 433,
+    "y": 677.9,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 677.9,
+    "text": "Não     \\"
+  },
+  {
+    "x": 304.7,
+    "y": 670.7,
+    "text": "Laser vertical - Sagital"
+  },
+  {
+    "x": 433,
+    "y": 670.2,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 670.2,
+    "text": "Não     \\"
+  },
+  {
+    "x": 298.5,
+    "y": 663,
+    "text": "Laser horizontal - Frankfurt"
+  },
+  {
+    "x": 433,
+    "y": 662.5,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 662.5,
+    "text": "Não     \\"
+  },
+  {
+    "x": 75.9,
+    "y": 655.1,
+    "text": "Sobre os processos de posicionamento, foram citados e orientados "
+  },
+  {
+    "x": 313.3,
+    "y": 655.3,
+    "text": "Laser do canino"
+  },
+  {
+    "x": 433,
+    "y": 654.8,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 654.8,
+    "text": "Não     \\"
+  },
+  {
+    "x": 61,
+    "y": 651.5,
+    "text": "2"
+  },
+  {
+    "x": 148.8,
+    "y": 647.5,
+    "text": "pelo técnico? "
+  },
+  {
+    "x": 304,
+    "y": 647.6,
+    "text": "Língua no céu da boca"
+  },
+  {
+    "x": 433,
+    "y": 647.1,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 647.1,
+    "text": "Não     \\"
+  },
+  {
+    "x": 284.9,
+    "y": 639.9,
+    "text": "Pés levemente posicionados a frente"
+  },
+  {
+    "x": 433,
+    "y": 639.5,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 639.5,
+    "text": "Não     \\"
+  },
+  {
+    "x": 269,
+    "y": 632.3,
+    "text": "Posicionadores Ex:Mordedor e apoio de queixo\\"
+  },
+  {
+    "x": 433,
+    "y": 631.8,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 631.8,
+    "text": "Não     \\"
+  },
+  {
+    "x": 310.1,
+    "y": 624.6,
+    "text": "Colete de chumbo"
+  },
+  {
+    "x": 433,
+    "y": 624.1,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 624.1,
+    "text": "Não     \\"
+  },
+  {
+    "x": 323,
+    "y": 616.9,
+    "text": "Paciente"
+  },
+  {
+    "x": 433,
+    "y": 616.4,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 616.4,
+    "text": "Não     \\"
+  },
+  {
+    "x": 321.7,
+    "y": 609.2,
+    "text": "Aquisição"
+  },
+  {
+    "x": 433,
+    "y": 608.7,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 608.7,
+    "text": "Não     \\"
+  },
+  {
+    "x": 80.3,
+    "y": 601.3,
+    "text": "Sobre o software EzDent-i, foi explicado sobre as abas de uso e "
+  },
+  {
+    "x": 318.3,
+    "y": 601.5,
+    "text": "Visualizador"
+  },
+  {
+    "x": 433,
+    "y": 601.1,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 601.1,
+    "text": "Não     \\"
+  },
+  {
+    "x": 61,
+    "y": 597.7,
+    "text": "3"
+  },
+  {
+    "x": 148.8,
+    "y": 593.7,
+    "text": "ferramentas?"
+  },
+  {
+    "x": 322.9,
+    "y": 593.9,
+    "text": "Consulta"
+  },
+  {
+    "x": 433,
+    "y": 593.4,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 593.4,
+    "text": "Não     \\"
+  },
+  {
+    "x": 323.2,
+    "y": 586.2,
+    "text": "Implante"
+  },
+  {
+    "x": 433,
+    "y": 585.7,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 585.7,
+    "text": "Não     \\"
+  },
+  {
+    "x": 305.6,
+    "y": 578.5,
+    "text": "Relatório Templates\\"
+  },
+  {
+    "x": 433,
+    "y": 578,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 578,
+    "text": "Não     \\"
+  },
+  {
+    "x": 328,
+    "y": 570.8,
+    "text": "MPR"
+  },
+  {
+    "x": 433,
+    "y": 570.3,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 570.3,
+    "text": "Não     \\"
+  },
+  {
+    "x": 326.2,
+    "y": 563.1,
+    "text": "Seção"
+  },
+  {
+    "x": 433,
+    "y": 562.6,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 562.6,
+    "text": "Não     \\"
+  },
+  {
+    "x": 324.7,
+    "y": 555.4,
+    "text": "3D Pan"
+  },
+  {
+    "x": 433,
+    "y": 555,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 555,
+    "text": "Não     \\"
+  },
+  {
+    "x": 82.8,
+    "y": 551.4,
+    "text": "Sobre o software Ez3D-i, foi explicado sobre as abas de uso e "
+  },
+  {
+    "x": 61,
+    "y": 547.8,
+    "text": "3"
+  },
+  {
+    "x": 328.9,
+    "y": 547.8,
+    "text": "TMJ"
+  },
+  {
+    "x": 433,
+    "y": 547.3,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 547.3,
+    "text": "Não     \\"
+  },
+  {
+    "x": 109.3,
+    "y": 543.8,
+    "text": "ferramentas? Caso seja equipamento 3D\\"
+  },
+  {
+    "x": 323.2,
+    "y": 540.1,
+    "text": "Implante"
+  },
+  {
+    "x": 433,
+    "y": 539.6,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 539.6,
+    "text": "Não     \\"
+  },
+  {
+    "x": 322.9,
+    "y": 532.4,
+    "text": "Consulta"
+  },
+  {
+    "x": 433,
+    "y": 531.9,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 531.9,
+    "text": "Não     \\"
+  },
+  {
+    "x": 305.6,
+    "y": 524.7,
+    "text": "Relatório Templates\\"
+  },
+  {
+    "x": 433,
+    "y": 524.2,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 496.9,
+    "y": 524.2,
+    "text": "Não     \\"
+  },
+  {
+    "x": 75,
+    "y": 515.1,
+    "text": "O kit de acessórios Manuais, pendrives, barras de transporte e etc\\"
+  },
+  {
+    "x": 61,
+    "y": 507.8,
+    "text": "4"
+  },
+  {
+    "x": 80.5,
+    "y": 507.6,
+    "text": "foram entregues pelo técnico para serem armazenados junto ao "
+  },
+  {
+    "x": 323.4,
+    "y": 507.8,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 461.9,
+    "y": 507.8,
+    "text": "Não     \\"
+  },
+  {
+    "x": 118.6,
+    "y": 500,
+    "text": "restante dos itens do equipamento?"
+  },
+  {
+    "x": 76.1,
+    "y": 487,
+    "text": "Há outros computadores que gostaria de instalar os softwares para "
+  },
+  {
+    "x": 61,
+    "y": 483.4,
+    "text": "5"
+  },
+  {
+    "x": 323.4,
+    "y": 483.4,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 461.9,
+    "y": 483.4,
+    "text": "Não     \\"
+  },
+  {
+    "x": 85.8,
+    "y": 479.5,
+    "text": "visualização dos exames? Se sim, quantos são?_________"
+  },
+  {
+    "x": 80.7,
+    "y": 464.7,
+    "text": "Foi explicado pelo técnico sobre a rede de internet do local para "
+  },
+  {
+    "x": 61,
+    "y": 461.1,
+    "text": "6"
+  },
+  {
+    "x": 323.4,
+    "y": 461.1,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 461.9,
+    "y": 461.1,
+    "text": "Não     \\"
+  },
+  {
+    "x": 106.6,
+    "y": 457.2,
+    "text": "comunicação das estações de visualização?"
+  },
+  {
+    "x": 80.1,
+    "y": 444.8,
+    "text": "Foi deixado os guias digitais de posicionamento e acessórios na "
+  },
+  {
+    "x": 61,
+    "y": 440.7,
+    "text": "7"
+  },
+  {
+    "x": 323.4,
+    "y": 441.2,
+    "text": "Sim     \\"
+  },
+  {
+    "x": 461.9,
+    "y": 441.2,
+    "text": "Não     \\"
+  },
+  {
+    "x": 115.8,
+    "y": 437.2,
+    "text": "área de trabalho do PC de aquisição?"
+  },
+  {
+    "x": 76.5,
+    "y": 424.9,
+    "text": "O treinamento com nossos especialistas científicos será agendado "
+  },
+  {
+    "x": 360.2,
+    "y": 421,
+    "text": "Contatos do suporte Vatech:"
+  },
+  {
+    "x": 81.3,
+    "y": 417.3,
+    "text": "pela equipe vatech após um período de mais ou menos 30 dias "
+  },
+  {
+    "x": 358.3,
+    "y": 413.5,
+    "text": "Whatsapp: 011\\9 6401-0294"
+  },
+  {
+    "x": 61,
+    "y": 409.9,
+    "text": "8"
+  },
+  {
+    "x": 81.5,
+    "y": 409.8,
+    "text": "após a instalação, caso maiores dúvidas entre em contato com "
+  },
+  {
+    "x": 362.8,
+    "y": 405.9,
+    "text": "Telefone: 011\\2189-0774"
+  },
+  {
+    "x": 95.2,
+    "y": 402.2,
+    "text": "nosso suporte. TREINAMENTO EXCLUSIVO PARA "
+  },
+  {
+    "x": 349.8,
+    "y": 398.3,
+    "text": "Email: vbrg0200@vatechglobal.com"
+  },
+  {
+    "x": 136.3,
+    "y": 394.6,
+    "text": "EQUIPAMENTOS 3D\\"
+  },
+  {
+    "x": 52.2,
+    "y": 383.7,
+    "text": "Descreva sua experiência referente ao treinamento aplicado:"
+  },
+  {
+    "x": 52.2,
+    "y": 308.8,
+    "text": "Descreva sua experiência referente ao processo de entrega do equipamento, desde o contato para recebimento da máquina até a instalação:"
+  },
+  {
+    "x": 52.2,
+    "y": 223,
+    "text": "Assinatura de treianmento completo"
+  },
+  {
+    "x": 52.2,
+    "y": 210.3,
+    "text": "Conferido por "
+  },
+  {
+    "x": 52.2,
+    "y": 202.6,
+    "text": "Vatech BR\\"
+  },
+  {
+    "x": 207.5,
+    "y": 200.5,
+    "text": "*Nome Cliente"
+  },
+  {
+    "x": 64.1,
+    "y": 188.1,
+    "text": "*Nome "
+  },
+  {
+    "x": 130.2,
+    "y": 184.5,
+    "text": "Lucas Gato"
+  },
+  {
+    "x": 59.3,
+    "y": 180.4,
+    "text": "Instalador"
+  },
+  {
+    "x": 56.2,
+    "y": 164.7,
+    "text": "Assinatura\\"
+  },
+  {
+    "x": 210.5,
+    "y": 164.2,
+    "text": "Assinatura\\"
+  }
+]

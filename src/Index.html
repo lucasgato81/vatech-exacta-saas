@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Vatech Exacta - Atendimento Técnico</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#c8102e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <?!= include('Styles'); ?>
+</head>
+<body>
+
+  <!-- CABEÇALHO SUPERIOR -->
+  <header class="app-header">
+    <div class="header-content">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGMAAAAfCAYAAADz23MvAAAEMUlEQVR4nO1Xa2hcRRQ+M3NnZpuwu0kbG6u7eTSbzb5u6uuHUPJDMEVFi00p2JYWpAhawQdUELTgj4KhWMFSC4qPID7AUhupaAnRQopaTdNtQpt2G7Hgg4JSKjGF1miUEW88Ge69e3eTZhs6HxxYZs535pzzzZ3ZATAwMDAwMDAwMDCoCMZCK/52rCDbpyqdz3UNI8Y1hOtGDA4gcbESyKJK56TDiHENYV7FiACrPSnty471i9R3Xr4vWrG3sG8VkLAaPyxS5/IyN35a2n/i5JWpsWMiezEOPKHH08XAsbHpvAbgCRXztLQn9WYNy9ylx9nSF7xqiAJd8q3IXtBzLUh7alTaf6i4T9L6HY6/Xs8paV85K9un8NgJmZt4gEQ3li0CBg6sEvLy04v3StjLvhTp8zieLoaXYU5eZMeDcNTm0PN/kzcfCsL9XKS+L7U2ZzPNqRjKLAARxK+chLex+p3lirHfSgyWstYeEvvI4a4k1Z1BeeWKoewp9v9XVRbuIuHVOOAdpKpD92EADPtsoXXPOHMhoFVesSkQVtA+ay8xit0Z2HdApH8iAGRmjmRGjoMie8GNq6wBxHKvdcJAa9x4bndGPbCY35dcMurAWoaD7eeJQd3nAG8dwj4pkLcEjb/Xajww12LsZPF3ivmo899tvJSGFRND4ajI/DpnYiickfZffgELst13/j/Qe2lk3RZWt63bivXkRfZ3v2NnNmJ0s/jbzrjibaZLnviYt+ZnHDfc+7gJ2pcgYgyI9A9zKkYvbzmOA+J7Q/3Gcyd4dgJz2yF0ZynnqsObjRilrOPGDdqXioihL/wsXbbLGV9FImvxXAToYmduOYi0VzNGpT3Zy1uPHxWZX+ZLjDPSnurhjf3FuOX0pGJi9Iu26fdGH0+O4Tn6730+nciPeO5RdsNzetxXr8KdMSSyv30mkqN7rIbeNpAr9Mvcj7sgxHiJxd91C4rH9vHEN5gzJLIXiyWylzf2Bjk+VtOaTX75Yd/XraZPSqltwYmhXrY46C4r9t7z7MbdeKwReBJzvhKZ836JuL0l/IoNAan2yk+Pg/+C6ugk4bV+3HU0+ogX90Fas9krPzf/qyKGW9LFdtTTrH5HkLPcsQ20divmj4j05aBrrqeLHytlLbxOGFg0KM/r0TfvYtwMvNkrybtJZI0b5wPeciRIkVvp0u06V305wzI3EbSpr1lNB8sRQ+F+Et2woMRQSEPo1j6ePOsE/8JqO3cbqVrpx1GX6HZ20+48z0w39pTMTX5otXzdScJrqHqM++B2sqjjFdawb1jkLjmFD/DUzy+z+Pu6bzWQ8H00+lAfbxsryNz0635EZq4c4slCF619uINU3+O2DgfCO2mk6yBvHcENPCbS429YTZ+uopGuZhApx1/dTY6pjeAWs5vFerCfb3MNDAwMDAwMDAxmgX8A6OJG9F8OI3AAAAAASUVORK5CYII=" class="brand-logo" alt="Vatech Logo">
+        <span style="font-size: 13px; font-weight: 700; color: #64748b;">| EXACTA</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button type="button" class="btn-sig-action" style="background:#0f172a !important; color:#ffffff !important; border:none; padding:5px 12px; font-weight:700; font-size:12px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="app.abrirModalAdminNovaOS()" title="Cadastrar nova Ordem de Serviço e gerar link para o técnico">
+          ➕ Nova OS
+        </button>
+        <button type="button" class="btn-sig-action" style="background:#2563eb !important; color:#ffffff !important; border:none; padding:5px 12px; font-weight:700; font-size:12px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="app.abrirModalPreviaHtml('dossie')">
+          👁️ Ver PDF
+        </button>
+        <span class="badge-os">OS #<span id="txtIdAtendimento">...</span></span>
+      </div>
+    </div>
+
+    <!-- BARRA DE PROGRESSO -->
+    <div style="background-color: #e2e8f0; height: 3px; width: 100%;">
+      <div id="progressBar" style="background-color: var(--primary); height: 3px; width: 16%; transition: width 0.3s ease;"></div>
+    </div>
+
+    <!-- ABAS DO FORMULÁRIO -->
+    <nav class="stepper-nav">
+      <div class="stepper-container">
+        <div class="step-tab active" onclick="app.navegarPara(1)">1. OS & Dados</div>
+        <div class="step-tab" onclick="app.navegarPara(2)">2. Checklist (61 Itens)</div>
+        <div class="step-tab" onclick="app.navegarPara(3)">3. Relatório Visita</div>
+        <div class="step-tab" onclick="app.navegarPara(4)">4. Garantia</div>
+        <div class="step-tab" onclick="app.navegarPara(5)">5. Feedback Cliente</div>
+        <div class="step-tab" onclick="app.navegarPara(6)">6. Assinaturas</div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- BARRA DE ALERTA DE PENDÊNCIAS (FIXA NO TOPO QUANDO HOUVER ITENS FALTANTES) -->
+  <div id="barraAlertaPendencias" class="barra-alerta-pendencias" style="display: none;">
+    <div class="barra-alerta-conteudo">
+      <div class="alerta-info-bloco">
+        <span class="alerta-icone-pulsante" id="alertaIcone">⚠️</span>
+        <div>
+          <div class="alerta-titulo-principal" id="txtAlertaTitulo">
+            Atenção: <span id="txtQtdPendentes" class="badge-qtd-pendente">0</span> itens pendentes para homologação
+          </div>
+          <div class="alerta-subtitulo" id="txtAlertaSubtitulo">
+            Aberto na tela para resposta imediata. Clique em SIM / NÃO ou digite nos campos destacados em vermelho abaixo:
+          </div>
+        </div>
+      </div>
+      <div class="alerta-botoes-acao">
+        <button type="button" class="btn-alerta-proximo" id="btnAlertaProximo" onclick="app.navegarProximaPendencia()">
+          <span>Próximo Faltante</span> ➔
+        </button>
+        
+        <button type="button" class="btn-alerta-fechar" onclick="app.fecharAlertaPendencias()" title="Fechar alerta">
+          ✕
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-container">
+
+    <!-- =================================================================== -->
+    <!-- ABA 1: IDENTIFICAÇÃO DA OS (DADOS BLOQUEADOS PARA O TÉCNICO)        -->
+    <!-- =================================================================== -->
+    <section id="step1" class="step-section">
+      <div class="card">
+        <div class="card-header">
+          <span>📋 Dados do Atendimento</span>
+          <span id="badgeStatus" style="font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #e0f2fe; color: #0369a1; font-weight: 700;">Carregando...</span>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Número da Solicitação / OS</label>
+            <input type="text" id="osId" class="form-input" readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data de Abertura</label>
+            <input type="text" id="osData" class="form-input" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>🏥 Informações do Cliente</span>
+          <span style="font-size: 11px; color: #0284c7; font-weight: 700;">🔒 Dados Mestre Central</span>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Razão Social / Nome da Clínica <span style="font-size:11px; color:#64748b;">(Somente Leitura)</span></label>
+            <input type="text" id="cliRazao" class="form-input" readonly>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Pessoa de Contato no Local <span style="font-size:11px; color:#059669; font-weight:600;">(Confirmar na visita)</span></label>
+              <input type="text" id="cliContato" class="form-input" placeholder="Nome de quem recebeu o técnico">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefone / WhatsApp no Local <span style="font-size:11px; color:#059669; font-weight:600;">(Confirmar na visita)</span></label>
+              <input type="text" id="cliTelefone" class="form-input" placeholder="DDD + Telefone / Celular">
+            </div>
+          </div>
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 6px;">
+              <label class="form-label" style="margin-bottom: 0;">Endereço Completo</label>
+              <div style="display: inline-flex; gap: 6px;">
+                <button type="button" onclick="app.abrirNavegacao('maps')" class="btn-sig-action" style="background:#1a73e8 !important; color:#ffffff !important; border:none; padding:4px 10px; font-weight:700; font-size:11.5px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" title="Abrir rota no Google Maps">
+                  📍 Google Maps
+                </button>
+                <button type="button" onclick="app.abrirNavegacao('waze')" class="btn-sig-action" style="background:#00d6fe !important; color:#0f172a !important; border:none; padding:4px 10px; font-weight:800; font-size:11.5px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" title="Abrir navegação no Waze">
+                  🚗 Waze
+                </button>
+              </div>
+            </div>
+            <input type="text" id="cliEndereco" class="form-input" readonly>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Cidade / UF</label>
+              <input type="text" id="cliCidadeUf" class="form-input" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">CEP</label>
+              <input type="text" id="cliCep" class="form-input" readonly>
+            </div>
+          </div>
+
+          <!-- BOTÕES TÁTEIS DE NAVEGAÇÃO GPS RÁPIDA (WAZE / GOOGLE MAPS) -->
+          <div style="display: flex; gap: 8px; margin-top: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+            <button type="button" onclick="app.abrirNavegacao('maps')" class="btn" style="flex: 1; min-height: 42px; min-width: 140px; background: #1a73e8 !important; color: #ffffff !important; border: none; border-radius: 8px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(26,115,232,0.3);" title="Abrir navegação por GPS no Google Maps">
+              📍 Traçar Rota no Google Maps
+            </button>
+            <button type="button" onclick="app.abrirNavegacao('waze')" class="btn" style="flex: 1; min-height: 42px; min-width: 140px; background: #00d6fe !important; color: #0f172a !important; border: none; border-radius: 8px; font-weight: 800; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,214,254,0.35);" title="Abrir navegação com rotas em tempo real no Waze">
+              🚗 Navegar com Waze
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>⚙️ Informações do Equipamento</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Somente Leitura</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Modelo</label>
+              <input type="text" id="eqModelo" class="form-input" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Número de Série</label>
+              <input type="text" id="eqSerie" class="form-input" style="font-weight: bold; color: var(--primary);" readonly>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Nota Fiscal</label>
+              <input type="text" id="eqNF" class="form-input" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Garantia Contratual</label>
+              <input type="text" id="eqGarantia" class="form-input" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>👨‍🔧 Técnico Responsável</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Nome do Técnico</label>
+              <input type="text" id="tecNome" class="form-input" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Empresa Solicitada</label>
+              <input type="text" id="tecEmpresa" class="form-input" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 2: CHECKLIST PÓS-INSTALAÇÃO (61 ITENS OFICIAIS VATECH)          -->
+    <!-- =================================================================== -->
+    <section id="step2" class="step-section" style="display: none;">
+
+      <!-- CAT 1: Antes da abertura das Caixas -->
+      <div class="accordion-toggle open" onclick="app.toggleAccordion(this)">
+        <span>1. Antes da abertura das Caixas (Itens 1-6)</span>
+        <span class="cat-badge" id="badgeCat1">0/6</span>
+      </div>
+      <div class="accordion-content show">
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">1</span> O Instalador acompanhou a entrega do equipamento?</div>
+          <div class="touch-toggle-group" data-key="q1">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q1', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q1', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">2</span> A empresa de entrega transportou e manuseou com cautela?</div>
+          <div class="touch-toggle-group" data-key="q2">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q2', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q2', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">3</span> O instalador certificou-se de que não há furos ou riscos suspeitos na caixa?</div>
+          <div class="touch-toggle-group" data-key="q3">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q3', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q3', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">4</span> O indicador ShockWatch está vermelho? (indicador de impacto da caixa)</div>
+          <div class="touch-toggle-group" data-key="q4">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q4', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q4', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">5</span> O indicador TiltWatch está vermelho? (indicador de tombamento da caixa)</div>
+          <div class="touch-toggle-group" data-key="q5">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q5', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q5', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">6</span> Os instaladores certificaram-se de que não há arranhões ou superfícies quebradas equipamento?</div>
+          <div class="touch-toggle-group" data-key="q6">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q6', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q6', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 2: Após abertura da Caixa -->
+      <div class="accordion-toggle" onclick="app.toggleAccordion(this)">
+        <span>2. Após abertura da Caixa (Itens 7-8)</span>
+        <span class="cat-badge" id="badgeCat2">0/2</span>
+      </div>
+      <div class="accordion-content">
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">7</span> Todos os acessórios e caixas estão incluídos na embalagem?</div>
+          <div class="touch-toggle-group" data-key="q7">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q7', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q7', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">8</span> Conferência de itens no Kit de instalação:</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><input type="checkbox" id="q8_disparador"> Disparador</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><input type="checkbox" id="q8_cabos"> Cabos de comunicação</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><input type="checkbox" id="q8_posicionadores"> Posicionadores</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><input type="checkbox" id="q8_pendrives"> Pendrives</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><input type="checkbox" id="q8_manuais"> Manuais</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><input type="checkbox" id="q8_fixadores"> Fixadores de parede</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><input type="checkbox" id="q8_fibra"> Placa fibra ótica</label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><input type="checkbox" id="q8_controle"> Controle up/down</label>
+          </div>
+          <div class="touch-toggle-group" data-key="q8">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q8', 'SIM', this)">SIM (Kit Completo)</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q8', 'NAO', this)">NÃO (Incompleto)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 3: Antes de Iniciar a Instalação -->
+      <div class="accordion-toggle" onclick="app.toggleAccordion(this)">
+        <span>3. Antes de Iniciar a Instalação (Itens 9-25)</span>
+        <span class="cat-badge" id="badgeCat3">0/17</span>
+      </div>
+      <div class="accordion-content">
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">9</span> O disjuntor está instalado no painel de distribuição?</div>
+          <div class="grid-2" style="margin-bottom: 8px;">
+            <input type="text" id="q9_valor" class="form-input" placeholder="Valor do Disjuntor (Ex: 20A)">
+            <div class="touch-toggle-group" data-key="q9">
+              <button type="button" class="touch-btn" onclick="app.setToggle('q9', 'SIM', this)">SIM</button>
+              <button type="button" class="touch-btn" onclick="app.setToggle('q9', 'NAO', this)">NÃO</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">10</span> Há DPS instalado no circuito dedicado ao equipamento?</div>
+          <div class="touch-toggle-group" data-key="q10">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q10', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q10', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">11</span> O Aterramento está instalado e o cabo terra está chegando na tomada do equipamento e computador?</div>
+          <div class="touch-toggle-group" data-key="q11">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q11', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q11', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">12</span> A tomada da sala é com plugues 20A?</div>
+          <div class="touch-toggle-group" data-key="q12">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q12', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q12', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">13</span> O Equipamento e computador estão ligados no mesmo Estabilizador/Nobreak?</div>
+          <div class="touch-toggle-group" data-key="q13">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q13', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q13', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">14</span> Há Nobreak ou Estabilizador dedicado para o equipamento?</div>
+          <div class="touch-toggle-group" data-key="q14_tipo">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q14_tipo', 'Estabilizador', this)">Estabilizador</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q14_tipo', 'Nobreak', this)">Nobreak</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">15</span> Informações do Nobreak/Estabilizador do Equipamento:</div>
+          <div class="grid-3">
+            <input type="text" id="q15_marca" class="form-input" placeholder="Marca">
+            <input type="text" id="q15_modelo" class="form-input" placeholder="Modelo">
+            <input type="text" id="q15_potencia" class="form-input" placeholder="Potência (KVA)">
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">16</span> Há um nobreak ou estabilizador para o computador?</div>
+          <div class="grid-2" style="margin-bottom: 8px;">
+            <div class="touch-toggle-group" data-key="q16_possui">
+              <button type="button" class="touch-btn" onclick="app.setToggle('q16_possui', 'SIM', this)">SIM</button>
+              <button type="button" class="touch-btn" onclick="app.setToggle('q16_possui', 'NAO', this)">NÃO</button>
+            </div>
+            <div class="touch-toggle-group" data-key="q16_tipo">
+              <button type="button" class="touch-btn" onclick="app.setToggle('q16_tipo', 'Estabilizador', this)">Estabilizador</button>
+              <button type="button" class="touch-btn" onclick="app.setToggle('q16_tipo', 'Nobreak', this)">Nobreak</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">17</span> Informações do Nobreak/Estabilizador do Computador:</div>
+          <div class="grid-3">
+            <input type="text" id="q17_marca" class="form-input" placeholder="Marca">
+            <input type="text" id="q17_modelo" class="form-input" placeholder="Modelo">
+            <input type="text" id="q17_potencia" class="form-input" placeholder="Potência (KVA)">
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">18</span> A tomada de saída do Nobreak/Estabilizador é com plugues 20A?</div>
+          <div class="touch-toggle-group" data-key="q18">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q18', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q18', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">19</span> A Tomada da sala é 220V?</div>
+          <div class="touch-toggle-group" data-key="q19_tipo">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q19_tipo', 'F+F', this)">F+F (Bifásica)</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q19_tipo', 'F+N', this)">F+N (Monofásica)</button>
+          </div>
+        </div>
+
+        <div class="checklist-item" style="background:#fffbeb; padding: 12px; border-radius: 8px;">
+          <div class="checklist-title"><span class="checklist-num">20</span> Medições Elétricas de Saída (Volts):</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;">
+            <div>
+              <label class="form-label">F + F (V)</label>
+              <input type="number" id="q20_ff" class="form-input" placeholder="Ex: 220">
+            </div>
+            <div>
+              <label class="form-label">F + N (V)</label>
+              <input type="number" id="q20_fn" class="form-input" placeholder="Ex: 220">
+            </div>
+            <div>
+              <label class="form-label">F1 + T (V)</label>
+              <input type="number" id="q20_f1t" class="form-input" placeholder="Ex: 127">
+            </div>
+            <div>
+              <label class="form-label">F2 + T (V)</label>
+              <input type="number" id="q20_f2t" class="form-input" placeholder="Ex: 127">
+            </div>
+            <div>
+              <label class="form-label">N + T (V)</label>
+              <input type="number" id="q20_nt" class="form-input" placeholder="Ex: 1.5">
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">21</span> Há Ar-condicionado com funcionamento em conformidade?</div>
+          <div class="touch-toggle-group" data-key="q21">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q21', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q21', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">22</span> Foi capturada foto da Etiqueta do número de série (coluna)?</div>
+          <div class="touch-toggle-group" data-key="q22">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q22', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q22', 'NAO', this)">NÃO</button>
+          </div>
+          <!-- ÁREA DE CAPTURA DE FOTO COM GEOLOCALIZAÇÃO -->
+          <div class="foto-capture-card" id="card_foto_q22">
+            <input type="file" id="cam_foto_q22" accept="image/*" capture="environment" style="display:none;" onchange="app.processarFotoInput(this, 'foto_q22', 'q22', 'Etiqueta Número de Série (Coluna)')">
+            <input type="file" id="gal_foto_q22" accept="image/*" style="display:none;" onchange="app.processarFotoInput(this, 'foto_q22', 'q22', 'Etiqueta Número de Série (Coluna)')">
+
+            <div id="acoes_foto_q22" style="display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:12.5px; font-weight:700; color:#334155; display:flex; align-items:center; gap:6px;">
+                <span>📸 Registro Fotográfico Obrigatório (Etiqueta de S/N):</span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="btn-foto-action btn-camera" onclick="document.getElementById('cam_foto_q22').click()">
+                  📷 Abrir Câmera
+                </button>
+                <button type="button" class="btn-foto-action btn-galeria" onclick="document.getElementById('gal_foto_q22').click()">
+                  📁 Galeria do Celular
+                </button>
+              </div>
+              <div style="font-size:11px; color:#64748b;">
+                * A foto receberá carimbo indelével no rodapé com data, hora e localização geográfica (GPS).
+              </div>
+            </div>
+
+            <div id="loading_foto_q22" style="display:none; text-align:center; padding:10px;">
+              <div class="spinner-photo"></div>
+              <div style="font-size:12px; font-weight:700; color:#0284c7; margin-top:6px;">Obtendo localização GPS e aplicando carimbo...</div>
+            </div>
+
+            <div id="previa_foto_q22" style="display:none;">
+              <div style="position:relative; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; max-width:380px; margin-bottom:8px; background:#0f172a;">
+                <img id="img_foto_q22" src="" alt="Etiqueta Número de Série (Coluna)" style="width:100%; height:auto; display:block; cursor:pointer;" onclick="app.abrirModalFotoAmpliada('foto_q22')">
+                <div style="position:absolute; top:6px; right:6px; background:rgba(5, 150, 105, 0.92); color:#fff; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:12px;">
+                  ✓ GPS & HORA CARIMBADOS
+                </div>
+              </div>
+              <div style="font-size:11px; color:#065f46; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:6px; padding:6px 10px; margin-bottom:8px;" id="meta_foto_q22"></div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-foto-action btn-sm" onclick="app.abrirModalFotoAmpliada('foto_q22')">👁️ Ver Ampliada</button>
+                <button type="button" class="btn-foto-action btn-sm" onclick="document.getElementById('cam_foto_q22').click()">📷 Nova Foto</button>
+                <button type="button" class="btn-foto-action btn-sm btn-remover" onclick="app.removerFoto('foto_q22', 'q22')">🗑️ Remover</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">23</span> Número de Série da etiqueta confere com Caixa e NF?</div>
+          <div class="touch-toggle-group" data-key="q23">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q23', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q23', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">24</span> Foi capturada foto do Cabo de energia do Equipamento (Power Cord)?</div>
+          <div class="touch-toggle-group" data-key="q24">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q24', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q24', 'NAO', this)">NÃO</button>
+          </div>
+          <!-- ÁREA DE CAPTURA DE FOTO COM GEOLOCALIZAÇÃO -->
+          <div class="foto-capture-card" id="card_foto_q24">
+            <input type="file" id="cam_foto_q24" accept="image/*" capture="environment" style="display:none;" onchange="app.processarFotoInput(this, 'foto_q24', 'q24', 'Cabo de Energia Power Cord')">
+            <input type="file" id="gal_foto_q24" accept="image/*" style="display:none;" onchange="app.processarFotoInput(this, 'foto_q24', 'q24', 'Cabo de Energia Power Cord')">
+
+            <div id="acoes_foto_q24" style="display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:12.5px; font-weight:700; color:#334155; display:flex; align-items:center; gap:6px;">
+                <span>📸 Registro Fotográfico Obrigatório (Cabo de Energia):</span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="btn-foto-action btn-camera" onclick="document.getElementById('cam_foto_q24').click()">
+                  📷 Abrir Câmera
+                </button>
+                <button type="button" class="btn-foto-action btn-galeria" onclick="document.getElementById('gal_foto_q24').click()">
+                  📁 Galeria do Celular
+                </button>
+              </div>
+              <div style="font-size:11px; color:#64748b;">
+                * A foto receberá carimbo indelével no rodapé com data, hora e localização geográfica (GPS).
+              </div>
+            </div>
+
+            <div id="loading_foto_q24" style="display:none; text-align:center; padding:10px;">
+              <div class="spinner-photo"></div>
+              <div style="font-size:12px; font-weight:700; color:#0284c7; margin-top:6px;">Obtendo localização GPS e aplicando carimbo...</div>
+            </div>
+
+            <div id="previa_foto_q24" style="display:none;">
+              <div style="position:relative; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; max-width:380px; margin-bottom:8px; background:#0f172a;">
+                <img id="img_foto_q24" src="" alt="Cabo de Energia Power Cord" style="width:100%; height:auto; display:block; cursor:pointer;" onclick="app.abrirModalFotoAmpliada('foto_q24')">
+                <div style="position:absolute; top:6px; right:6px; background:rgba(5, 150, 105, 0.92); color:#fff; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:12px;">
+                  ✓ GPS & HORA CARIMBADOS
+                </div>
+              </div>
+              <div style="font-size:11px; color:#065f46; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:6px; padding:6px 10px; margin-bottom:8px;" id="meta_foto_q24"></div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-foto-action btn-sm" onclick="app.abrirModalFotoAmpliada('foto_q24')">👁️ Ver Ampliada</button>
+                <button type="button" class="btn-foto-action btn-sm" onclick="document.getElementById('cam_foto_q24').click()">📷 Nova Foto</button>
+                <button type="button" class="btn-foto-action btn-sm btn-remover" onclick="app.removerFoto('foto_q24', 'q24')">🗑️ Remover</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">25</span> Cabo Energia, Qual o Tipo do Plug:</div>
+          <div class="touch-toggle-group" data-key="q25_plug">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q25_plug', 'ABNT 20A', this)">ABNT 20A</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q25_plug', 'Tipo Borne', this)">Tipo Borne</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 4: Durante a Instalação -->
+      <div class="accordion-toggle" onclick="app.toggleAccordion(this)">
+        <span>4. Durante a Instalação (Itens 26-32)</span>
+        <span class="cat-badge" id="badgeCat4">0/7</span>
+      </div>
+      <div class="accordion-content">
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">26</span> (Apenas PaX-i) Equipamento é Fixado no chão/parede ou em base?</div>
+          <div class="touch-toggle-group" data-key="q26_fixacao">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q26_fixacao', 'CHAO', this)">CHÃO / PAREDE</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q26_fixacao', 'BASE', this)">BASE AUTOPORTANTE</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">27</span> Cabos, especialmente fibra óptica, não estão dobrados ou muito enrolados?</div>
+          <div class="touch-toggle-group" data-key="q27">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q27', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q27', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">28</span> Cabos estão bem conectados ao equipamento e computador?</div>
+          <div class="touch-toggle-group" data-key="q28">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q28', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q28', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">29</span> Equipamento bem nivelado/balanceado (Esq/Dir e Frente/Trás)?</div>
+          <div class="touch-toggle-group" data-key="q29">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q29', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q29', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">30</span> Equipamento foi corretamente fixado na parede?</div>
+          <div class="touch-toggle-group" data-key="q30">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q30', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q30', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">31</span> Todos os cabos estão bem organizados?</div>
+          <div class="touch-toggle-group" data-key="q31">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q31', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q31', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">32</span> Equipamento apresenta algum problema ou defeito visualmente?</div>
+          <div class="touch-toggle-group" data-key="q32">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q32', 'SIM', this)">SIM (Com defeito)</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q32', 'NAO', this)">NÃO (Perfeito)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 5: Depois de instalação -->
+      <div class="accordion-toggle" onclick="app.toggleAccordion(this)">
+        <span>5. Depois de instalação (Itens 33-36b)</span>
+        <span class="cat-badge" id="badgeCat5">0/5</span>
+      </div>
+      <div class="accordion-content">
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">33</span> Painel de Led (verde) está ligado e movimentação conforme?</div>
+          <div class="touch-toggle-group" data-key="q33">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q33', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q33', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">34</span> Deixado kit de barras de transporte junto com acessórios?</div>
+          <div class="touch-toggle-group" data-key="q34">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q34', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q34', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">35</span> O botão up/down do equipamento funciona corretamente?</div>
+          <div class="touch-toggle-group" data-key="q35">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q35', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q35', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">36</span> Possui barramentos internos de aterramento? (3 barras cobre + terra - Bush Brass)</div>
+          <div class="touch-toggle-group" data-key="q36">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q36', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q36', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">36b</span> Reforço preventivo no cabo do sensor Pan/Tomo? (Exclusivo Vatech A9)</div>
+          <div class="touch-toggle-group" data-key="q36b">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q36b', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q36b', 'NAO', this)">NÃO / N/A</button>
+          </div>
+          <!-- ÁREA DE CAPTURA DE FOTO COM GEOLOCALIZAÇÃO -->
+          <div class="foto-capture-card" id="card_foto_q36b">
+            <input type="file" id="cam_foto_q36b" accept="image/*" capture="environment" style="display:none;" onchange="app.processarFotoInput(this, 'foto_q36b', 'q36b', 'Reforço Cabo Sensor Pan/Tomo (A9)')">
+            <input type="file" id="gal_foto_q36b" accept="image/*" style="display:none;" onchange="app.processarFotoInput(this, 'foto_q36b', 'q36b', 'Reforço Cabo Sensor Pan/Tomo (A9)')">
+
+            <div id="acoes_foto_q36b" style="display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:12.5px; font-weight:700; color:#334155; display:flex; align-items:center; gap:6px;">
+                <span>📸 Registro Fotográfico Obrigatório (Cabo do Sensor A9):</span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="btn-foto-action btn-camera" onclick="document.getElementById('cam_foto_q36b').click()">
+                  📷 Abrir Câmera
+                </button>
+                <button type="button" class="btn-foto-action btn-galeria" onclick="document.getElementById('gal_foto_q36b').click()">
+                  📁 Galeria do Celular
+                </button>
+              </div>
+              <div style="font-size:11px; color:#64748b;">
+                * A foto receberá carimbo indelével no rodapé com data, hora e localização geográfica (GPS).
+              </div>
+            </div>
+
+            <div id="loading_foto_q36b" style="display:none; text-align:center; padding:10px;">
+              <div class="spinner-photo"></div>
+              <div style="font-size:12px; font-weight:700; color:#0284c7; margin-top:6px;">Obtendo localização GPS e aplicando carimbo...</div>
+            </div>
+
+            <div id="previa_foto_q36b" style="display:none;">
+              <div style="position:relative; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; max-width:380px; margin-bottom:8px; background:#0f172a;">
+                <img id="img_foto_q36b" src="" alt="Reforço Cabo Sensor Pan/Tomo (A9)" style="width:100%; height:auto; display:block; cursor:pointer;" onclick="app.abrirModalFotoAmpliada('foto_q36b')">
+                <div style="position:absolute; top:6px; right:6px; background:rgba(5, 150, 105, 0.92); color:#fff; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:12px;">
+                  ✓ GPS & HORA CARIMBADOS
+                </div>
+              </div>
+              <div style="font-size:11px; color:#065f46; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:6px; padding:6px 10px; margin-bottom:8px;" id="meta_foto_q36b"></div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-foto-action btn-sm" onclick="app.abrirModalFotoAmpliada('foto_q36b')">👁️ Ver Ampliada</button>
+                <button type="button" class="btn-foto-action btn-sm" onclick="document.getElementById('cam_foto_q36b').click()">📷 Nova Foto</button>
+                <button type="button" class="btn-foto-action btn-sm btn-remover" onclick="app.removerFoto('foto_q36b', 'q36b')">🗑️ Remover</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 6: PC & Softwares -->
+      <div class="accordion-toggle" onclick="app.toggleAccordion(this)">
+        <span>6. PC & Softwares (Itens 37-55)</span>
+        <span class="cat-badge" id="badgeCat6">0/19</span>
+      </div>
+      <div class="accordion-content">
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">37</span> Computador e Monitor inclusos no equipamento?</div>
+          <div class="touch-toggle-group" data-key="q37">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q37', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q37', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">38</span> Dados da CPU:</div>
+          <div class="grid-2">
+            <input type="text" id="q38_modelo" class="form-input" placeholder="Modelo CPU (Ex: Dell OptiPlex)">
+            <input type="text" id="q38_nserie" class="form-input" placeholder="N. Série CPU">
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">39</span> Dados do Monitor:</div>
+          <div class="grid-2">
+            <input type="text" id="q39_modelo" class="form-input" placeholder="Modelo Monitor (Ex: Dell 24)">
+            <input type="text" id="q39_nserie" class="form-input" placeholder="N. Série Monitor">
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">40</span> Placa de Rede Gigabit instalada (PCI do Kit PaX-i)?</div>
+          <div class="touch-toggle-group" data-key="q40">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q40', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q40', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">41</span> O computador possui placa de Vídeo dedicada?</div>
+          <div class="touch-toggle-group" data-key="q41">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q41', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q41', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">42</span> A rede de internet está disponível para o PC?</div>
+          <div class="touch-toggle-group" data-key="q42">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q42', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q42', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">43</span> Ez3D-i instalado? (se necessário)</div>
+          <div class="touch-toggle-group" data-key="q43">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q43', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q43', 'NAO', this)">NÃO / N/A</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">44</span> Cliente irá imprimir em impressora DRY pelo Software Vatech?</div>
+          <div class="touch-toggle-group" data-key="q44">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q44', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q44', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">45</span> Dados da Impressora DRY:</div>
+          <div class="grid-3" style="margin-bottom: 6px;">
+            <input type="text" id="q45_marca" class="form-input" placeholder="Marca">
+            <input type="text" id="q45_modelo" class="form-input" placeholder="Modelo">
+            <input type="text" id="q45_aetitle" class="form-input" placeholder="AE TITLE">
+          </div>
+          <div class="grid-2">
+            <input type="text" id="q45_ip" class="form-input" placeholder="Endereço IP">
+            <input type="text" id="q45_porta" class="form-input" placeholder="Porta DICOM">
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">46</span> Foi realizado a calibração de impressão e testes?</div>
+          <div class="touch-toggle-group" data-key="q46">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q46', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q46', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">47</span> Banco de dados configurado no HD secundário? (Caso possua)</div>
+          <div class="touch-toggle-group" data-key="q47">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q47', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q47', 'NAO', this)">NÃO / N/A</button>
+          </div>
+        </div>
+
+        <div class="checklist-item" style="background:#f0fdf4; padding:12px; border-radius:8px;">
+          <div class="checklist-title"><span class="checklist-num">48</span> Licenças de Softwares Ativadas:</div>
+          <div class="grid-2" style="gap:10px;">
+            <div>
+              <span style="font-weight:600; font-size:13px;">EzDent-i:</span>
+              <div class="touch-toggle-group" data-key="q48_ezdenti" style="margin-top:4px;">
+                <button type="button" class="touch-btn" onclick="app.setToggle('q48_ezdenti', 'Floating', this)">Floating</button>
+                <button type="button" class="touch-btn" onclick="app.setToggle('q48_ezdenti', '30dias', this)">30 Dias</button>
+              </div>
+            </div>
+            <div>
+              <span style="font-weight:600; font-size:13px;">Ez3D-i:</span>
+              <div class="touch-toggle-group" data-key="q48_ez3di" style="margin-top:4px;">
+                <button type="button" class="touch-btn" onclick="app.setToggle('q48_ez3di', 'Floating', this)">Floating</button>
+                <button type="button" class="touch-btn" onclick="app.setToggle('q48_ez3di', '30dias', this)">30 Dias</button>
+              </div>
+            </div>
+            <div>
+              <span style="font-weight:600; font-size:13px;">Biblioteca Consult:</span>
+              <div class="touch-toggle-group" data-key="q48_consult" style="margin-top:4px;">
+                <button type="button" class="touch-btn" onclick="app.setToggle('q48_consult', 'Floating', this)">Floating</button>
+                <button type="button" class="touch-btn" onclick="app.setToggle('q48_consult', '30dias', this)">30 Dias</button>
+              </div>
+            </div>
+            <div>
+              <span style="font-weight:600; font-size:13px;">Biblioteca Implant:</span>
+              <div class="touch-toggle-group" data-key="q48_implant" style="margin-top:4px;">
+                <button type="button" class="touch-btn" onclick="app.setToggle('q48_implant', 'Floating', this)">Floating</button>
+                <button type="button" class="touch-btn" onclick="app.setToggle('q48_implant', '30dias', this)">30 Dias</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">49</span> Pen Drive e Mousepad:</div>
+          <div class="grid-2">
+            <input type="text" id="q49_sn" class="form-input" placeholder="Número de Série do Pen Drive (s.n.)">
+            <div class="touch-toggle-group" data-key="q49_mousepad">
+              <button type="button" class="touch-btn" onclick="app.setToggle('q49_mousepad', 'SIM', this)">Mousepad Vatech: SIM</button>
+              <button type="button" class="touch-btn" onclick="app.setToggle('q49_mousepad', 'NAO', this)">NÃO</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">50</span> MAC ADDRESS coletado para licença? (se necessário)</div>
+          <div class="grid-2">
+            <input type="text" id="q50_mac" class="form-input" placeholder="MAC Address (Ex: AA:BB:CC:DD:EE:FF)">
+            <div class="touch-toggle-group" data-key="q50">
+              <button type="button" class="touch-btn" onclick="app.setToggle('q50', 'SIM', this)">SIM</button>
+              <button type="button" class="touch-btn" onclick="app.setToggle('q50', 'NAO', this)">NÃO</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">51</span> Alinhamento do colimador feito em todos os modos e FOVs?</div>
+          <div class="touch-toggle-group" data-key="q51">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q51', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q51', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">52</span> A imagem está sendo salva no EzDent-i?</div>
+          <div class="touch-toggle-group" data-key="q52">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q52', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q52', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">53</span> Terá softwares terceiros a serem instalados?</div>
+          <div class="grid-2">
+            <input type="text" id="q53_qual" class="form-input" placeholder="Qual software terceiro?">
+            <div class="touch-toggle-group" data-key="q53">
+              <button type="button" class="touch-btn" onclick="app.setToggle('q53', 'SIM', this)">SIM</button>
+              <button type="button" class="touch-btn" onclick="app.setToggle('q53', 'NAO', this)">NÃO</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">54</span> Foi instalado em PCs Clients?</div>
+          <div class="grid-2">
+            <input type="number" id="q54_quantos" class="form-input" placeholder="Quantos PCs clients?">
+            <div class="touch-toggle-group" data-key="q54">
+              <button type="button" class="touch-btn" onclick="app.setToggle('q54', 'SIM', this)">SIM</button>
+              <button type="button" class="touch-btn" onclick="app.setToggle('q54', 'NAO', this)">NÃO</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-item" style="background:#f8fafc; padding:14px; border-radius:10px; border:1px solid #e2e8f0;">
+          <div class="checklist-title" style="margin-bottom:6px;">
+            <span class="checklist-num">55</span> <b>Versões dos Softwares Instalados (Conforme PDF Oficial Vatech):</b>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">
+            Identifique a versão ou status de instalação de cada um dos 8 softwares oficiais do equipamento:
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+            
+            <!-- 1. Win -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <label for="v_win" style="display:block; font-size:12.5px; font-weight:700; color:#1e293b; margin-bottom:2px;">
+                  🖥️ Win (Windows)
+                </label>
+                <div style="font-size:11px; color:#64748b; margin-bottom:6px;">Sistema Operacional da CPU</div>
+              </div>
+              <input type="text" id="v_win" class="form-input" placeholder="Ex: Windows 11 Pro 64-bit" style="font-size:13px;">
+            </div>
+
+            <!-- 2. EzServer -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <label for="v_ezserver" style="display:block; font-size:12.5px; font-weight:700; color:#1e293b; margin-bottom:2px;">
+                  🗄️ EzServer
+                </label>
+                <div style="font-size:11px; color:#64748b; margin-bottom:6px;">Servidor / Banco de Imagens</div>
+              </div>
+              <input type="text" id="v_ezserver" class="form-input" placeholder="Ex: 5.1.3" style="font-size:13px;">
+            </div>
+
+            <!-- 3. EzDent-i -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <label for="v_ezdenti" style="display:block; font-size:12.5px; font-weight:700; color:#1e293b; margin-bottom:2px;">
+                  🦷 EzDent-i
+                </label>
+                <div style="font-size:11px; color:#64748b; margin-bottom:6px;">Software Odontológico 2D</div>
+              </div>
+              <input type="text" id="v_ezdenti" class="form-input" placeholder="Ex: 3.4.1" style="font-size:13px;">
+            </div>
+
+            <!-- 4. CaptureSW -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <label for="v_capture" style="display:block; font-size:12.5px; font-weight:700; color:#1e293b; margin-bottom:2px;">
+                  📷 CaptureSW
+                </label>
+                <div style="font-size:11px; color:#64748b; margin-bottom:6px;">Software de Disparo e Aquisição</div>
+              </div>
+              <input type="text" id="v_capture" class="form-input" placeholder="Ex: 1.0.8" style="font-size:13px;">
+            </div>
+
+            <!-- 5. ImplantDB -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                  <label for="v_implantdb" style="font-size:12.5px; font-weight:700; color:#1e293b;">
+                    🔩 ImplantDB
+                  </label>
+                  <button type="button" class="btn-sig-action" style="padding:1px 6px; font-size:10px;" onclick="document.getElementById('v_implantdb').value='OK'; document.getElementById('v_implantdb').dispatchEvent(new Event('input'))">OK</button>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin-bottom:6px;">Biblioteca de Implantes</div>
+              </div>
+              <input type="text" id="v_implantdb" class="form-input" placeholder="Ex: OK ou Versão" style="font-size:13px;">
+            </div>
+
+            <!-- 6. Consult -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                  <label for="v_consult" style="font-size:12.5px; font-weight:700; color:#1e293b;">
+                    👨‍⚕️ Consult
+                  </label>
+                  <button type="button" class="btn-sig-action" style="padding:1px 6px; font-size:10px;" onclick="document.getElementById('v_consult').value='OK'; document.getElementById('v_consult').dispatchEvent(new Event('input'))">OK</button>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin-bottom:6px;">Software de Consulta Clínica</div>
+              </div>
+              <input type="text" id="v_consult" class="form-input" placeholder="Ex: OK ou Versão" style="font-size:13px;">
+            </div>
+
+            <!-- 7. Ez3D-i -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                  <label for="v_ez3di" style="display:block; font-size:12.5px; font-weight:700; color:#1e293b;">
+                    🧊 Ez3D-i
+                  </label>
+                  <button type="button" class="btn-sig-action" style="padding:1px 6px; font-size:10px;" onclick="document.getElementById('v_ez3di').value='N/A'; document.getElementById('v_ez3di').dispatchEvent(new Event('input'))">N/A</button>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin-bottom:6px;">Software 3D / Tomografia</div>
+              </div>
+              <input type="text" id="v_ez3di" class="form-input" placeholder="Ex: 5.4.0 ou N/A" style="font-size:13px;">
+            </div>
+
+            <!-- 8. Fibra Óptica -->
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                  <label for="v_fibra" style="display:block; font-size:12.5px; font-weight:700; color:#1e293b;">
+                    ⚡ Fibra Óptica
+                  </label>
+                  <button type="button" class="btn-sig-action" style="padding:1px 6px; font-size:10px;" onclick="document.getElementById('v_fibra').value='OK'; document.getElementById('v_fibra').dispatchEvent(new Event('input'))">OK</button>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin-bottom:6px;">Driver Comunicação Óptica</div>
+              </div>
+              <input type="text" id="v_fibra" class="form-input" placeholder="Ex: OK ou Versão" style="font-size:13px;">
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 7: Aquisição de Imagem -->
+      <div class="accordion-toggle" onclick="app.toggleAccordion(this)">
+        <span>7. Aquisição de Imagem (Itens 56-59)</span>
+        <span class="cat-badge" id="badgeCat7">0/4</span>
+      </div>
+      <div class="accordion-content">
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">56</span> Realizado captura de todos os modos de exames?</div>
+          <div class="touch-toggle-group" data-key="q56">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q56', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q56', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">57</span> PANO - Modos Realizados:</div>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="checkbox" id="q57_std" checked> Standard</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="checkbox" id="q57_orto" checked> Ortogonal Bitewing</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="checkbox" id="q57_atm" checked> ATM Open/Close</label>
+          </div>
+          <div class="touch-toggle-group" data-key="q57">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q57', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q57', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">58</span> CEPH - Modos Realizados (se equipado):</div>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="checkbox" id="q58_lat"> Lateral</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="checkbox" id="q58_fulllat"> Full Lateral</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="checkbox" id="q58_pa"> PA</label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px;"><input type="checkbox" id="q58_carpal"> Carpal</label>
+          </div>
+          <div class="touch-toggle-group" data-key="q58">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q58', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q58', 'NAO', this)">NÃO / N/A</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">59</span> CBCT - FOVs Realizados (Tomógrafo):</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(90px, 1fr)); gap:6px; margin-bottom:8px;">
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_5x5"> 5x5</label>
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_8x5"> 8x5</label>
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_8x8"> 8x8</label>
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_8x9"> 8x9</label>
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_10x7"> 10x7</label>
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_10x85"> 10x8.5</label>
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_12x9"> 12x9</label>
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_16x9"> 16x9</label>
+            <label style="display:flex; align-items:center; gap:4px; font-size:12px;"><input type="checkbox" id="q59_dscan"> Double Scan</label>
+          </div>
+          <div class="touch-toggle-group" data-key="q59">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q59', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q59', 'NAO', this)">NÃO / N/A</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 8: Entrega Técnica -->
+      <div class="accordion-toggle" onclick="app.toggleAccordion(this)">
+        <span>8. Entrega Técnica (Itens 60-63)</span>
+        <span class="cat-badge" id="badgeCat8">0/4</span>
+      </div>
+      <div class="accordion-content">
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">60</span> Foi realizada entrega técnica?</div>
+          <div class="touch-toggle-group" data-key="q60">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q60', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q60', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">61</span> Nome dos Participantes da Entrega Técnica:</div>
+          <input type="text" id="q61_participantes" class="form-input" placeholder="Ex: Dr. Gabriel Leite, Auxiliar Maria">
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">62</span> Explicada a importância do PenDrive de Licenças e CD/Pendrive de Software?</div>
+          <div class="touch-toggle-group" data-key="q62">
+            <button type="button" class="touch-btn" onclick="app.setToggle('q62', 'SIM', this)">SIM</button>
+            <button type="button" class="touch-btn" onclick="app.setToggle('q62', 'NAO', this)">NÃO</button>
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <div class="checklist-title"><span class="checklist-num">63</span> Foi entregue para:</div>
+          <input type="text" id="q63_entregue_para" class="form-input" placeholder="Nome do Responsável pelo Recebimento">
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 3: RELATÓRIO DE VISITA TÉCNICA                                  -->
+    <!-- =================================================================== -->
+    <section id="step3" class="step-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>🕒 Período da Intervenção Técnica</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Horário Inicial</label>
+              <input type="time" id="relHoraInicio" class="form-input" value="09:00">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data Inicial</label>
+              <input type="date" id="relDataInicio" class="form-input">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Horário Final</label>
+              <input type="time" id="relHoraFim" class="form-input" value="13:30">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data Final</label>
+              <input type="date" id="relDataFim" class="form-input">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Motivo do Chamado</label>
+              <input type="text" id="relMotivo" class="form-input" value="INSTALAÇÃO DE EQUIPAMENTO">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Garantia</label>
+              <input type="text" id="relGarantia" class="form-input" value="5 Anos">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>📝 Descrição Técnica Detalhada</span>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Ações Executadas / Observações Técnicas:</label>
+            <textarea id="relDescricao" class="form-textarea" rows="8" placeholder="Descreva os passos executados, calibração, fixação, alinhamentos, configurações de rede, etc."></textarea>
+          </div>
+          <div style="background-color: #f8fafc; border-left: 4px solid var(--primary); padding: 10px 12px; font-size: 13px; color: #475569;">
+            <b>Declaração:</b> "Confirmo que constatei o adequado funcionamento do equipamento após serviço técnico prestado."
+          </div>
+        </div>
+      </div>
+    
+      <!-- REGISTRO FOTOGRÁFICO ADICIONAL DE CAMPO -->
+      <div class="card">
+        <div class="card-header">
+          <span>📸 Fotos Adicionais da Instalação em Campo</span>
+        </div>
+        <div class="card-body">
+          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+            Anexe fotos adicionais do ambiente, equipamento montado ou teste de imagem com carimbo GPS de autenticidade:
+          </div>
+          
+          <!-- ÁREA DE CAPTURA DE FOTO COM GEOLOCALIZAÇÃO -->
+          <div class="foto-capture-card" id="card_foto_extra">
+            <input type="file" id="cam_foto_extra" accept="image/*" capture="environment" style="display:none;" onchange="app.processarFotoInput(this, 'foto_extra', '', 'Instalação / Vista Geral da Sala')">
+            <input type="file" id="gal_foto_extra" accept="image/*" style="display:none;" onchange="app.processarFotoInput(this, 'foto_extra', '', 'Instalação / Vista Geral da Sala')">
+
+            <div id="acoes_foto_extra" style="display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:12.5px; font-weight:700; color:#334155; display:flex; align-items:center; gap:6px;">
+                <span>📸 Registro Fotográfico Obrigatório (Vista Geral / Sala):</span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="btn-foto-action btn-camera" onclick="document.getElementById('cam_foto_extra').click()">
+                  📷 Abrir Câmera
+                </button>
+                <button type="button" class="btn-foto-action btn-galeria" onclick="document.getElementById('gal_foto_extra').click()">
+                  📁 Galeria do Celular
+                </button>
+              </div>
+              <div style="font-size:11px; color:#64748b;">
+                * A foto receberá carimbo indelével no rodapé com data, hora e localização geográfica (GPS).
+              </div>
+            </div>
+
+            <div id="loading_foto_extra" style="display:none; text-align:center; padding:10px;">
+              <div class="spinner-photo"></div>
+              <div style="font-size:12px; font-weight:700; color:#0284c7; margin-top:6px;">Obtendo localização GPS e aplicando carimbo...</div>
+            </div>
+
+            <div id="previa_foto_extra" style="display:none;">
+              <div style="position:relative; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; max-width:380px; margin-bottom:8px; background:#0f172a;">
+                <img id="img_foto_extra" src="" alt="Instalação / Vista Geral da Sala" style="width:100%; height:auto; display:block; cursor:pointer;" onclick="app.abrirModalFotoAmpliada('foto_extra')">
+                <div style="position:absolute; top:6px; right:6px; background:rgba(5, 150, 105, 0.92); color:#fff; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:12px;">
+                  ✓ GPS & HORA CARIMBADOS
+                </div>
+              </div>
+              <div style="font-size:11px; color:#065f46; background:#ecfdf5; border:1px solid #a7f3d0; border-radius:6px; padding:6px 10px; margin-bottom:8px;" id="meta_foto_extra"></div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-foto-action btn-sm" onclick="app.abrirModalFotoAmpliada('foto_extra')">👁️ Ver Ampliada</button>
+                <button type="button" class="btn-foto-action btn-sm" onclick="document.getElementById('cam_foto_extra').click()">📷 Nova Foto</button>
+                <button type="button" class="btn-foto-action btn-sm btn-remover" onclick="app.removerFoto('foto_extra', '')">🗑️ Remover</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 4: TERMO DE GARANTIA VATECH                                     -->
+    <!-- =================================================================== -->
+    <section id="step4" class="step-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>🛡️ Certificado e Condições de Garantia Vatech</span>
+        </div>
+        <div class="card-body">
+          <div class="terms-box">
+            <b>Termos/Condições de Garantia Vatech Networks</b>
+            <p>Os atributos e aspectos gerais desta garantia terão validade e serão estabelecidos mediante ao firmamento do instalador e o cliente na data de instalação.</p>
+            <ul>
+              <li>• A garantia no equipamento será prestada pelo período descrito no contrato de compra do equipamento, iniciando esse período pela data de instalação desde que as irregularidades apresentadas demonstrem sua origem em função do uso correto do equipamento.</li>
+              <li>• A garantia do computador e monitor (quando adquirido junto à Vatech) será prestada por 1 ano (12 meses), iniciando esse período pela data de instalação desde que as irregularidades apresentadas demonstrem sua origem em função do uso correto do computador e monitor.</li>
+              <li>• A garantia não será prestada em caso de fenômenos meteorológicos, tais como ocorrência de raios e descargas elétricas que venham a atingir a rede elétrica, de telefonia ou de dados da clínica.</li>
+              <li>• A garantia não será coberta em danos no equipamento ocasionados por incêndio, furtos ou vandalismo, alagamento e depredações no estabelecimento onde o equipamento foi instalado.</li>
+              <li>• No período de garantia estão cobertos os seguintes itens: Placas eletrônicas, sensores, cabeçote, cabos em geral e motores em geral.</li>
+              <li>• A calibração e a manutenção do equipamento estão cobertas pela garantia, desde que o equipamento não apresente aspectos de impacto, rompimento de lacres de segurança, violação das partes ou tentativa de manutenção por pessoas não autorizadas;</li>
+              <li>• A garantia não será coberta caso a embalagem do equipamento fora aberta por uma pessoa não autorizada pela equipe responsável da fábrica ou os equipamentos forem manipulados por pessoa não autorizada e não credenciada a rede autorizada e sem o treinamento adequado para a realização da instalação do produto;</li>
+              <li>• A garantia não será coberta caso o computador de aquisição do equipamento apresente programas indevidos, tais como vírus, programas de spam, música, redes sociais, e-mails pessoais e softwares instalados sem a autorização da equipe responsável da fábrica pelo setor de pós-venda.</li>
+              <li>• A garantia não cobre defeitos físicos no computador de aquisição, causados por danos, impactos, manuseio incorreto e uso indevido.</li>
+              <li>• A garantia não cobre defeitos lógicos, formatação e reinstalação dos softwares do equipamento no computador de aquisição.</li>
+              <li>• Após o término da garantia, o acesso remoto da fábrica será cobrado por hora, mediante ao valor estipulado pela fábrica.</li>
+              <li>• A garantia não cobre a perda de quaisquer dados do computador de aquisição.</li>
+              <li>• O equipamento possui um período de até 60 dias para que seu funcionamento fique totalmente correto e operante, em virtude das adequações e integrações com outros componentes que a clínica utiliza.</li>
+              <li>• A garantia do equipamento não é coberta caso o equipamento demonstre avarias, riscos, amassados e demais aspectos de danificação física, como queda, impactos, e qualquer tipo de uso indevido.</li>
+              <li>• A chave de licença dos softwares não terá garantia em caso de perda, roubo, extravios em geral e indícios de danificações físicas.</li>
+              <li>• A garantia não cobrirá os equipamentos e produtos que forem utilizados de forma inadequada ou que depois de instalados forem transportados ou reinstalados em outro local;</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 14px; padding: 12px; background-color: #f1f5f9; border-radius: 8px;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 13.5px; font-weight: 600;">
+              <input type="checkbox" id="chkAceiteGarantia" style="width: 20px; height: 20px; margin-top: 2px;">
+              <span>Declaro que li, compreendi e concordo integralmente com todos os termos e condições do Certificado de Garantia oficial Vatech Brasil.</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 5: FEEDBACK DO CLIENTE E AVALIAÇÃO DE TREINAMENTO               -->
+    <!-- =================================================================== -->
+    <section id="step5" class="step-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span>⭐ Avaliação do Treinamento Pós-Instalação</span>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">1. Qual sua opinião sobre o treinamento em geral?</label>
+            <div class="touch-toggle-group" data-key="fb_q1_opiniao" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;">
+              <button type="button" class="touch-btn" data-val="Otimo" onclick="app.setToggle('fb_q1_opiniao', 'Otimo', this)" style="padding: 6px 2px; font-size: 13.5px;">Ótimo</button>
+              <button type="button" class="touch-btn" data-val="Bom" onclick="app.setToggle('fb_q1_opiniao', 'Bom', this)" style="padding: 6px 2px; font-size: 13.5px;">Bom</button>
+              <button type="button" class="touch-btn" data-val="Neutro" onclick="app.setToggle('fb_q1_opiniao', 'Neutro', this)" style="padding: 6px 2px; font-size: 13.5px;">Neutro</button>
+              <button type="button" class="touch-btn" data-val="Ruim" onclick="app.setToggle('fb_q1_opiniao', 'Ruim', this)" style="padding: 6px 2px; font-size: 13.5px;">Ruim</button>
+              <button type="button" class="touch-btn" data-val="Pessimo" onclick="app.setToggle('fb_q1_opiniao', 'Pessimo', this)" style="padding: 6px 2px; font-size: 13.5px;">Péssimo</button>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 18px;">
+            <label class="form-label">2. Sobre os processos de posicionamento, foram citados e orientados pelo técnico?</label>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+              <div class="grid-2" style="align-items:center;">
+                <span style="font-size: 13px;">Processo de início do exame - Confirm/Ready:</span>
+                <div class="touch-toggle-group" data-key="fb_q2_inicio"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_inicio','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_inicio','NAO',this)">Não</button></div>
+              </div>
+              <div class="grid-2" style="align-items:center;">
+                <span style="font-size: 13px;">Laser vertical - Sagital:</span>
+                <div class="touch-toggle-group" data-key="fb_q2_sagital"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_sagital','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_sagital','NAO',this)">Não</button></div>
+              </div>
+              <div class="grid-2" style="align-items:center;">
+                <span style="font-size: 13px;">Laser horizontal - Frankfurt:</span>
+                <div class="touch-toggle-group" data-key="fb_q2_frankfurt"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_frankfurt','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_frankfurt','NAO',this)">Não</button></div>
+              </div>
+              <div class="grid-2" style="align-items:center;">
+                <span style="font-size: 13px;">Laser do canino:</span>
+                <div class="touch-toggle-group" data-key="fb_q2_canino"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_canino','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_canino','NAO',this)">Não</button></div>
+              </div>
+              <div class="grid-2" style="align-items:center;">
+                <span style="font-size: 13px;">Língua no céu da boca:</span>
+                <div class="touch-toggle-group" data-key="fb_q2_lingua"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_lingua','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_lingua','NAO',this)">Não</button></div>
+              </div>
+              <div class="grid-2" style="align-items:center;">
+                <span style="font-size: 13px;">Pés levemente posicionados a frente:</span>
+                <div class="touch-toggle-group" data-key="fb_q2_pes"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_pes','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_pes','NAO',this)">Não</button></div>
+              </div>
+              <div class="grid-2" style="align-items:center;">
+                <span style="font-size: 13px;">Posicionadores (Ex:Mordedor e apoio de queixo):</span>
+                <div class="touch-toggle-group" data-key="fb_q2_posicionadores"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_posicionadores','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_posicionadores','NAO',this)">Não</button></div>
+              </div>
+              <div class="grid-2" style="align-items:center;">
+                <span style="font-size: 13px;">Colete de chumbo:</span>
+                <div class="touch-toggle-group" data-key="fb_q2_colete"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_colete','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q2_colete','NAO',this)">Não</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 18px;">
+            <label class="form-label">3. Sobre o software EzDent-i, foi explicado sobre as abas de uso e ferramentas?</label>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Paciente:</span><div class="touch-toggle-group" data-key="fb_q3_paciente"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_paciente','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_paciente','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Aquisição:</span><div class="touch-toggle-group" data-key="fb_q3_aquisicao"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_aquisicao','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_aquisicao','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Visualizador:</span><div class="touch-toggle-group" data-key="fb_q3_visualizador"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_visualizador','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_visualizador','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Consulta:</span><div class="touch-toggle-group" data-key="fb_q3_consulta"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_consulta','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_consulta','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Implante:</span><div class="touch-toggle-group" data-key="fb_q3_implante"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_implante','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_implante','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Relatório (Templates):</span><div class="touch-toggle-group" data-key="fb_q3_relatorio"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_relatorio','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3_relatorio','NAO',this)">Não</button></div></div>
+            </div>
+          </div>
+
+          <!-- ITEM 3: EZ3D-I (CASO SEJA EQUIPAMENTO 3D) -->
+          <div class="form-group" style="margin-top: 18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <label class="form-label" style="margin-bottom:0;">3. Sobre o software Ez3D-i, foi explicado sobre as abas de uso e ferramentas? <span style="font-size:12px; font-weight:normal; color:#64748b;">(Caso seja equipamento 3D)</span></label>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="btn-sig-action" style="padding:4px 8px; font-size:11.5px;" onclick="app.preencherEz3Di('SIM')">✓ Todos Sim</button>
+                <button type="button" class="btn-sig-action" style="padding:4px 8px; font-size:11.5px; background:#f1f5f9; color:#475569;" onclick="app.preencherEz3Di('NAO')">✕ Não se aplica (Equipamento 2D)</button>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-top:8px;">
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba MPR:</span><div class="touch-toggle-group" data-key="fb_q3b_mpr"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_mpr','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_mpr','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Seção:</span><div class="touch-toggle-group" data-key="fb_q3b_secao"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_secao','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_secao','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba 3D Pan:</span><div class="touch-toggle-group" data-key="fb_q3b_3dpan"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_3dpan','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_3dpan','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba TMJ:</span><div class="touch-toggle-group" data-key="fb_q3b_tmj"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_tmj','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_tmj','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Implante:</span><div class="touch-toggle-group" data-key="fb_q3b_implante"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_implante','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_implante','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Consulta:</span><div class="touch-toggle-group" data-key="fb_q3b_consulta"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_consulta','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_consulta','NAO',this)">Não</button></div></div>
+              <div class="grid-2" style="align-items:center;"><span style="font-size: 13px;">Aba Relatório (Templates):</span><div class="touch-toggle-group" data-key="fb_q3b_relatorio"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_relatorio','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q3b_relatorio','NAO',this)">Não</button></div></div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 18px;">
+            <label class="form-label">4. O kit de acessórios (Manuais, pendrives, barras de transporte e etc) foram entregues pelo técnico para serem armazenados junto ao restante dos itens do equipamento?</label>
+            <div class="touch-toggle-group" data-key="fb_q4"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q4','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q4','NAO',this)">Não</button></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">5. Há outros computadores que gostaria de instalar os softwares para visualização dos exames? Se sim, quantos são?</label>
+            <div class="grid-2">
+              <input type="text" id="fb_q5_quantos" class="form-input" placeholder="Se sim, quantos computadores?">
+              <div class="touch-toggle-group" data-key="fb_q5"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q5','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q5','NAO',this)">Não</button></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">6. Foi explicado pelo técnico sobre a rede de internet do local para comunicação das estações de visualização?</label>
+            <div class="touch-toggle-group" data-key="fb_q6"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q6','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q6','NAO',this)">Não</button></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">7. Foi deixado os guias digitais de posicionamento e acessórios na área de trabalho do PC de aquisição?</label>
+            <div class="touch-toggle-group" data-key="fb_q7"><button type="button" class="touch-btn" onclick="app.setToggle('fb_q7','SIM',this)">Sim</button><button type="button" class="touch-btn" onclick="app.setToggle('fb_q7','NAO',this)">Não</button></div>
+          </div>
+
+          <!-- ITEM 8: AVISO CIENTÍFICO 3D E SUPORTE VATECH -->
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px; margin-top:14px; font-size:12.5px; color:#1e3a8a;">
+            <div style="font-weight:700; margin-bottom:4px;">8. Treinamento com Especialistas Científicos Vatech:</div>
+            <div>O treinamento com nossos especialistas científicos será agendado pela equipe Vatech após um período de mais ou menos 30 dias após a instalação, caso maiores dúvidas entre em contato com nosso suporte. <b>(TREINAMENTO EXCLUSIVO PARA EQUIPAMENTOS 3D)</b></div>
+            <div style="margin-top:6px; font-size:12px; color:#1e40af;">
+              <b>Contatos suporte Vatech:</b> WhatsApp: (011) 9 6401-0294 &nbsp;|&nbsp; Telefone: (011) 2189-0774 &nbsp;|&nbsp; Email: vbrg0200@vatechglobal.com
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:14px;">
+            <label class="form-label">Descreva sua experiência referente ao treinamento aplicado:</label>
+            <textarea id="fbExpTreinamento" class="form-textarea" rows="3" placeholder="Comentários sobre o treinamento"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Descreva sua experiência referente ao processo de entrega do equipamento, desde o contato para recebimento da máquina até a instalação:</label>
+            <textarea id="fbExpEntrega" class="form-textarea" rows="3" placeholder="Comentários sobre a entrega e instalação"></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 6: FECHAMENTO E ASSINATURAS TOUCH (TÉCNICO E CLIENTE)           -->
+    <!-- =================================================================== -->
+    <section id="step6" class="step-section" style="display: none;">
+      
+      <!-- ASSINATURA DO TÉCNICO -->
+      <div class="card sig-card-container">
+        <div class="card-header">
+          <span>✍️ Assinatura do Instalador / Técnico</span>
+          <span id="badgeTecnicoStatus" class="sig-status-badge pending">Pendente ⚠️</span>
+        </div>
+        <div class="card-body">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">
+            Responsável Técnico: <span id="labelNomeTecnico" style="color: var(--primary);">Lucas Gato</span>
+          </div>
+          <div class="sig-container" id="sigBoxTecnico">
+            <canvas id="canvasTecnico" class="sig-canvas"></canvas>
+            <div class="sig-baseline"><span>Assine acima desta linha</span><span>Vatech Service</span></div>
+            <div class="sig-watermark" id="watermarkTecnico">
+              ✍️ Toque com o dedo na tela ou clique e arraste com o mouse para assinar
+            </div>
+          </div>
+          <div class="sig-actions">
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-sig-action" onclick="app.limparAssinatura('tecnico')">🔄 Limpar</button>
+              <button type="button" class="btn-sig-action" onclick="app.desfazerAssinatura('tecnico')">↩️ Desfazer</button>
+            </div>
+            <button type="button" class="btn-sig-action" style="background:#fee2e2; border-color:#fca5a5; color:#991b1b;" onclick="app.abrirModoTelaCheia('tecnico')">
+              📱 Expandir Tela Cheia
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSINATURA DO CLIENTE -->
+      <div class="card sig-card-container">
+        <div class="card-header">
+          <span>✍️ Assinatura do Cliente / Responsável</span>
+          <span id="badgeClienteStatus" class="sig-status-badge pending">Pendente ⚠️</span>
+        </div>
+        <div class="card-body">
+          <div style="font-size: 13.5px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">
+            Responsável da Clínica: <span id="labelNomeCliente" style="color: var(--primary);">Gabriel Leite Souza</span>
+          </div>
+          <div class="sig-container" id="sigBoxCliente">
+            <canvas id="canvasCliente" class="sig-canvas"></canvas>
+            <div class="sig-baseline"><span>Assine acima desta linha</span><span>Aceite de Instalação</span></div>
+            <div class="sig-watermark" id="watermarkCliente">
+              ✍️ Toque com o dedo na tela ou clique e arraste com o mouse para assinar
+            </div>
+          </div>
+          <div class="sig-actions">
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-sig-action" onclick="app.limparAssinatura('cliente')">🔄 Limpar</button>
+              <button type="button" class="btn-sig-action" onclick="app.desfazerAssinatura('cliente')">↩️ Desfazer</button>
+            </div>
+            <button type="button" class="btn-sig-action" style="background:#fee2e2; border-color:#fca5a5; color:#991b1b;" onclick="app.abrirModoTelaCheia('cliente')">
+              📱 Expandir Tela Cheia
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESUMO DE VALIDAÇÃO E BOTÃO DE HOMOLOGAÇÃO -->
+      <div class="card">
+        <div class="card-body">
+          <div id="validationAlert" style="display:none; background-color: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px; margin-bottom: 14px; font-size: 13.5px; color: #991b1b;">
+            <b>Atenção:</b> <span id="validationMsg">Preencha todos os campos obrigatórios e colete as assinaturas.</span>
+          </div>
+
+          <button type="button" class="btn" style="width: 100%; min-height: 48px; font-size: 15px; margin-bottom: 12px; background: #2563eb !important; background-color: #2563eb !important; color: #ffffff !important; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);" onclick="app.abrirModalPreviaHtml('dossie')">
+            👁️ VISUALIZAR DOCUMENTOS (PRÉVIA DO PDF)
+          </button>
+
+          <button type="button" id="btnHomologarCard" class="btn btn-success" style="width: 100%; min-height: 54px; font-size: 16px; background: #059669 !important; background-color: #059669 !important; color: #ffffff !important; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4);" onclick="app.submeterAtendimento()">
+            🚀 HOMOLOGAR E TRANSMITIR ATENDIMENTO
+          </button>
+          <div style="text-align: center; margin-top: 8px; font-size: 12px; color: var(--text-muted);">
+            Esta ação gravará as assinaturas oficiais nos 4 PDFs e concluirá a OS.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL DE ASSINATURA EM TELA CHEIA (PARA SMARTPHONES E TABLETS COM ROTAÇÃO 180° / PAISAGEM) -->
+  <div id="modalFullscreenSig" class="fullscreen-sig-modal">
+    <div class="fullscreen-sig-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size: 20px;">✍️</span>
+        <div>
+          <div style="font-weight: 800; font-size: 15px; color:#0f172a;" id="fsSigTitle">Assinatura</div>
+          <div style="font-size: 11.5px; color: var(--text-muted);" id="fsSigSubtitle">Assine com o dedo ou caneta touch</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button type="button" class="btn-sig-action" onclick="app.alternarRotacaoFsSig()" id="btnGirarFsSig" style="background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; padding:6px 12px; font-weight:700; font-size:12px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" title="Girar tela 180° / inverter orientação">
+          🔄 Girar 180°
+        </button>
+        <button type="button" class="btn-clear" onclick="app.fecharModoTelaCheia(false)" style="font-weight:700; font-size:12.5px; color:#dc2626;">✕ Cancelar</button>
+      </div>
+    </div>
+    <div class="fullscreen-sig-canvas-container" id="fsCanvasContainer">
+      <canvas id="canvasFullscreen" class="fullscreen-sig-canvas"></canvas>
+      <div class="sig-baseline"><span>Assine acima desta linha</span><span>Vatech Touch Pad • Modo Amplo</span></div>
+    </div>
+    <div style="display: flex; gap: 8px; justify-content: space-between; align-items: center;">
+      <div style="display: flex; gap: 6px;">
+        <button type="button" class="btn-sig-action" onclick="app.limparFsSig()" style="padding: 8px 14px; font-weight:700; font-size:12.5px;">🔄 Limpar</button>
+        <button type="button" class="btn-sig-action" onclick="app.desfazerFsSig()" style="padding: 8px 14px; font-weight:700; font-size:12.5px;">↩️ Desfazer</button>
+      </div>
+      <button type="button" class="btn btn-success" style="min-height: 42px; padding: 6px 20px; font-size: 14px; font-weight: 800; border-radius: 8px; box-shadow: 0 4px 12px rgba(5,150,105,0.3);" onclick="app.fecharModoTelaCheia(true)">
+        ✓ Confirmar Assinatura
+      </button>
+    </div>
+  </div>
+
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+  <footer class="bottom-bar">
+    <div class="bottom-bar-content">
+      <button type="button" id="btnAnterior" class="btn btn-secondary" onclick="app.passoAnterior()" style="display:none;">⬅️ Anterior</button>
+      <button type="button" id="btnPreviaBottom" class="btn" style="background:#2563eb !important; background-color:#2563eb !important; color:#ffffff !important; font-weight:700; flex:1; display:inline-flex; align-items:center; justify-content:center; gap:6px; font-size: 14px; border:none; border-radius:8px; cursor:pointer;" onclick="app.abrirModalPreviaHtml('dossie')">👁️ Ver PDF</button>
+      <button type="button" id="btnProximo" class="btn btn-primary" onclick="app.proximoPasso()">Próximo ➡️</button>
+    </div>
+  </footer>
+
+  <!-- =================================================================== -->
+  <!-- MODAL DE CADASTRO PRÉVIO E DESPACHO DE OS (ADMIN / CENTRAL)         -->
+  <!-- =================================================================== -->
+  <div id="modalAdminNovaOS" class="modal-overlay" style="display:none; z-index:9999; background:rgba(0,0,0,0.75); padding:12px;" onclick="if(event.target === this) app.fecharModalAdminNovaOS()">
+    <div style="background:#ffffff; border-radius:14px; max-width:850px; width:100%; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);">
+      
+      <!-- CABEÇALHO DO MODAL -->
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 20px; border-bottom:1px solid #e2e8f0; background:#f8fafc;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:22px;">📋</span>
+          <div>
+            <div style="font-weight:700; font-size:16px; color:#0f172a;">Cadastro e Despacho de Nova OS</div>
+            <div style="font-size:11.5px; color:#64748b;">Preencha os dados do cliente e equipamento antes de enviar para o técnico em campo.</div>
+          </div>
+        </div>
+        <button type="button" class="btn-clear" onclick="app.fecharModalAdminNovaOS()" style="font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- CORPO COM FORMULÁRIO -->
+      <div style="flex:1; overflow-y:auto; padding:20px;" id="adminFormContainer">
+        
+        <!-- CARD 1: DADOS DO ATENDIMENTO -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>📌 Dados do Atendimento</span>
+          </div>
+          <div class="grid-2">
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Tipo de Atendimento *</label>
+              <select id="admTipoAtendimento" class="form-input" style="background:#fff;">
+                <option value="Instalação de Equipamento Novo">Instalação de Equipamento Novo</option>
+                <option value="Manutenção Preventiva">Manutenção Preventiva Periódica</option>
+                <option value="Manutenção Corretiva">Manutenção Corretiva / Chamado Técnico</option>
+                <option value="Revisão Técnica / Calibração">Revisão Técnica / Calibração</option>
+                <option value="Treinamento Operacional">Treinamento Operacional / Entrega Técnica</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Número da OS *</label>
+              <input type="text" id="admIdAtendimento" class="form-input" style="font-weight:700; color:#c8102e; background:#fff;">
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: DADOS DO CLIENTE / CLÍNICA -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>🏥 Dados da Clínica / Cliente</span>
+          </div>
+          <div class="form-group" style="margin-bottom:8px;">
+            <label class="form-label">Razão Social / Nome da Clínica *</label>
+            <input type="text" id="admCliRazao" class="form-input" style="background:#fff;" placeholder="Ex: SOUZA & CARVALHO ODONTOLOGIA LTDA">
+          </div>
+          <div class="grid-2">
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Nome do Contato / Dr(a). Responsável</label>
+              <input type="text" id="admCliContato" class="form-input" style="background:#fff;" placeholder="Ex: Dr. Gabriel Leite Souza">
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Telefone / WhatsApp do Cliente</label>
+              <input type="text" id="admCliTelefone" class="form-input" style="background:#fff;" placeholder="Ex: (35) 98897-5567">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">CNPJ ou CPF</label>
+              <input type="text" id="admCliCpfCnpj" class="form-input" style="background:#fff;" placeholder="Ex: 00.000.000/0001-00">
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">E-mail para envio dos relatórios</label>
+              <input type="email" id="admCliEmail" class="form-input" style="background:#fff;" placeholder="Ex: contato@clinica.com.br">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:8px;">
+            <label class="form-label">Endereço Completo</label>
+            <input type="text" id="admCliEndereco" class="form-input" style="background:#fff;" placeholder="Ex: Rua Barão de Cascalho, 554 - Centro">
+          </div>
+          <div class="grid-2">
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Cidade / UF *</label>
+              <input type="text" id="admCliCidadeUf" class="form-input" style="background:#fff;" placeholder="Ex: LIMEIRA/SP">
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">CEP</label>
+              <input type="text" id="admCliCep" class="form-input" style="background:#fff;" placeholder="Ex: 13480-770">
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3: DADOS DO EQUIPAMENTO -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>⚙️ Dados do Equipamento</span>
+          </div>
+          <div class="grid-2">
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Modelo do Equipamento *</label>
+              <input type="text" id="admEqModelo" list="listaModelosVatech" class="form-input" style="background:#fff;" placeholder="Selecione ou digite o modelo">
+              <datalist id="listaModelosVatech">
+                <option value="PaX-i">PaX-i (Panorâmico 2D)</option>
+                <option value="PaX-i 3D">PaX-i 3D (Pan / Tomo)</option>
+                <option value="Vatech A9">Vatech A9 (Pan / Tomo / Ceph)</option>
+                <option value="Green 16">Green 16 (4 em 1)</option>
+                <option value="Green X">Green X (Alta Resolução)</option>
+                <option value="EzRay Air Wall">EzRay Air Wall (Intraoral Parede)</option>
+                <option value="EzRay Air Portable">EzRay Air Portable (Portátil)</option>
+                <option value="EzSensor HD">EzSensor HD (Sensor Intraoral)</option>
+              </datalist>
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Número de Série (S/N) *</label>
+              <input type="text" id="admEqSerie" class="form-input" style="background:#fff; font-weight:700; color:#c8102e;" placeholder="Ex: 047-024913">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Número da Nota Fiscal (NF)</label>
+              <input type="text" id="admEqNF" class="form-input" style="background:#fff;" placeholder="Ex: 16208">
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Período de Garantia *</label>
+              <select id="admEqGarantia" class="form-input" style="background:#fff;">
+                <option value="5">5 Anos (Oficial Vatech)</option>
+                <option value="2">2 Anos</option>
+                <option value="1">1 Ano</option>
+                <option value="10">10 Anos (Tubo / Sensor)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 4: TÉCNICO RESPONSÁVEL -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+            <span>👨‍🔧 Técnico Responsável</span>
+          </div>
+          <div class="grid-2">
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Nome do Técnico Designado *</label>
+              <input type="text" id="admTecNome" class="form-input" style="background:#fff;" value="Lucas Gato" placeholder="Ex: Lucas Gato">
+            </div>
+            <div class="form-group" style="margin-bottom:8px;">
+              <label class="form-label">Empresa Técnica</label>
+              <input type="text" id="admTecEmpresa" class="form-input" style="background:#fff;" value="EXACTA MANUTENCOES" placeholder="Ex: EXACTA MANUTENCOES">
+            </div>
+          </div>
+        </div>
+
+        <!-- RESULTADO COM LINK GERADO (INICIALMENTE OCULTO) -->
+        <div id="admResultadoBox" style="display:none; background:#ecfdf5; border:1.5px solid #10b981; border-radius:12px; padding:16px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+            <span style="font-size:22px;">✅</span>
+            <div>
+              <div style="font-weight:700; font-size:15px; color:#065f46;">Ordem de Serviço Cadastrada com Sucesso!</div>
+              <div style="font-size:12px; color:#047857;">O link exclusivo do técnico já está pronto para despacho imediato:</div>
+            </div>
+          </div>
+          
+          <div style="background:#ffffff; border:1px solid #a7f3d0; border-radius:8px; padding:10px 12px; margin-bottom:12px; word-break:break-all; font-size:12.5px; font-family:monospace; color:#0f172a;" id="admLinkGeradoTexto"></div>
+
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary" style="flex:1; min-height:42px; background:#059669; font-size:13px; display:inline-flex; align-items:center; justify-content:center; gap:6px;" onclick="app.copiarLinkDespacho()">
+              📋 Copiar Link
+            </button>
+            <button type="button" class="btn btn-primary" style="flex:1; min-height:42px; background:#25d366; color:#ffffff; font-size:13px; display:inline-flex; align-items:center; justify-content:center; gap:6px;" onclick="app.enviarWhatsAppDespacho()">
+              💬 Enviar via WhatsApp
+            </button>
+            <button type="button" class="btn btn-secondary" style="flex:1; min-height:42px; font-size:13px;" onclick="app.abrirAtendimentoCadastrado()">
+              👁️ Abrir no Sistema
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RODAPÉ DE AÇÕES -->
+      <div style="padding:12px 20px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:10px;" id="admRodapeBotoes">
+        <button type="button" class="btn btn-secondary" onclick="app.fecharModalAdminNovaOS()">Fechar</button>
+        <button type="button" class="btn btn-primary" style="background:#c8102e; min-width:220px;" onclick="app.salvarNovaOSAdmin()">
+          🚀 Salvar e Gerar Link do Técnico
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL DE VISUALIZAÇÃO AMPLIADA DA FOTO AUTENTICADA -->
+  <div id="modalFotoAmpliada" class="modal-overlay" style="display:none; z-index:10000; background:rgba(0,0,0,0.85); padding:12px;" onclick="if(event.target === this) app.fecharModalFotoAmpliada()">
+    <div style="background:#ffffff; border-radius:12px; max-width:960px; width:100%; max-height:94vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px; border-bottom:1px solid #e2e8f0; background:#f8fafc;">
+        <div>
+          <div style="font-weight:700; font-size:15px; color:#1e293b;" id="modalFotoTitulo">Foto Autenticada</div>
+          <div style="font-size:11.5px; color:#64748b;" id="modalFotoSubtitulo">Carimbada com Data/Hora e Coordenadas GPS</div>
+        </div>
+        <button type="button" class="btn-clear" onclick="app.fecharModalFotoAmpliada()" style="font-size:18px; cursor:pointer;">✕</button>
+      </div>
+      <div style="flex:1; overflow:auto; padding:12px; text-align:center; background:#0f172a; display:flex; align-items:center; justify-content:center;">
+        <img id="imgModalAmpliada" src="" alt="Foto Ampliada" style="max-width:100%; max-height:72vh; object-fit:contain; border-radius:6px; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+      </div>
+      <div style="padding:10px 18px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:12px; color:#065f46; font-weight:600;" id="modalFotoMeta">🛡️ Autenticidade técnica garantida</span>
+        <button type="button" class="btn btn-secondary" style="padding:6px 16px; font-size:13px;" onclick="app.fecharModalFotoAmpliada()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE CARREGAMENTO -->
+  <div id="modalLoading" class="modal-overlay">
+    <div class="modal-card">
+      <div class="spinner"></div>
+      <h3 style="margin: 0 0 8px 0; font-size: 18px;">Homologando Atendimento...</h3>
+      <p id="loadingStatusText" style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 0;">
+        Renderizando documentos oficiais e gerando PDFs no Google Drive...
+      </p>
+    </div>
+  </div>
+
+  <!-- MODAL DE SUCESSO -->
+  <div id="modalSuccess" class="modal-overlay" onclick="if(event.target === this) app.fecharModalSuccess()">
+    <div class="modal-card" style="text-align: left; position: relative;">
+      <!-- BOTÃO FECHAR (X) PARA VOLTAR E EDITAR -->
+      <button type="button" class="btn-clear" onclick="app.fecharModalSuccess()" style="position: absolute; top: 12px; right: 14px; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: #64748b; background: #f1f5f9; cursor: pointer; border: 1px solid #cbd5e1; transition: all 0.2s;" onmouseover="this.style.background='#e2e8f0'; this.style.color='#0f172a'" onmouseout="this.style.background='#f1f5f9'; this.style.color='#64748b'" title="Fechar e voltar para editar (ESC)">
+        ✕
+      </button>
+
+      <div style="text-align: center; margin-bottom: 16px;">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: #d1fae5; color: #059669; border-radius: 50%; font-size: 32px; margin-bottom: 8px;">
+          ✓
+        </div>
+        <h3 style="margin: 0; font-size: 20px; color: #065f46;">Atendimento Homologado!</h3>
+        <p style="font-size: 13px; color: #64748b; margin-top: 4px;">
+          Os documentos técnicos foram gerados e salvos com sucesso na pasta do equipamento.
+        </p>
+      </div>
+
+      <!-- BOTÃO PRINCIPAL EM DESTAQUE: BAIXAR PDF ÚNICO CONSOLIDADO -->
+      <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px; margin-bottom: 14px; text-align: center;">
+        <div style="font-size: 11.5px; font-weight: 700; color: #1e40af; text-transform: uppercase; margin-bottom: 4px;">📄 Dossiê Técnico Completo (Arquivo PDF Único)</div>
+        <div style="font-size: 12.5px; color: #334155; margin-bottom: 10px;">Todos os documentos técnicos e fotos consolidados em 1 único arquivo PDF sequencial.</div>
+        <button type="button" id="btnBaixarDossiePdf" class="btn btn-primary" style="width: 100%; min-height: 48px; font-size: 14.5px; font-weight: 700; background: #2563eb; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none;" onclick="app.baixarDossiePdf()">
+          📥 BAIXAR DOSSIÊ COMPLETO EM PDF ÚNICO
+        </button>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+        <div style="font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px;">DOCUMENTOS INDIVIDUAIS GERADOS NO GOOGLE DRIVE:</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;" id="listPdfsLinks">
+          <!-- Inserido dinamicamente via JS -->
+        </div>
+      </div>
+
+      <a id="btnLinkPastaDrive" href="#" target="_blank" class="btn btn-secondary" style="width: 100%; text-decoration: none; margin-bottom: 8px; text-align: center;">
+        📁 Abrir Pasta no Google Drive
+      </a>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary" style="flex: 1; font-size: 13.5px; min-width: 130px;" onclick="app.abrirModalPreviaHtml('dossie')">
+          👁️ Ver Documentos
+        </button>
+        <button type="button" class="btn btn-secondary" style="flex: 1; font-size: 13.5px; min-width: 130px; font-weight: 600; color: #0f172a;" onclick="app.fecharModalSuccess()">
+          ✏️ Voltar e Editar (ESC)
+        </button>
+        <button type="button" class="btn btn-secondary" style="flex: 1; font-size: 13.5px; min-width: 130px;" onclick="window.location.reload()">
+          🔄 Novo Atendimento
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE PRÉ-VISUALIZAÇÃO DOS DOCUMENTOS OFICIAIS -->
+  <div id="modalPrevia" class="modal-overlay" style="padding: 10px; z-index: 9999;">
+    <div class="modal-previa-card">
+      
+      <!-- CABEÇALHO DO MODAL (FIXO) -->
+      <div class="previa-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--primary);"></span>
+            <h3 style="margin: 0; font-size: 16.5px; font-weight: 700; color: #0f172a;">Visualização dos Documentos Oficiais Vatech</h3>
+          </div>
+          <p style="margin: 2px 0 0 18px; font-size: 11.5px; color: var(--text-muted);">
+            Layout 100% idêntico aos arquivos originais de Limeira. Role o documento para conferir todos os campos, assinaturas e fotos com GPS.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn-sig-action" onclick="app.imprimirDocPrevia()" style="font-size: 12px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" title="Imprimir ou Salvar em PDF">
+            🖨️ Imprimir / Salvar PDF
+          </button>
+          <button type="button" class="btn-sig-action" onclick="app.abrirDocNovaJanela()" style="font-size: 12px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" title="Abrir em tela cheia numa nova aba do navegador">
+            ↗️ Nova Aba
+          </button>
+          <button type="button" class="btn-sig-action btn-close-modal" onclick="document.getElementById('modalPrevia').style.display='none'">
+            ✕ Fechar
+          </button>
+        </div>
+      </div>
+
+      <!-- BARRA DE ABAS DOS DOCUMENTOS (NUNCA ENCOLHE) -->
+      <div class="previa-tabs-bar">
+        <button type="button" id="tabPrevia_dossie" class="btn-previa-tab active" onclick="app.trocarDocPrevia('dossie')">
+          📑 Dossiê Completo (PDF Único)
+        </button>
+        <button type="button" id="tabPrevia_checklist" class="btn-previa-tab" onclick="app.trocarDocPrevia('checklist')">
+          📋 1. Checklist Pós-Instalação (61 Itens)
+        </button>
+        <button type="button" id="tabPrevia_relatorio" class="btn-previa-tab" onclick="app.trocarDocPrevia('relatorio')">
+          📄 2. Relatório de Visita Técnica
+        </button>
+        <button type="button" id="tabPrevia_garantia" class="btn-previa-tab" onclick="app.trocarDocPrevia('garantia')">
+          🛡️ 3. Termo de Garantia
+        </button>
+        <button type="button" id="tabPrevia_feedback" class="btn-previa-tab" onclick="app.trocarDocPrevia('feedback')">
+          ⭐ 4. Feedback do Cliente
+        </button>
+        <button type="button" id="tabPrevia_fotos" class="btn-previa-tab" onclick="app.trocarDocPrevia('fotos')">
+          📸 5. Anexo Fotográfico (GPS)
+        </button>
+      </div>
+
+      <!-- ÁREA DE VISUALIZAÇÃO DO DOCUMENTO (FOLHA COM SCROLL SUAVE) -->
+      <div class="previa-viewer-body">
+        <iframe id="iframePrevia" class="preview-doc-iframe"></iframe>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DADOS INICIAIS INJETADOS PELO GOOGLE APPS SCRIPT -->
+  <script>
+    window.INITIAL_DATA = <?!= dadosAtendimento ? JSON.stringify(dadosAtendimento) : 'null' ?>;
+    window.INITIAL_TICKET_ID = <?= ticketId ? JSON.stringify(ticketId) : '""' ?>;
+  </script>
+
+  <?!= include('Scripts'); ?>
+
+</body>
+</html>

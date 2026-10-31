@@ -1,0 +1,2075 @@
+<script>
+/**
+ * Vatech Exacta - Motor de Assinatura Digital Touch & Mouse de Alta Definição
+ * Suporte a tela de celular (Touch/Stylus) e computador (Mouse/Trackpad)
+ */
+
+class SmoothSignaturePad {
+  constructor(canvasId, watermarkId, badgeId, onUpdate) {
+    this.canvas = document.getElementById(canvasId);
+    this.watermark = document.getElementById(watermarkId);
+    this.badge = document.getElementById(badgeId);
+    this.onUpdate = onUpdate;
+    this.rotationAngle = 0; // 0, 90, 180, 270 graus
+    if (!this.canvas) return;
+
+    this.ctx = this.canvas.getContext('2d');
+    this.isDrawing = false;
+    this.strokes = []; // Histórico de traços para permitir "Desfazer"
+    this.currentStroke = [];
+    this.dpr = window.devicePixelRatio || 1;
+
+    this.setupCanvas();
+    this.bindEvents();
+  }
+
+  setupCanvas() {
+    if (!this.canvas) return;
+    const rect = this.canvas.getBoundingClientRect();
+    const isRot = (this.rotationAngle === 90 || this.rotationAngle === 270);
+    const displayWidth = this.canvas.clientWidth || (isRot ? rect.height : rect.width);
+    const displayHeight = this.canvas.clientHeight || (isRot ? rect.width : rect.height);
+    if (displayWidth === 0 || displayHeight === 0) return;
+
+    this.dpr = window.devicePixelRatio || 1;
+    this.canvas.width = displayWidth * this.dpr;
+    this.canvas.height = displayHeight * this.dpr;
+
+    this.ctx.scale(this.dpr, this.dpr);
+    this.ctx.lineWidth = 2.4;
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+    this.ctx.strokeStyle = '#0f172a';
+
+    this.redraw();
+  }
+
+  bindEvents() {
+    const c = this.canvas;
+
+    // Utiliza Pointer Events (unifica Touch, Stylus e Mouse com captura contínua)
+    if (window.PointerEvent) {
+      c.addEventListener('pointerdown', (e) => this.onPointerDown(e), { passive: false });
+      c.addEventListener('pointermove', (e) => this.onPointerMove(e), { passive: false });
+      c.addEventListener('pointerup', (e) => this.onPointerUp(e));
+      c.addEventListener('pointercancel', (e) => this.onPointerUp(e));
+    } else {
+      // Fallback para navegadores legados
+      c.addEventListener('touchstart', (e) => this.onTouchStart(e), { passive: false });
+      c.addEventListener('touchmove', (e) => this.onTouchMove(e), { passive: false });
+      c.addEventListener('touchend', () => this.stopDrawing());
+      c.addEventListener('mousedown', (e) => this.onMouseDown(e));
+      c.addEventListener('mousemove', (e) => this.onMouseMove(e));
+      c.addEventListener('mouseup', () => this.stopDrawing());
+      c.addEventListener('mouseleave', () => this.stopDrawing());
+    }
+
+    // Monitora redimensionamento de janela ou rotação de aparelho
+    window.addEventListener('resize', () => {
+      this.setupCanvas();
+    });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => this.setupCanvas(), 200);
+    });
+  }
+
+  getPointerPos(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    const isRot = (this.rotationAngle === 90 || this.rotationAngle === 270);
+    const displayWidth = this.canvas.clientWidth || (isRot ? rect.height : rect.width);
+    const displayHeight = this.canvas.clientHeight || (isRot ? rect.width : rect.height);
+
+    if (this.rotationAngle) {
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const rad = -this.rotationAngle * Math.PI / 180;
+      const unrotX = dx * Math.cos(rad) - dy * Math.sin(rad);
+      const unrotY = dx * Math.sin(rad) + dy * Math.cos(rad);
+      return {
+        x: unrotX + displayWidth / 2,
+        y: unrotY + displayHeight / 2
+      };
+    }
+
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  onPointerDown(e) {
+    // Apenas clique primário (botão esquerdo do mouse ou toque)
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault();
+    try { this.canvas.setPointerCapture(e.pointerId); } catch(err) {}
+
+    this.isDrawing = true;
+    const pt = this.getPointerPos(e);
+    this.currentStroke = [pt];
+
+    if (this.watermark) this.watermark.style.display = 'none';
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(pt.x, pt.y);
+  }
+
+  onPointerMove(e) {
+    if (!this.isDrawing) return;
+    e.preventDefault();
+
+    const pt = this.getPointerPos(e);
+    this.currentStroke.push(pt);
+
+    // Suavização do traço com curvas de Bézier quadráticas
+    const pts = this.currentStroke;
+    if (pts.length >= 3) {
+      const p1 = pts[pts.length - 2];
+      const p2 = pts[pts.length - 1];
+      const midPoint = {
+        x: (p1.x + p2.x) / 2,
+        y: (p1.y + p2.y) / 2
+      };
+      this.ctx.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+      this.ctx.stroke();
+    } else {
+      this.ctx.lineTo(pt.x, pt.y);
+      this.ctx.stroke();
+    }
+  }
+
+  onPointerUp(e) {
+    if (!this.isDrawing) return;
+    this.isDrawing = false;
+    try { this.canvas.releasePointerCapture(e.pointerId); } catch(err) {}
+
+    if (this.currentStroke.length > 0) {
+      this.strokes.push([...this.currentStroke]);
+      this.currentStroke = [];
+    }
+
+    this.updateStatus();
+    if (this.onUpdate) this.onUpdate();
+  }
+
+  // Fallback Touch
+  onTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    this.onPointerDown({ clientX: t.clientX, clientY: t.clientY, preventDefault: () => {} });
+  }
+
+  onTouchMove(e) {
+    if (!this.isDrawing || e.touches.length !== 1) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    this.onPointerMove({ clientX: t.clientX, clientY: t.clientY, preventDefault: () => {} });
+  }
+
+  // Fallback Mouse
+  onMouseDown(e) {
+    this.onPointerDown(e);
+  }
+
+  onMouseMove(e) {
+    this.onPointerMove(e);
+  }
+
+  stopDrawing() {
+    if (this.isDrawing) {
+      this.isDrawing = false;
+      if (this.currentStroke.length > 0) {
+        this.strokes.push([...this.currentStroke]);
+        this.currentStroke = [];
+      }
+      this.updateStatus();
+      if (this.onUpdate) this.onUpdate();
+    }
+  }
+
+  redraw() {
+    const w = this.canvas.width / this.dpr;
+    const h = this.canvas.height / this.dpr;
+    this.ctx.clearRect(0, 0, w, h);
+
+    if (this.strokes.length === 0) {
+      if (this.watermark) this.watermark.style.display = 'block';
+      this.updateStatus();
+      return;
+    }
+
+    if (this.watermark) this.watermark.style.display = 'none';
+
+    this.ctx.lineWidth = 2.4;
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+    this.ctx.strokeStyle = '#0f172a';
+
+    this.strokes.forEach(stroke => {
+      if (stroke.length < 2) return;
+      this.ctx.beginPath();
+      this.ctx.moveTo(stroke[0].x, stroke[0].y);
+
+      for (let i = 1; i < stroke.length - 1; i++) {
+        const p1 = stroke[i];
+        const p2 = stroke[i + 1];
+        const midPoint = {
+          x: (p1.x + p2.x) / 2,
+          y: (p1.y + p2.y) / 2
+        };
+        this.ctx.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+      }
+      this.ctx.lineTo(stroke[stroke.length - 1].x, stroke[stroke.length - 1].y);
+      this.ctx.stroke();
+    });
+
+    this.updateStatus();
+  }
+
+  desfazer() {
+    if (this.strokes.length > 0) {
+      this.strokes.pop();
+      this.redraw();
+      if (this.onUpdate) this.onUpdate();
+    }
+  }
+
+  clear() {
+    this.strokes = [];
+    this.currentStroke = [];
+    const w = this.canvas.width / this.dpr;
+    const h = this.canvas.height / this.dpr;
+    this.ctx.clearRect(0, 0, w, h);
+    if (this.watermark) this.watermark.style.display = 'block';
+    this.updateStatus();
+    if (this.onUpdate) this.onUpdate();
+  }
+
+  isEmpty() {
+    return this.strokes.length === 0;
+  }
+
+  updateStatus() {
+    if (!this.badge) return;
+    if (this.isEmpty()) {
+      this.badge.textContent = 'Pendente ⚠️';
+      this.badge.className = 'sig-status-badge pending';
+    } else {
+      this.badge.textContent = 'Assinado ✓';
+      this.badge.className = 'sig-status-badge signed';
+    }
+  }
+
+  /**
+   * Recorta bordas vazias transparentes e exporta PNG de alta definição para inserção no PDF
+   */
+  toTrimmedDataURL() {
+    if (this.isEmpty()) return null;
+
+    const w = this.canvas.width;
+    const h = this.canvas.height;
+    const imgData = this.ctx.getImageData(0, 0, w, h);
+    const data = imgData.data;
+
+    let minX = w, minY = h, maxX = 0, maxY = 0;
+    let found = false;
+
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const alpha = data[(y * w + x) * 4 + 3];
+        if (alpha > 20) {
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+          found = true;
+        }
+      }
+    }
+
+    if (!found) return null;
+
+    // Adiciona margem de segurança de 15px
+    const pad = Math.round(15 * this.dpr);
+    minX = Math.max(0, minX - pad);
+    minY = Math.max(0, minY - pad);
+    maxX = Math.min(w, maxX + pad);
+    maxY = Math.min(h, maxY + pad);
+
+    const cropW = maxX - minX;
+    const cropH = maxY - minY;
+
+    const trimmedCanvas = document.createElement('canvas');
+    trimmedCanvas.width = cropW;
+    trimmedCanvas.height = cropH;
+    const tCtx = trimmedCanvas.getContext('2d');
+
+    tCtx.drawImage(this.canvas, minX, minY, cropW, cropH, 0, 0, cropW, cropH);
+    return trimmedCanvas.toDataURL('image/png');
+  }
+
+  getStrokes() {
+    return this.strokes;
+  }
+
+  setStrokes(strokes) {
+    this.strokes = strokes ? JSON.parse(JSON.stringify(strokes)) : [];
+    this.redraw();
+  }
+
+  setScaledStrokes(strokes, fromWidth, fromHeight) {
+    if (!strokes || strokes.length === 0) {
+      this.clear();
+      return;
+    }
+    const isRot = (this.rotationAngle === 90 || this.rotationAngle === 270);
+    const rect = this.canvas.getBoundingClientRect();
+    const toW = this.canvas.clientWidth || (isRot ? rect.height : rect.width) || (this.canvas.width / this.dpr);
+    const toH = this.canvas.clientHeight || (isRot ? rect.width : rect.height) || (this.canvas.height / this.dpr);
+
+    if (!fromWidth || !fromHeight || fromWidth <= 0 || fromHeight <= 0) {
+      this.setStrokes(strokes);
+      return;
+    }
+
+    const sx = toW / fromWidth;
+    const sy = toH / fromHeight;
+    const s = Math.min(sx, sy) * 0.95;
+
+    const offsetX = (toW - fromWidth * s) / 2;
+    const offsetY = (toH - fromHeight * s) / 2;
+
+    this.strokes = strokes.map(stroke => stroke.map(pt => ({
+      x: pt.x * s + offsetX,
+      y: pt.y * s + offsetY
+    })));
+
+    this.redraw();
+  }
+}
+
+// Objeto de controle da Aplicação PWA
+const app = {
+  passoAtual: 1,
+  totalPassos: 6,
+  dados: null,
+  toggles: {},
+  fotos: {},
+  sigTecnico: null,
+  sigCliente: null,
+  fsPad: null,
+  fsTarget: null, // 'tecnico' ou 'cliente'
+
+  init() {
+    // Carrega dados da OS passada na URL (?id=...) ou do INITIAL_DATA / mock
+    const urlParams = new URLSearchParams(window.location.search);
+    const idParam = urlParams.get('id');
+    if (idParam) {
+      try {
+        const savedOs = localStorage.getItem('vatech_os_' + idParam);
+        if (savedOs) {
+          this.dados = JSON.parse(savedOs);
+        }
+      } catch(e){}
+    }
+    if (!this.dados) {
+      this.dados = window.INITIAL_DATA || this.mockDados();
+    }
+    this.preencherIdentificacao();
+
+    // Inicializa os pads de assinatura com eventos touch e mouse
+    const onSigDraw = (canvasId) => {
+      this.salvarRascunho();
+      const c = document.getElementById(canvasId);
+      if (c) c.classList.remove('input-unanswered');
+      const barra = document.getElementById('barraAlertaPendencias');
+      if (barra && barra.style.display !== 'none') {
+        this.atualizarStatusPendenciasAposResposta();
+      }
+    };
+    this.sigTecnico = new SmoothSignaturePad('canvasTecnico', 'watermarkTecnico', 'badgeTecnicoStatus', () => onSigDraw('canvasTecnico'));
+    this.sigCliente = new SmoothSignaturePad('canvasCliente', 'watermarkCliente', 'badgeClienteStatus', () => onSigDraw('canvasCliente'));
+
+    const hojeStr = new Date().toISOString().slice(0, 10);
+    const campoDataIni = document.getElementById('relDataInicio');
+    const campoDataFim = document.getElementById('relDataFim');
+    if (campoDataIni && !campoDataIni.value) campoDataIni.value = hojeStr;
+    if (campoDataFim && !campoDataFim.value) campoDataFim.value = hojeStr;
+
+    // Limpa rascunhos de testes anteriores que continham valores falsos
+    try {
+      const draftKey = 'vatech_draft_' + (this.dados ? this.dados.idAtendimento : 'default');
+      const draftRaw = localStorage.getItem(draftKey);
+      if (draftRaw && (draftRaw.includes('"q49_sn":"VT-2026-9921"') || draftRaw.includes('"q1":"SIM"'))) {
+        localStorage.removeItem(draftKey);
+      }
+    } catch(e) {}
+    this.restaurarRascunho();
+    this.atualizarProgresso();
+
+    document.querySelectorAll('input, textarea, select').forEach(el => {
+      const handleInput = () => {
+        this.salvarRascunho();
+        el.classList.remove('input-unanswered');
+        if (el.parentElement) el.parentElement.classList.remove('input-unanswered');
+        const parentLabel = el.closest('label');
+        if (parentLabel) parentLabel.classList.remove('input-unanswered');
+        const barra = document.getElementById('barraAlertaPendencias');
+        if (barra && barra.style.display !== 'none') {
+          this.atualizarStatusPendenciasAposResposta();
+        }
+      };
+      el.addEventListener('change', handleInput);
+      el.addEventListener('input', handleInput);
+    });
+  },
+
+  mockDados() {
+    return {
+      idAtendimento: '260930092200',
+      status: 'Pendente',
+      dataCriacao: '2026-09-30',
+      cliente: {
+        razaoSocial: 'SOUZA & CARVALHO ODONTOLOGIA LTDA',
+        nomeContato: 'GABRIEL LEITE SOUZA',
+        telefone: '35-98897-5567',
+        email: 'GABRIIEL.SOUZA@HOTMAIL.COM',
+        endereco: 'Rua Barão de Cascalho 554, Centro',
+        cidadeUf: 'LIMEIRA/SP',
+        cep: '13480-770'
+      },
+      equipamento: {
+        modelo: 'PaX-i',
+        nSerie: '047-024913',
+        notaFiscal: '16208',
+        anosGarantia: '5',
+        comCeph: 'NÃO',
+        comBase: 'NÃO'
+      },
+      tecnico: {
+        empresa: 'EXACTA MANUTENCOES',
+        nomeTecnico: 'Lucas Gato'
+      }
+    };
+  },
+
+  preencherIdentificacao() {
+    const d = this.dados;
+    if (!d) return;
+
+    document.getElementById('txtIdAtendimento').textContent = d.idAtendimento || '---';
+    document.getElementById('osId').value = d.idAtendimento || '';
+    document.getElementById('osData').value = d.dataCriacao || '';
+    document.getElementById('badgeStatus').textContent = d.status || 'Pendente';
+
+    function cleanStr(s) {
+      if (!s) return '';
+      return String(s).replace(/^\|\s*/, '').replace(/\|\s*TEL:.*$/i, '').replace(/\|/g, '').trim();
+    }
+
+    if (d.cliente) {
+      document.getElementById('cliRazao').value = cleanStr(d.cliente.razaoSocial) || '';
+      const cleanContato = cleanStr(d.cliente.nomeContato) || '';
+      document.getElementById('cliContato').value = cleanContato;
+      document.getElementById('cliTelefone').value = cleanStr(d.cliente.telefone) || '';
+      document.getElementById('cliEndereco').value = cleanStr(d.cliente.endereco) || '';
+      document.getElementById('cliCidadeUf').value = cleanStr(d.cliente.cidadeUf) || '';
+      document.getElementById('cliCep').value = cleanStr(d.cliente.cep) || '';
+      document.getElementById('labelNomeCliente').textContent = cleanContato || 'Cliente';
+    }
+
+    if (d.equipamento) {
+      document.getElementById('eqModelo').value = d.equipamento.modelo || 'PaX-i';
+      document.getElementById('eqSerie').value = d.equipamento.nSerie || '';
+      document.getElementById('eqNF').value = d.equipamento.notaFiscal || '';
+      document.getElementById('eqGarantia').value = (d.equipamento.anosGarantia || '5') + ' Anos';
+    }
+
+    if (d.tecnico) {
+      document.getElementById('tecNome').value = d.tecnico.nomeTecnico || '';
+      document.getElementById('tecEmpresa').value = d.tecnico.empresa || '';
+      document.getElementById('labelNomeTecnico').textContent = d.tecnico.nomeTecnico || 'Técnico';
+    }
+
+    // Descrição técnica deve ser digitada pelo técnico responsável
+
+  },
+
+  abrirNavegacao(tipoApp) {
+    const elEnd = document.getElementById('cliEndereco');
+    const elCid = document.getElementById('cliCidadeUf');
+    const elCep = document.getElementById('cliCep');
+
+    const endereco = (elEnd && elEnd.value) || (this.dados && this.dados.cliente && this.dados.cliente.endereco) || '';
+    const cidadeUf = (elCid && elCid.value) || (this.dados && this.dados.cliente && this.dados.cliente.cidadeUf) || '';
+    const cep = (elCep && elCep.value) || (this.dados && this.dados.cliente && this.dados.cliente.cep) || '';
+
+    const partes = [endereco, cidadeUf, cep ? 'CEP ' + cep : ''].filter(Boolean);
+    const enderecoCompleto = partes.join(', ');
+
+    if (!enderecoCompleto) {
+      alert('Endereço do cliente não informado.');
+      return;
+    }
+
+    const query = encodeURIComponent(enderecoCompleto);
+    let url = '';
+    if (tipoApp === 'waze') {
+      url = 'https://waze.com/ul?q=' + query + '&navigate=yes';
+    } else {
+      url = 'https://www.google.com/maps/search/?api=1&query=' + query;
+    }
+
+    window.open(url, '_blank');
+  },
+
+  setToggle(key, val, btn) {
+    this.toggles[key] = val;
+    let parent = null;
+    if (btn && btn.parentElement) {
+      parent = btn.parentElement;
+    } else {
+      parent = document.querySelector(`.touch-toggle-group[data-key="${key}"]`);
+    }
+
+    if (parent) {
+      parent.classList.remove('toggle-unanswered');
+      const badge = parent.querySelector('.badge-item-pendente');
+      if (badge) badge.remove();
+
+      const norm = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+      const normVal = norm(val);
+
+      parent.querySelectorAll('.touch-btn').forEach(b => {
+        b.classList.remove('active-sim', 'active-nao', 'active-opt', 'active-otimo', 'active-bom', 'active-neutro', 'active-ruim', 'active-pessimo');
+        
+        const isMatch = (btn && b === btn) || 
+          (b.dataset.val && b.dataset.val === val) ||
+          (norm(b.textContent) === normVal) ||
+          (norm(b.textContent).includes(normVal) || normVal.includes(norm(b.textContent))) ||
+          (val === 'SIM' && norm(b.textContent).startsWith('SIM')) ||
+          (val === 'NAO' && (norm(b.textContent).startsWith('NAO') || norm(b.textContent).startsWith('NA')));
+
+        if (isMatch) {
+          if (val === 'SIM') b.classList.add('active-sim');
+          else if (val === 'NAO') b.classList.add('active-nao');
+          else if (val === 'Otimo') b.classList.add('active-otimo');
+          else if (val === 'Bom') b.classList.add('active-bom');
+          else if (val === 'Neutro') b.classList.add('active-neutro');
+          else if (val === 'Ruim') b.classList.add('active-ruim');
+          else if (val === 'Pessimo') b.classList.add('active-pessimo');
+          else b.classList.add('active-opt');
+        }
+      });
+    }
+
+    this.atualizarProgresso();
+    this.salvarRascunho();
+
+    // Atualiza barra de alerta se estiver visível
+    const barra = document.getElementById('barraAlertaPendencias');
+    if (barra && barra.style.display !== 'none') {
+      this.atualizarStatusPendenciasAposResposta();
+    }
+  },
+
+  preencherEz3Di(val) {
+    const keys = ['fb_q3b_mpr', 'fb_q3b_secao', 'fb_q3b_3dpan', 'fb_q3b_tmj', 'fb_q3b_implante', 'fb_q3b_consulta', 'fb_q3b_relatorio'];
+    keys.forEach(k => {
+      this.setToggle(k, val, null);
+    });
+  },
+
+  // ============================================================================
+  // MÓDULO DE FOTOS DE CAMPO COM GEOLOCALIZAÇÃO E DATA/HORA INDELÉVEIS
+  // ============================================================================
+  obterGeolocalizacao() {
+    return new Promise((resolve) => {
+      const getFallback = (motivo) => {
+        const cidade = (this.dados && this.dados.cliente && this.dados.cliente.cidade) ? this.dados.cliente.cidade : 'Limeira';
+        const uf = (this.dados && this.dados.cliente && this.dados.cliente.uf) ? this.dados.cliente.uf : 'SP';
+        return {
+          sucesso: false,
+          lat: null,
+          lng: null,
+          precisao: null,
+          texto: `Local da OS: ${cidade} - ${uf} (${motivo})`
+        };
+      };
+
+      if (!navigator.geolocation) {
+        resolve(getFallback('GPS não suportado neste dispositivo'));
+        return;
+      }
+
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 7000,
+        maximumAge: 0
+      };
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lng = pos.coords.longitude.toFixed(6);
+          const acc = Math.round(pos.coords.accuracy || 0);
+          resolve({
+            sucesso: true,
+            lat: lat,
+            lng: lng,
+            precisao: acc,
+            texto: `Lat ${lat}, Long ${lng} (±${acc}m)`
+          });
+        },
+        (err) => {
+          let motivo = 'GPS não autorizado';
+          if (err.code === 3) motivo = 'Tempo limite de GPS excedido';
+          else if (err.code === 2) motivo = 'Posição GPS indisponível';
+          resolve(getFallback(motivo));
+        },
+        options
+      );
+    });
+  },
+
+  estamparCarimboAutenticidade(img, geo, metadados) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Redimensionamento proporcional para manter alta resolução sem sobrecarregar payload
+    const maxDim = 1600;
+    let w = img.width;
+    let h = img.height;
+    if (w > maxDim || h > maxDim) {
+      if (w > h) {
+        h = Math.round((h * maxDim) / w);
+        w = maxDim;
+      } else {
+        w = Math.round((w * maxDim) / h);
+        h = maxDim;
+      }
+    }
+
+    // Altura da barra de rodapé com informações de segurança
+    const bannerH = Math.max(100, Math.min(180, Math.round(h * 0.14)));
+    const totalH = h + bannerH;
+
+    canvas.width = w;
+    canvas.height = totalH;
+
+    // 1. Desenha a foto capturada
+    ctx.drawImage(img, 0, 0, w, h);
+
+    // 2. Tarja de rodapé de alta segurança
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, h, w, bannerH);
+
+    // Linha divisória superior esmeralda (indicador de autenticidade / verificação)
+    ctx.fillStyle = '#10b981';
+    ctx.fillRect(0, h, w, Math.max(3, Math.round(bannerH * 0.035)));
+
+    // 3. Textos do carimbo com fonte responsiva
+    const baseFontSize = Math.max(13, Math.min(22, Math.round(w / 45)));
+    const smallFontSize = Math.max(10, Math.min(17, Math.round(baseFontSize * 0.82)));
+    const lineSpacing = Math.round(bannerH * 0.28);
+    let startY = h + Math.round(bannerH * 0.28);
+
+    // Linha 1: Cabeçalho Oficial
+    ctx.font = `bold ${baseFontSize}px Arial, Helvetica, sans-serif`;
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillText('🛡️ VATECH & EXACTA — REGISTRO TÉCNICO OFICIAL DE CAMPO', 20, startY);
+
+    // Tag lateral de autenticidade
+    ctx.font = `bold ${smallFontSize}px Arial, Helvetica, sans-serif`;
+    ctx.fillStyle = '#34d399';
+    const tagText = '✓ AUTENTICIDADE TÉCNICA';
+    const tagWidth = ctx.measureText(tagText).width;
+    ctx.fillText(tagText, w - tagWidth - 20, startY);
+
+    // Linha 2: Data/Hora e Geolocalização GPS
+    startY += lineSpacing;
+    ctx.font = `normal ${smallFontSize}px Arial, Helvetica, sans-serif`;
+    ctx.fillStyle = '#f1f5f9';
+    const textLinha2 = `📅 DATA/HORA: ${metadados.dataHoraStr}   |   📍 LOCAL: ${geo.texto}`;
+    ctx.fillText(textLinha2, 20, startY);
+
+    // Linha 3: Identificação do Item, OS e Número de Série
+    startY += lineSpacing;
+    ctx.fillStyle = '#94a3b8';
+    const textLinha3 = `ITEM: ${metadados.titulo}   |   OS #${metadados.idAtendimento}   |   S/N: ${metadados.nSerie}`;
+    ctx.fillText(textLinha3, 20, startY);
+
+    return canvas.toDataURL('image/jpeg', 0.85);
+  },
+
+  async processarFotoInput(input, fotoKey, toggleKey, titulo) {
+    if (!input || !input.files || !input.files[0]) return;
+    const file = input.files[0];
+
+    const card = document.getElementById('card_' + fotoKey);
+    const acoes = document.getElementById('acoes_' + fotoKey);
+    const loading = document.getElementById('loading_' + fotoKey);
+    const previa = document.getElementById('previa_' + fotoKey);
+
+    if (acoes) acoes.style.display = 'none';
+    if (previa) previa.style.display = 'none';
+    if (loading) loading.style.display = 'block';
+
+    try {
+      const agora = new Date();
+      const padZero = (n) => String(n).padStart(2, '0');
+      const dataHoraStr = `${padZero(agora.getDate())}/${padZero(agora.getMonth() + 1)}/${agora.getFullYear()} ${padZero(agora.getHours())}:${padZero(agora.getMinutes())}:${padZero(agora.getSeconds())}`;
+      
+      const geo = await this.obterGeolocalizacao();
+
+      const base64Src = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(file);
+      });
+
+      const img = await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = (err) => reject(err);
+        image.src = base64Src;
+      });
+
+      const nSerie = (this.dados && this.dados.equipamento && this.dados.equipamento.nSerie) ? this.dados.equipamento.nSerie : '047-024913';
+      const idAtendimento = (this.dados && this.dados.idAtendimento) ? this.dados.idAtendimento : 'AT-LIMEIRA';
+
+      const dataUrlFinal = this.estamparCarimboAutenticidade(img, geo, {
+        dataHoraStr: dataHoraStr,
+        titulo: titulo || 'Evidência Técnica',
+        nSerie: nSerie,
+        idAtendimento: idAtendimento
+      });
+
+      if (!this.fotos) this.fotos = {};
+      this.fotos[fotoKey] = {
+        dataUrl: dataUrlFinal,
+        timestamp: agora.getTime(),
+        dataHoraStr: dataHoraStr,
+        geo: geo,
+        localStr: geo.texto,
+        titulo: titulo,
+        toggleKey: toggleKey
+      };
+
+      // Se possui toggle associado, marca automaticamente como SIM
+      if (toggleKey) {
+        this.setToggle(toggleKey, 'SIM');
+      }
+
+      this.atualizarCardFotoUI(fotoKey);
+      this.salvarRascunho();
+
+    } catch (err) {
+      console.error('Erro ao processar imagem:', err);
+      alert('Não foi possível processar a imagem selecionada: ' + err.message);
+      if (acoes) acoes.style.display = 'flex';
+      if (loading) loading.style.display = 'none';
+    } finally {
+      input.value = '';
+    }
+  },
+
+  atualizarCardFotoUI(fotoKey) {
+    const card = document.getElementById('card_' + fotoKey);
+    const acoes = document.getElementById('acoes_' + fotoKey);
+    const loading = document.getElementById('loading_' + fotoKey);
+    const previa = document.getElementById('previa_' + fotoKey);
+    const img = document.getElementById('img_' + fotoKey);
+    const meta = document.getElementById('meta_' + fotoKey);
+
+    if (loading) loading.style.display = 'none';
+
+    if (this.fotos && this.fotos[fotoKey]) {
+      const f = this.fotos[fotoKey];
+      if (card) card.classList.add('has-photo');
+      if (acoes) acoes.style.display = 'none';
+      if (previa) previa.style.display = 'block';
+      if (img) img.src = f.dataUrl;
+      if (meta) {
+        meta.innerHTML = `
+          <div style="font-weight:700; color:#065f46; display:flex; align-items:center; gap:4px; margin-bottom:2px;">
+            <span>✓ Carimbo de Autenticidade Gravado</span>
+          </div>
+          <div>📅 <b>Data/Hora:</b> ${f.dataHoraStr}</div>
+          <div>📍 <b>Local:</b> ${f.localStr}</div>
+        `;
+      }
+    } else {
+      if (card) card.classList.remove('has-photo');
+      if (acoes) acoes.style.display = 'flex';
+      if (previa) previa.style.display = 'none';
+      if (img) img.src = '';
+      if (meta) meta.innerHTML = '';
+    }
+  },
+
+  removerFoto(fotoKey, toggleKey) {
+    if (!confirm('Deseja realmente remover esta foto autenticada?')) return;
+    if (this.fotos && this.fotos[fotoKey]) {
+      delete this.fotos[fotoKey];
+    }
+    this.atualizarCardFotoUI(fotoKey);
+    this.salvarRascunho();
+  },
+
+  abrirModalFotoAmpliada(fotoKey) {
+    if (!this.fotos || !this.fotos[fotoKey]) return;
+    const f = this.fotos[fotoKey];
+    const modal = document.getElementById('modalFotoAmpliada');
+    const img = document.getElementById('imgModalAmpliada');
+    const titulo = document.getElementById('modalFotoTitulo');
+    const subtitulo = document.getElementById('modalFotoSubtitulo');
+    const meta = document.getElementById('modalFotoMeta');
+
+    if (img) img.src = f.dataUrl;
+    if (titulo) titulo.textContent = '📸 ' + (f.titulo || 'Registro Fotográfico Autenticado');
+    if (subtitulo) subtitulo.textContent = `Carimbado em ${f.dataHoraStr}`;
+    if (meta) meta.innerHTML = `📅 <b>${f.dataHoraStr}</b> &nbsp;|&nbsp; 📍 <b>${f.localStr}</b> &nbsp;|&nbsp; 🛡️ Autenticidade Técnica Verificada`;
+    if (modal) modal.style.display = 'flex';
+  },
+
+  fecharModalFotoAmpliada() {
+    const modal = document.getElementById('modalFotoAmpliada');
+    if (modal) modal.style.display = 'none';
+  },
+
+  // ============================================================================
+  // MÓDULO DE GESTÃO E DESPACHO DE OS (ADMINISTRATIVO / CENTRAL)
+  // ============================================================================
+  abrirModalAdminNovaOS() {
+    const modal = document.getElementById('modalAdminNovaOS');
+    if (!modal) return;
+
+    // Gera sugestão de ID no formato YYMMDDHHMMSS
+    const now = new Date();
+    const yy = String(now.getFullYear()).slice(-2);
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mi = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    const idSugerido = `${yy}${mm}${dd}${hh}${mi}${ss}`;
+
+    const campoId = document.getElementById('admIdAtendimento');
+    if (campoId) campoId.value = idSugerido;
+
+    const resBox = document.getElementById('admResultadoBox');
+    if (resBox) resBox.style.display = 'none';
+
+    modal.style.display = 'flex';
+  },
+
+  fecharModalAdminNovaOS() {
+    const modal = document.getElementById('modalAdminNovaOS');
+    if (modal) modal.style.display = 'none';
+  },
+
+  salvarNovaOSAdmin() {
+    const razaoSocial = document.getElementById('admCliRazao')?.value.trim();
+    const modelo = document.getElementById('admEqModelo')?.value.trim();
+    const nSerie = document.getElementById('admEqSerie')?.value.trim();
+    const cidadeUf = document.getElementById('admCliCidadeUf')?.value.trim();
+    const id = document.getElementById('admIdAtendimento')?.value.trim() || 'OS-NOVA';
+
+    if (!razaoSocial || !modelo || !nSerie || !cidadeUf) {
+      alert('Por favor, preencha os campos obrigatórios marcados com (*): Razão Social, Cidade/UF, Modelo e Número de Série.');
+      return;
+    }
+
+    const novoAtendimento = {
+      idAtendimento: id,
+      status: 'Pendente',
+      dataCriacao: new Date().toISOString().slice(0, 10),
+      tipoAtendimento: document.getElementById('admTipoAtendimento')?.value || 'Instalação de Equipamento Novo',
+      cliente: {
+        razaoSocial: razaoSocial,
+        nomeContato: document.getElementById('admCliContato')?.value.trim() || '',
+        cpfCnpj: document.getElementById('admCliCpfCnpj')?.value.trim() || '',
+        telefone: document.getElementById('admCliTelefone')?.value.trim() || '',
+        email: document.getElementById('admCliEmail')?.value.trim() || '',
+        endereco: document.getElementById('admCliEndereco')?.value.trim() || '',
+        cidadeUf: cidadeUf,
+        cep: document.getElementById('admCliCep')?.value.trim() || ''
+      },
+      equipamento: {
+        modelo: modelo,
+        nSerie: nSerie,
+        notaFiscal: document.getElementById('admEqNF')?.value.trim() || '',
+        anosGarantia: document.getElementById('admEqGarantia')?.value || '5',
+        comCeph: 'NÃO',
+        comBase: 'NÃO'
+      },
+      tecnico: {
+        nomeTecnico: document.getElementById('admTecNome')?.value.trim() || 'Lucas Gato',
+        empresa: document.getElementById('admTecEmpresa')?.value.trim() || 'EXACTA MANUTENCOES'
+      }
+    };
+
+    // Salva no localStorage localmente
+    try {
+      localStorage.setItem('vatech_os_' + id, JSON.stringify(novoAtendimento));
+    } catch(e){}
+
+    // Se estiver em ambiente Google Apps Script, salva no Google Sheets
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run.criarNovoAtendimento(novoAtendimento);
+    }
+
+    // Calcula URL do link direto
+    let linkTecnico = '';
+    if (window.location.protocol.startsWith('http')) {
+      linkTecnico = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    } else {
+      linkTecnico = `${window.location.href.split('?')[0]}?id=${id}`;
+    }
+
+    this.ultimoLinkGerado = linkTecnico;
+    this.ultimoAtendimentoGerado = novoAtendimento;
+
+    const resBox = document.getElementById('admResultadoBox');
+    const linkTxt = document.getElementById('admLinkGeradoTexto');
+    if (linkTxt) linkTxt.textContent = linkTecnico;
+    if (resBox) {
+      resBox.style.display = 'block';
+      resBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  },
+
+  copiarLinkDespacho() {
+    if (!this.ultimoLinkGerado) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(this.ultimoLinkGerado).then(() => {
+        alert('✓ Link copiado para a área de transferência com sucesso!\nVocê já pode colar no WhatsApp do técnico.');
+      });
+    } else {
+      prompt('Copie o link abaixo:', this.ultimoLinkGerado);
+    }
+  },
+
+  enviarWhatsAppDespacho() {
+    if (!this.ultimoAtendimentoGerado || !this.ultimoLinkGerado) return;
+    const d = this.ultimoAtendimentoGerado;
+    const msg = `🛠️ *VATECH & EXACTA — ORDEM DE SERVIÇO #${d.idAtendimento}*\n\n` +
+      `📋 *Atendimento:* ${d.tipoAtendimento || 'Instalação Técnica'}\n` +
+      `🏥 *Clínica:* ${d.cliente.razaoSocial}\n` +
+      `📍 *Cidade/UF:* ${d.cliente.cidadeUf}\n` +
+      `⚙️ *Equipamento:* ${d.equipamento.modelo} (S/N: ${d.equipamento.nSerie})\n` +
+      `👤 *Técnico Responsável:* ${d.tecnico.nomeTecnico}\n\n` +
+      `👉 *Acesse o formulário oficial para atendimento no campo:*\n${this.ultimoLinkGerado}`;
+
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  },
+
+  abrirAtendimentoCadastrado() {
+    if (!this.ultimoAtendimentoGerado) return;
+    this.dados = this.ultimoAtendimentoGerado;
+    this.toggles = {};
+    this.fotos = {};
+    if (this.sigTecnico) this.sigTecnico.clear();
+    if (this.sigCliente) this.sigCliente.clear();
+    this.preencherIdentificacao();
+    this.atualizarProgresso();
+    this.fecharModalAdminNovaOS();
+    this.navegarPara(1);
+    alert(`Atendimento OS #${this.dados.idAtendimento} carregado na tela com sucesso!`);
+  },
+
+  toggleAccordion(headerEl) {
+    const content = headerEl.nextElementSibling;
+    const isOpen = headerEl.classList.contains('open');
+    if (isOpen) {
+      headerEl.classList.remove('open');
+      content.classList.remove('show');
+    } else {
+      headerEl.classList.add('open');
+      content.classList.add('show');
+    }
+  },
+
+  navegarPara(passo) {
+    if (passo < 1 || passo > this.totalPassos) return;
+    this.passoAtual = passo;
+
+    for (let i = 1; i <= this.totalPassos; i++) {
+      const sec = document.getElementById('step' + i);
+      if (sec) sec.style.display = (i === passo) ? 'block' : 'none';
+    }
+
+    document.querySelectorAll('.step-tab').forEach((tab, idx) => {
+      tab.classList.toggle('active', (idx + 1) === passo);
+    });
+
+    const btnAnt = document.getElementById('btnAnterior');
+    const btnProx = document.getElementById('btnProximo');
+    btnAnt.style.display = (passo > 1) ? 'inline-flex' : 'none';
+
+    if (passo === this.totalPassos) {
+      btnProx.style.display = 'inline-flex';
+      btnProx.style.background = '#059669';
+      btnProx.style.backgroundColor = '#059669';
+      btnProx.style.color = '#ffffff';
+      btnProx.textContent = '🚀 Homologar';
+      btnProx.onclick = () => this.submeterAtendimento();
+    } else {
+      btnProx.style.display = 'inline-flex';
+      btnProx.style.background = '';
+      btnProx.style.backgroundColor = '';
+      btnProx.style.color = '';
+      btnProx.textContent = 'Próximo ➡️';
+      btnProx.onclick = () => this.proximoPasso();
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Quando o usuário chega na aba de assinaturas, calibra os canvases com as dimensões exatas da tela
+    if (passo === 6) {
+      setTimeout(() => {
+        if (this.sigTecnico) this.sigTecnico.setupCanvas();
+        if (this.sigCliente) this.sigCliente.setupCanvas();
+      }, 100);
+    }
+  },
+
+  proximoPasso() {
+    this.navegarPara(this.passoAtual + 1);
+  },
+
+  passoAnterior() {
+    this.navegarPara(this.passoAtual - 1);
+  },
+
+  limparAssinatura(tipo) {
+    if (tipo === 'tecnico' && this.sigTecnico) this.sigTecnico.clear();
+    if (tipo === 'cliente' && this.sigCliente) this.sigCliente.clear();
+    this.salvarRascunho();
+  },
+
+  desfazerAssinatura(tipo) {
+    if (tipo === 'tecnico' && this.sigTecnico) this.sigTecnico.desfazer();
+    if (tipo === 'cliente' && this.sigCliente) this.sigCliente.desfazer();
+    this.salvarRascunho();
+  },
+
+  // Modal de Assinatura em Tela Cheia (Ergonomia no Celular com Rotação 180° / Paisagem)
+  fsAngle: 90,
+
+  abrirModoTelaCheia(tipo) {
+    this.fsTarget = tipo;
+    const modal = document.getElementById('modalFullscreenSig');
+    const title = document.getElementById('fsSigTitle');
+    const sub = document.getElementById('fsSigSubtitle');
+
+    if (tipo === 'tecnico') {
+      title.textContent = 'Assinatura do Instalador / Técnico';
+      sub.textContent = this.dados.tecnico ? this.dados.tecnico.nomeTecnico : 'Lucas Gato';
+    } else {
+      title.textContent = 'Assinatura do Cliente / Responsável';
+      sub.textContent = this.dados.cliente ? this.dados.cliente.nomeContato : 'Cliente';
+    }
+
+    // Se a tela estiver em modo retrato (típico de celular), gira 90° para preencher toda a tela de lado
+    const isPortrait = (window.innerHeight > window.innerWidth);
+    this.fsAngle = isPortrait ? 90 : 0;
+    this.aplicarRotacaoModal();
+
+    modal.classList.add('open');
+
+    // Tenta travar em landscape via Screen Orientation API em navegadores que suportam
+    try {
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+      }
+    } catch(e) {}
+
+    // Inicializa pad de tela cheia calibrando com a rotação
+    setTimeout(() => {
+      if (!this.fsPad) {
+        this.fsPad = new SmoothSignaturePad('canvasFullscreen', null, null);
+      }
+      this.fsPad.rotationAngle = this.fsAngle;
+      this.fsPad.setupCanvas();
+
+      // Copia traços existentes proporcionalmente
+      const originalPad = (tipo === 'tecnico') ? this.sigTecnico : this.sigCliente;
+      if (originalPad && !originalPad.isEmpty()) {
+        const origW = originalPad.canvas.clientWidth || (originalPad.canvas.width / originalPad.dpr);
+        const origH = originalPad.canvas.clientHeight || (originalPad.canvas.height / originalPad.dpr);
+        this.fsPad.setScaledStrokes(originalPad.getStrokes(), origW, origH);
+      } else {
+        this.fsPad.clear();
+      }
+    }, 150);
+  },
+
+  alternarRotacaoFsSig() {
+    // Alterna a rotação 180 graus para permitir segurar o celular de ambos os lados
+    if (this.fsAngle === 90) {
+      this.fsAngle = 270;
+    } else if (this.fsAngle === 270) {
+      this.fsAngle = 90;
+    } else if (this.fsAngle === 0) {
+      this.fsAngle = 180;
+    } else {
+      this.fsAngle = 0;
+    }
+
+    this.aplicarRotacaoModal();
+
+    if (this.fsPad) {
+      this.fsPad.rotationAngle = this.fsAngle;
+      setTimeout(() => {
+        this.fsPad.setupCanvas();
+      }, 50);
+    }
+  },
+
+  aplicarRotacaoModal() {
+    const modal = document.getElementById('modalFullscreenSig');
+    if (!modal) return;
+    modal.classList.remove('rot-0', 'rot-90', 'rot-180', 'rot-270');
+    modal.classList.add('rot-' + this.fsAngle);
+  },
+
+  fecharModoTelaCheia(salvar) {
+    const modal = document.getElementById('modalFullscreenSig');
+    if (salvar && this.fsPad && this.fsTarget) {
+      const originalPad = (this.fsTarget === 'tecnico') ? this.sigTecnico : this.sigCliente;
+      if (originalPad) {
+        const fsW = this.fsPad.canvas.clientWidth || (this.fsPad.canvas.width / this.fsPad.dpr);
+        const fsH = this.fsPad.canvas.clientHeight || (this.fsPad.canvas.height / this.fsPad.dpr);
+        originalPad.setScaledStrokes(this.fsPad.getStrokes(), fsW, fsH);
+        this.salvarRascunho();
+        const c = originalPad.canvas;
+        if (c) c.classList.remove('input-unanswered');
+        const barra = document.getElementById('barraAlertaPendencias');
+        if (barra && barra.style.display !== 'none') {
+          this.atualizarStatusPendenciasAposResposta();
+        }
+      }
+    }
+
+    try {
+      if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+      }
+    } catch(e) {}
+
+    modal.classList.remove('open', 'rot-0', 'rot-90', 'rot-180', 'rot-270');
+    this.fsTarget = null;
+  },
+
+  limparFsSig() {
+    if (this.fsPad) this.fsPad.clear();
+  },
+
+  desfazerFsSig() {
+    if (this.fsPad) this.fsPad.desfazer();
+  },
+
+  atualizarProgresso() {
+    const checkCat = (keys, badgeId) => {
+      let count = 0;
+      keys.forEach(k => {
+        if (this.toggles[k] !== undefined) count++;
+      });
+      const badge = document.getElementById(badgeId);
+      if (badge) {
+        badge.textContent = `${count}/${keys.length}`;
+        badge.classList.toggle('complete', count === keys.length);
+      }
+    };
+
+    checkCat(['q1','q2','q3','q4','q5','q6'], 'badgeCat1');
+    checkCat(['q7','q8'], 'badgeCat2');
+    checkCat(['q9','q10','q11','q12','q13','q14_tipo','q16_possui','q18','q19_tipo','q21','q22','q23','q24','q25_plug'], 'badgeCat3');
+    checkCat(['q26_fixacao','q27','q28','q29','q30','q31','q32'], 'badgeCat4');
+    checkCat(['q33','q34','q35','q36','q36b'], 'badgeCat5');
+    checkCat(['q37','q40','q41','q42','q43','q44','q46','q47','q48_ezdenti','q48_ez3di','q49_mousepad','q50','q51','q52','q53','q54'], 'badgeCat6');
+    checkCat(['q56','q57','q58','q59'], 'badgeCat7');
+    checkCat(['q60','q62'], 'badgeCat8');
+
+    const totalItens = 45;
+    const preenchidos = Object.keys(this.toggles).length;
+    const pct = Math.min(100, Math.round((preenchidos / totalItens) * 100));
+    document.getElementById('progressBar').style.width = Math.max(12, pct) + '%';
+  },
+
+  salvarRascunho() {
+    try {
+      const key = 'vatech_draft_' + (this.dados ? this.dados.idAtendimento : 'default');
+      const payload = this.coletarPayload(false);
+      // Salva traços vetoriais das assinaturas para restauração 100% fiel
+      payload.strokesTecnico = this.sigTecnico ? this.sigTecnico.getStrokes() : [];
+      payload.strokesCliente = this.sigCliente ? this.sigCliente.getStrokes() : [];
+      payload.fotos = this.fotos || {};
+      localStorage.setItem(key, JSON.stringify(payload));
+    } catch(e) {}
+  },
+
+  restaurarRascunho() {
+    try {
+      const key = 'vatech_draft_' + (this.dados ? this.dados.idAtendimento : 'default');
+      const saved = localStorage.getItem(key);
+      if (!saved) return;
+      const data = JSON.parse(saved);
+
+      if (data.toggles) {
+        this.toggles = data.toggles;
+        const norm = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+        Object.entries(this.toggles).forEach(([k, val]) => {
+          const group = document.querySelector(`.touch-toggle-group[data-key="${k}"]`);
+          if (group) {
+            const normVal = norm(val);
+            group.querySelectorAll('.touch-btn').forEach(btn => {
+              btn.classList.remove('active-sim', 'active-nao', 'active-opt', 'active-otimo', 'active-bom', 'active-neutro', 'active-ruim', 'active-pessimo');
+              const isMatch = (btn.dataset.val && btn.dataset.val === val) ||
+                (norm(btn.textContent) === normVal) ||
+                (norm(btn.textContent).includes(normVal) || normVal.includes(norm(btn.textContent))) ||
+                (val === 'SIM' && norm(btn.textContent).startsWith('SIM')) ||
+                (val === 'NAO' && (norm(btn.textContent).startsWith('NAO') || norm(btn.textContent).startsWith('NA')));
+
+              if (isMatch) {
+                if (val === 'SIM') btn.classList.add('active-sim');
+                else if (val === 'NAO') btn.classList.add('active-nao');
+                else if (val === 'Otimo') btn.classList.add('active-otimo');
+                else if (val === 'Bom') btn.classList.add('active-bom');
+                else if (val === 'Neutro') btn.classList.add('active-neutro');
+                else if (val === 'Ruim') btn.classList.add('active-ruim');
+                else if (val === 'Pessimo') btn.classList.add('active-pessimo');
+                else btn.classList.add('active-opt');
+              }
+            });
+          }
+        });
+      }
+
+      if (data.inputs) {
+        Object.entries(data.inputs).forEach(([id, val]) => {
+          const el = document.getElementById(id);
+          if (el) {
+            if (el.type === 'checkbox') el.checked = !!val;
+            else el.value = val;
+          }
+        });
+      }
+
+      // Restaura fotos autenticadas
+      if (data.fotos) {
+        this.fotos = data.fotos;
+        Object.keys(this.fotos).forEach(k => {
+          this.atualizarCardFotoUI(k);
+        });
+      }
+
+      // Restaura traços das assinaturas
+      if (data.strokesTecnico && this.sigTecnico) {
+        this.sigTecnico.setStrokes(data.strokesTecnico);
+      }
+      if (data.strokesCliente && this.sigCliente) {
+        this.sigCliente.setStrokes(data.strokesCliente);
+      }
+    } catch(e) {}
+  },
+
+  coletarPayload(requireSignatures = true) {
+    const getVal = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    };
+    const getChk = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.checked : false;
+    };
+
+    const checklist = {
+      q1: this.toggles.q1 || '',
+      q2: this.toggles.q2 || '',
+      q3: this.toggles.q3 || '',
+      q4: this.toggles.q4 || '',
+      q5: this.toggles.q5 || '',
+      q6: this.toggles.q6 || '',
+      q7: this.toggles.q7 || '',
+      q8: this.toggles.q8 || '',
+      q8_disparador: getChk('q8_disparador'),
+      q8_cabos: getChk('q8_cabos'),
+      q8_posicionadores: getChk('q8_posicionadores'),
+      q8_pendrives: getChk('q8_pendrives'),
+      q8_manuais: getChk('q8_manuais'),
+      q8_fixadores: getChk('q8_fixadores'),
+      q8_fibra: getChk('q8_fibra'),
+      q8_controle: getChk('q8_controle'),
+      q9: this.toggles.q9 || '',
+      q9_valor: getVal('q9_valor'),
+      q10: this.toggles.q10 || '',
+      q11: this.toggles.q11 || '',
+      q12: this.toggles.q12 || '',
+      q13: this.toggles.q13 || '',
+      q14_tipo: this.toggles.q14_tipo || '',
+      q15_marca: getVal('q15_marca'),
+      q15_modelo: getVal('q15_modelo'),
+      q15_potencia: getVal('q15_potencia'),
+      q16_possui: this.toggles.q16_possui || '',
+      q16_tipo: this.toggles.q16_tipo || '',
+      q17_marca: getVal('q17_marca'),
+      q17_modelo: getVal('q17_modelo'),
+      q17_potencia: getVal('q17_potencia'),
+      q18: this.toggles.q18 || '',
+      q19_tipo: this.toggles.q19_tipo || '',
+      q20_ff: getVal('q20_ff'),
+      q20_fn: getVal('q20_fn'),
+      q20_f1t: getVal('q20_f1t'),
+      q20_f2t: getVal('q20_f2t'),
+      q20_nt: getVal('q20_nt'),
+      q21: this.toggles.q21 || '',
+      q22: this.toggles.q22 || '',
+      q23: this.toggles.q23 || '',
+      q24: this.toggles.q24 || '',
+      q25_plug: this.toggles.q25_plug || '',
+      q26_fixacao: this.toggles.q26_fixacao || '',
+      q27: this.toggles.q27 || '',
+      q28: this.toggles.q28 || '',
+      q29: this.toggles.q29 || '',
+      q30: this.toggles.q30 || '',
+      q31: this.toggles.q31 || '',
+      q32: this.toggles.q32 || '',
+      q33: this.toggles.q33 || '',
+      q34: this.toggles.q34 || '',
+      q35: this.toggles.q35 || '',
+      q36: this.toggles.q36 || '',
+      q36b: this.toggles.q36b || '',
+      q37: this.toggles.q37 || '',
+      q38_modelo: getVal('q38_modelo'),
+      q38_nserie: getVal('q38_nserie'),
+      q39_modelo: getVal('q39_modelo'),
+      q39_nserie: getVal('q39_nserie'),
+      q40: this.toggles.q40 || '',
+      q41: this.toggles.q41 || '',
+      q42: this.toggles.q42 || '',
+      q43: this.toggles.q43 || '',
+      q44: this.toggles.q44 || '',
+      q45_marca: getVal('q45_marca'),
+      q45_modelo: getVal('q45_modelo'),
+      q45_aetitle: getVal('q45_aetitle'),
+      q45_ip: getVal('q45_ip'),
+      q45_porta: getVal('q45_porta'),
+      q46: this.toggles.q46 || '',
+      q47: this.toggles.q47 || '',
+      q48_ezdenti: this.toggles.q48_ezdenti || '',
+      q48_ez3di: this.toggles.q48_ez3di || '',
+      q48_consult: this.toggles.q48_consult || '',
+      q48_implant: this.toggles.q48_implant || '',
+      q49_sn: getVal('q49_sn'),
+      q49_mousepad: this.toggles.q49_mousepad || '',
+      q50: this.toggles.q50 || '',
+      q50_mac: getVal('q50_mac'),
+      q51: this.toggles.q51 || '',
+      q52: this.toggles.q52 || '',
+      q53: this.toggles.q53 || '',
+      q53_qual: getVal('q53_qual'),
+      q54: this.toggles.q54 || '',
+      q54_quantos: getVal('q54_quantos'),
+      v_win: getVal('v_win'),
+      v_ezserver: getVal('v_ezserver'),
+      v_ezdenti: getVal('v_ezdenti'),
+      v_capture: getVal('v_capture'),
+      v_implantdb: getVal('v_implantdb'),
+      v_consult: getVal('v_consult'),
+      v_ez3di: getVal('v_ez3di'),
+      v_fibra: getVal('v_fibra'),
+      q56: this.toggles.q56 || '',
+      q57: this.toggles.q57 || '',
+      q57_std: getChk('q57_std'),
+      q57_orto: getChk('q57_orto'),
+      q57_atm: getChk('q57_atm'),
+      q58: this.toggles.q58 || '',
+      q58_lat: getChk('q58_lat'),
+      q58_fulllat: getChk('q58_fulllat'),
+      q58_pa: getChk('q58_pa'),
+      q58_carpal: getChk('q58_carpal'),
+      q59: this.toggles.q59 || '',
+      q59_5x5: getChk('q59_5x5'),
+      q59_8x5: getChk('q59_8x5'),
+      q59_8x8: getChk('q59_8x8'),
+      q59_8x9: getChk('q59_8x9'),
+      q59_10x7: getChk('q59_10x7'),
+      q59_10x85: getChk('q59_10x85'),
+      q59_12x9: getChk('q59_12x9'),
+      q59_16x9: getChk('q59_16x9'),
+      q59_dscan: getChk('q59_dscan'),
+      q60: this.toggles.q60 || '',
+      q61_participantes: getVal('q61_participantes'),
+      q62: this.toggles.q62 || '',
+      q63_entregue_para: getVal('q63_entregue_para')
+    };
+
+    const relatorio = {
+      horaInicial: getVal('relHoraInicio'),
+      dataInicial: getVal('relDataInicio'),
+      horaFinal: getVal('relHoraFim'),
+      dataFinal: getVal('relDataFim'),
+      motivo: getVal('relMotivo'),
+      garantia: getVal('relGarantia'),
+      descricaoTecnica: getVal('relDescricao')
+    };
+
+    const garantia = {
+      aceite: getChk('chkAceiteGarantia'),
+      dataInicio: (this.dados && this.dados.dataCriacao) ? this.dados.dataCriacao : '',
+      anos: (this.dados && this.dados.equipamento) ? this.dados.equipamento.anosGarantia : '5'
+    };
+
+    const feedback = {
+      q1_opiniao: this.toggles.fb_q1_opiniao || '',
+      q2_inicio: this.toggles.fb_q2_inicio || '',
+      q2_sagital: this.toggles.fb_q2_sagital || '',
+      q2_frankfurt: this.toggles.fb_q2_frankfurt || '',
+      q2_canino: this.toggles.fb_q2_canino || '',
+      q2_lingua: this.toggles.fb_q2_lingua || '',
+      q2_pes: this.toggles.fb_q2_pes || '',
+      q2_posicionadores: this.toggles.fb_q2_posicionadores || '',
+      q2_colete: this.toggles.fb_q2_colete || '',
+      q3_paciente: this.toggles.fb_q3_paciente || '',
+      q3_aquisicao: this.toggles.fb_q3_aquisicao || '',
+      q3_visualizador: this.toggles.fb_q3_visualizador || '',
+      q3_consulta: this.toggles.fb_q3_consulta || '',
+      q3_implante: this.toggles.fb_q3_implante || '',
+      q3_relatorio: this.toggles.fb_q3_relatorio || '',
+      q3b_mpr: this.toggles.fb_q3b_mpr || '',
+      q3b_secao: this.toggles.fb_q3b_secao || '',
+      q3b_3dpan: this.toggles.fb_q3b_3dpan || '',
+      q3b_tmj: this.toggles.fb_q3b_tmj || '',
+      q3b_implante: this.toggles.fb_q3b_implante || '',
+      q3b_consulta: this.toggles.fb_q3b_consulta || '',
+      q3b_relatorio: this.toggles.fb_q3b_relatorio || '',
+      q4: this.toggles.fb_q4 || '',
+      q5: this.toggles.fb_q5 || '',
+      q5_quantos: getVal('fb_q5_quantos'),
+      q6: this.toggles.fb_q6 || '',
+      q7: this.toggles.fb_q7 || '',
+      expTreinamento: getVal('fbExpTreinamento'),
+      expEntrega: getVal('fbExpEntrega')
+    };
+
+    const assinaturas = {
+      tecnico: (this.sigTecnico && !this.sigTecnico.isEmpty()) ? this.sigTecnico.toTrimmedDataURL() : null,
+      cliente: (this.sigCliente && !this.sigCliente.isEmpty()) ? this.sigCliente.toTrimmedDataURL() : null
+    };
+
+    const inputsMap = {};
+    document.querySelectorAll('input, textarea, select').forEach(el => {
+      if (el.id) {
+        inputsMap[el.id] = (el.type === 'checkbox') ? el.checked : el.value;
+      }
+    });
+
+    return {
+      idAtendimento: this.dados ? this.dados.idAtendimento : '260930092200',
+      dadosAtendimento: this.dados || (typeof this.mockDados === 'function' ? this.mockDados() : {}),
+      checklist: checklist,
+      relatorio: relatorio,
+      garantia: garantia,
+      feedback: feedback,
+      assinaturas: assinaturas,
+      fotos: this.fotos || {},
+      toggles: this.toggles,
+      inputs: inputsMap
+    };
+  },
+
+  
+  auditarAtendimento() {
+    const pendencias = [];
+
+    // 1. Checar todos os grupos de Toggle (SIM/NÃO e escolhas)
+    document.querySelectorAll('.touch-toggle-group').forEach(group => {
+      const key = group.dataset.key;
+      if (!key || key.includes('${')) return;
+
+      if (!this.toggles[key]) {
+        // Se for questão do software Ez3D-i e o equipamento for 2D (ex: PaX-i), não bloqueia se não preenchido
+        const is3D = this.dados && this.dados.equipamento && (
+          String(this.dados.equipamento.modelo || '').toUpperCase().includes('3D') ||
+          String(this.dados.equipamento.modelo || '').toUpperCase().includes('SMART') ||
+          String(this.dados.equipamento.modelo || '').toUpperCase().includes('GREEN')
+        );
+        if (key.startsWith('fb_q3b_') && !is3D) {
+          this.toggles[key] = 'NAO';
+          return;
+        }
+
+        const stepSection = group.closest('.step-section');
+        const stepNum = stepSection ? (parseInt(stepSection.id.replace('step', '')) || 2) : 2;
+
+        let titulo = '';
+        const checklistItem = group.closest('.checklist-item');
+        if (checklistItem) {
+          const t = checklistItem.querySelector('.checklist-title');
+          if (t) titulo = t.innerText.trim();
+        } else {
+          const prev = group.previousElementSibling || group.parentElement?.querySelector('label') || group.parentElement?.querySelector('span');
+          if (prev) titulo = prev.innerText.trim();
+          else titulo = 'Item: ' + key;
+        }
+
+        let categoria = '';
+        const accordionContent = group.closest('.accordion-content');
+        if (accordionContent && accordionContent.previousElementSibling) {
+          categoria = accordionContent.previousElementSibling.innerText.trim();
+        }
+
+        pendencias.push({
+          tipo: 'toggle',
+          key: key,
+          step: stepNum,
+          categoria: categoria,
+          titulo: titulo || ('Item ' + key),
+          element: group
+        });
+      }
+    });
+
+    // 2. Medições elétricas obrigatórias
+    const q20_nt = document.getElementById('q20_nt');
+    if (q20_nt && !q20_nt.value.trim()) {
+      pendencias.push({
+        tipo: 'input',
+        id: 'q20_nt',
+        step: 2,
+        categoria: '4. Durante a Instalação (Medições Elétricas)',
+        titulo: 'Tensão Neutro-Terra (V) - medição obrigatória',
+        element: q20_nt
+      });
+    }
+
+    const q20_ff = document.getElementById('q20_ff');
+    const q20_fn = document.getElementById('q20_fn');
+    if (q20_ff && q20_fn && !q20_ff.value.trim() && !q20_fn.value.trim()) {
+      pendencias.push({
+        tipo: 'input',
+        id: 'q20_fn',
+        step: 2,
+        categoria: '4. Durante a Instalação (Medições Elétricas)',
+        titulo: 'Tensão de Alimentação (Fase-Neutro ou Fase-Fase)',
+        element: q20_fn
+      });
+    }
+
+    // 3. Relatório Técnico
+    const relDesc = document.getElementById('relDescricao');
+    if (relDesc && (!relDesc.value.trim() || relDesc.value.trim().length < 10)) {
+      pendencias.push({
+        tipo: 'input',
+        id: 'relDescricao',
+        step: 3,
+        categoria: '3. Relatório de Visita Técnica',
+        titulo: 'Descrição Técnica dos serviços executados',
+        element: relDesc
+      });
+    }
+
+    // 4. Termo de Garantia
+    const chkGarantia = document.getElementById('chkAceiteGarantia');
+    if (chkGarantia && !chkGarantia.checked) {
+      pendencias.push({
+        tipo: 'checkbox',
+        id: 'chkAceiteGarantia',
+        step: 4,
+        categoria: '4. Termo de Garantia',
+        titulo: 'Confirmação e Aceite dos Termos de Garantia',
+        element: chkGarantia
+      });
+    }
+
+    // 5. Feedback do Cliente
+    if (!this.toggles['fb_q1_opiniao']) {
+      pendencias.push({
+        tipo: 'toggle',
+        key: 'fb_q1_opiniao',
+        step: 5,
+        categoria: '5. Feedback do Cliente',
+        titulo: 'Avaliação Geral do Treinamento (Ótimo, Bom, Neutro...)',
+        element: document.querySelector('.touch-toggle-group[data-key="fb_q1_opiniao"]')
+      });
+    }
+
+    // 6. Assinaturas
+    if (!this.sigTecnico || this.sigTecnico.isEmpty()) {
+      pendencias.push({
+        tipo: 'signature',
+        id: 'canvasTecnico',
+        step: 6,
+        categoria: '6. Assinaturas',
+        titulo: 'Assinatura do Instalador / Técnico Responsável',
+        element: document.getElementById('canvasTecnico')
+      });
+    }
+
+    if (!this.sigCliente || this.sigCliente.isEmpty()) {
+      pendencias.push({
+        tipo: 'signature',
+        id: 'canvasCliente',
+        step: 6,
+        categoria: '6. Assinaturas',
+        titulo: 'Assinatura do Cliente / Responsável da Clínica',
+        element: document.getElementById('canvasCliente')
+      });
+    }
+
+    return pendencias;
+  },
+  submeterAtendimento() {
+    const pendencias = this.auditarAtendimento();
+    if (pendencias.length > 0) {
+      // Ativa a barra de alerta no topo com contagem
+      this.exibirBarraAlertaPendencias(pendencias);
+      
+      // Imediatamente abre e focaliza na primeira pendência para o técnico responder!
+      this.indicePendenciaAtual = 0;
+      this.focarItemPendente(pendencias[0]);
+      return;
+    }
+
+    this.fecharAlertaPendencias();
+    this.removerMarcacoesErro();
+
+    const alertBox = document.getElementById('validationAlert');
+    if (alertBox) alertBox.style.display = 'none';
+
+    const modalLoading = document.getElementById('modalLoading');
+    if (modalLoading) modalLoading.style.display = 'flex';
+
+    const payload = this.coletarPayload(true);
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler((res) => this.onSubmissaoSucesso(res))
+        .withFailureHandler((err) => this.onSubmissaoErro(err))
+        .salvarAtendimento(payload);
+    } else {
+      setTimeout(() => {
+        const mockResult = {
+          success: true,
+          nSerie: this.dados.equipamento.nSerie,
+          pastaDriveUrl: 'https://drive.google.com/drive/folders/mock_folder_' + this.dados.equipamento.nSerie,
+          dossieUrl: 'https://drive.google.com/file/d/mock_dossie/view',
+          pdfs: {
+            dossieCompleto: 'https://drive.google.com/file/d/mock_dossie/view',
+            checklist: 'https://drive.google.com/file/d/mock_checklist/view',
+            relatorio: 'https://drive.google.com/file/d/mock_relatorio/view',
+            garantia: 'https://drive.google.com/file/d/mock_garantia/view',
+            feedback: 'https://drive.google.com/file/d/mock_feedback/view'
+          }
+        };
+        this.onSubmissaoSucesso(mockResult);
+      }, 1500);
+    }
+  },
+
+  exibirBarraAlertaPendencias(pendencias) {
+    const barra = document.getElementById('barraAlertaPendencias');
+    if (!barra) return;
+
+    barra.classList.remove('sucesso');
+    barra.style.display = 'block';
+
+    const qtdEl = document.getElementById('txtQtdPendentes');
+    if (qtdEl) qtdEl.textContent = pendencias.length;
+
+    const titEl = document.getElementById('txtAlertaTitulo');
+    if (titEl) {
+      titEl.innerHTML = 'Atenção: <span id="txtQtdPendentes" class="badge-qtd-pendente">' + pendencias.length + '</span> item(ns) pendente(s) para homologação';
+    }
+
+    const subEl = document.getElementById('txtAlertaSubtitulo');
+    if (subEl) {
+      subEl.textContent = 'Aberto na tela para resposta imediata. Clique em SIM / NÃO ou digite nos campos destacados em vermelho abaixo:';
+    }
+
+    const btnProx = document.getElementById('btnAlertaProximo');
+    if (btnProx) {
+      btnProx.style.background = '#dc2626';
+      btnProx.innerHTML = '<span>Próximo Faltante</span> ➔';
+      btnProx.onclick = () => this.navegarProximaPendencia();
+    }
+
+    // Destaca no formulário todos os itens não respondidos
+    this.removerMarcacoesErro();
+    pendencias.forEach(p => {
+      if (p.element) {
+        if (p.tipo === 'toggle') {
+          p.element.classList.add('toggle-unanswered');
+          if (!p.element.querySelector('.badge-item-pendente')) {
+            const badge = document.createElement('div');
+            badge.className = 'badge-item-pendente';
+            badge.innerHTML = '⚠️ Resposta obrigatória';
+            p.element.insertBefore(badge, p.element.firstChild);
+          }
+        } else if (p.tipo === 'input' || p.tipo === 'signature' || p.tipo === 'checkbox') {
+          const target = (p.tipo === 'checkbox' ? (p.element.closest('label') || p.element.parentElement || p.element) : p.element);
+          target.classList.add('input-unanswered');
+        }
+      }
+    });
+  },
+
+  focarItemPendente(p) {
+    if (!p) return;
+
+    // 1. Troca para a aba onde o item está
+    this.navegarPara(p.step);
+
+    setTimeout(() => {
+      let el = null;
+      if (p.key) {
+        el = document.querySelector(`.touch-toggle-group[data-key="${p.key}"]`);
+      } else if (p.id) {
+        el = document.getElementById(p.id);
+      }
+
+      if (el) {
+        // 2. Se estiver dentro de um accordion fechado, abre-o automaticamente!
+        const accContent = (el && el.closest) ? el.closest('.accordion-content') : null;
+        if (accContent && !accContent.classList.contains('show')) {
+          accContent.classList.add('show');
+          if (accContent.previousElementSibling) {
+            accContent.previousElementSibling.classList.add('open');
+          }
+        }
+
+        // 3. Rola a tela até o item e aplica efeito holofote
+        if (el && el.scrollIntoView) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        if (el && el.classList) {
+          el.classList.add('item-spotlight');
+          setTimeout(() => el.classList.remove('item-spotlight'), 3000);
+        }
+
+        // 4. Se for campo de texto, dá foco direto
+        if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') && el.focus) {
+          el.focus();
+        }
+      }
+    }, 200);
+  },
+
+  navegarProximaPendencia() {
+    const pendencias = this.auditarAtendimento();
+    if (pendencias.length === 0) {
+      this.alertaSucessoConcluido();
+      return;
+    }
+
+    this.indicePendenciaAtual = ((this.indicePendenciaAtual || 0) + 1) % pendencias.length;
+    const p = pendencias[this.indicePendenciaAtual];
+    this.focarItemPendente(p);
+
+    const qtdEl = document.getElementById('txtQtdPendentes');
+    if (qtdEl) qtdEl.textContent = pendencias.length;
+  },
+
+  atualizarStatusPendenciasAposResposta() {
+    const pendencias = this.auditarAtendimento();
+    const qtdEl = document.getElementById('txtQtdPendentes');
+    if (qtdEl) qtdEl.textContent = pendencias.length;
+
+    if (pendencias.length === 0) {
+      this.alertaSucessoConcluido();
+    }
+  },
+
+  alertaSucessoConcluido() {
+    const barra = document.getElementById('barraAlertaPendencias');
+    if (!barra) return;
+
+    barra.classList.add('sucesso');
+    barra.style.display = 'block';
+
+    const icone = document.getElementById('alertaIcone');
+    if (icone) icone.textContent = '✅';
+
+    const titEl = document.getElementById('txtAlertaTitulo');
+    if (titEl) {
+      titEl.innerHTML = '<span style="color:#065f46; font-size:15px; font-weight:800;">✓ Todos os itens foram preenchidos com sucesso!</span>';
+    }
+
+    const subEl = document.getElementById('txtAlertaSubtitulo');
+    if (subEl) {
+      subEl.textContent = 'Nenhuma pendência técnica encontrada. Você já pode homologar e emitir o dossiê oficial.';
+    }
+
+    const btnProx = document.getElementById('btnAlertaProximo');
+    if (btnProx) {
+      btnProx.style.background = '#059669';
+      btnProx.innerHTML = '<span>🚀 Homologar Agora</span>';
+      btnProx.onclick = () => {
+        this.navegarPara(6);
+        setTimeout(() => this.submeterAtendimento(), 250);
+      };
+    }
+  },
+
+  fecharAlertaPendencias() {
+    const barra = document.getElementById('barraAlertaPendencias');
+    if (barra) barra.style.display = 'none';
+  },
+
+  removerMarcacoesErro() {
+    document.querySelectorAll('.toggle-unanswered').forEach(el => el.classList.remove('toggle-unanswered'));
+    document.querySelectorAll('.input-unanswered').forEach(el => el.classList.remove('input-unanswered'));
+    document.querySelectorAll('.badge-item-pendente').forEach(el => el.remove());
+  },
+
+  
+
+  onSubmissaoSucesso(res) {
+    document.getElementById('modalLoading').style.display = 'none';
+    if (!res || !res.success) {
+      alert('Erro na geração dos documentos: ' + (res ? res.error : 'Resposta desconhecida'));
+      return;
+    }
+
+    try {
+      localStorage.removeItem('vatech_draft_' + this.dados.idAtendimento);
+    } catch(e) {}
+
+    const listContainer = document.getElementById('listPdfsLinks');
+    if (listContainer) {
+      listContainer.innerHTML = '';
+      const pdfList = [
+        { name: `Checklist Pós-Instalação (${res.nSerie})`, key: 'checklist', url: res.pdfs ? res.pdfs.checklist : null },
+        { name: `Relatório de Visita Técnica (${res.nSerie})`, key: 'relatorio', url: res.pdfs ? res.pdfs.relatorio : null },
+        { name: `Termo de Garantia (${res.nSerie})`, key: 'garantia', url: res.pdfs ? res.pdfs.garantia : null },
+        { name: `Feedback do Cliente (${res.nSerie})`, key: 'feedback', url: res.pdfs ? res.pdfs.feedback : null },
+        { name: `Anexo Fotográfico Oficial (${res.nSerie})`, key: 'fotos', url: res.pdfs ? res.pdfs.anexoFotos : null }
+      ];
+
+      pdfList.forEach(item => {
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.justifyContent = 'space-between';
+        row.style.padding = '8px 12px';
+        row.style.background = '#ffffff';
+        row.style.border = '1px solid #cbd5e1';
+        row.style.borderRadius = '6px';
+        row.style.color = '#1e293b';
+        row.style.fontSize = '13px';
+        row.style.fontWeight = '600';
+
+        const isGAS = (typeof google !== 'undefined' && google.script && google.script.run && item.url && !item.url.includes('mock'));
+        if (isGAS) {
+          row.innerHTML = `<span>📄 ${item.name}</span> <a href="${item.url}" target="_blank" style="color:var(--primary); font-size:12px; text-decoration:none;">Visualizar PDF ↗</a>`;
+        } else {
+          row.innerHTML = `<span>📄 ${item.name}</span> <button type="button" class="btn-sig-action" style="padding:4px 10px; font-size:11.5px;" onclick="app.abrirModalPreviaHtml('${item.key}')">Visualizar ↗</button>`;
+        }
+        listContainer.appendChild(row);
+      });
+    }
+
+    const btnPasta = document.getElementById('btnLinkPastaDrive');
+    if (btnPasta) {
+      if (res.pastaDriveUrl && !res.pastaDriveUrl.includes('mock')) {
+        btnPasta.href = res.pastaDriveUrl;
+        btnPasta.style.display = 'block';
+      } else {
+        btnPasta.style.display = 'none';
+      }
+    }
+
+    const modalSuccess = document.getElementById('modalSuccess');
+    if (modalSuccess) modalSuccess.style.display = 'flex';
+  },
+
+  docsPreviaHtml: {},
+  docPreviaAtual: 'dossie',
+
+  renderizarPreviaLocal(docTipo) {
+    const payload = this.coletarPayload(false);
+    const d = (this.dados) ? JSON.parse(JSON.stringify(this.dados)) : (typeof this.mockDados === 'function' ? this.mockDados() : {});
+    const c = payload.checklist;
+    const rel = payload.relatorio;
+    const gar = payload.garantia;
+    const fb = payload.feedback;
+    const sigs = payload.assinaturas;
+    const fotos = payload.fotos || this.fotos || {};
+
+    let html = '';
+    if (typeof gerarHtmlDossieCompleto === 'function') {
+      if (docTipo === 'dossie') html = gerarHtmlDossieCompleto(d, c, rel, gar, fb, sigs, fotos);
+      else if (docTipo === 'checklist') html = gerarHtmlChecklist(d, c, sigs);
+      else if (docTipo === 'relatorio') html = gerarHtmlRelatorio(d, rel, sigs);
+      else if (docTipo === 'garantia') html = gerarHtmlGarantia(d, gar, sigs);
+      else if (docTipo === 'feedback') html = gerarHtmlFeedback(d, fb, sigs);
+      else if (docTipo === 'fotos') html = gerarHtmlAnexoFotos(d, fotos, sigs);
+    }
+    return html;
+  },
+
+  abrirModalPreviaHtml(docInicial = 'dossie') {
+    this.docPreviaAtual = docInicial;
+    const modal = document.getElementById('modalPrevia');
+    if (!modal) return;
+    modal.style.display = 'flex';
+
+    if (typeof gerarHtmlDossieCompleto === 'function') {
+      this.trocarDocPrevia(this.docPreviaAtual);
+      return;
+    }
+
+    const iframe = document.getElementById('iframePrevia');
+    if (iframe) {
+      iframe.srcdoc = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;color:#64748b;font-size:15px;">⏳ Carregando documento oficial e assinaturas...</div>';
+    }
+
+    const payload = this.coletarPayload(false);
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler((res) => {
+          if (res && res.success) {
+            this.docsPreviaHtml = res;
+            this.trocarDocPrevia(this.docPreviaAtual);
+          } else {
+            if (iframe) iframe.srcdoc = '<div style="color:red;padding:20px;">Erro ao carregar prévia: ' + (res ? res.error : 'Falha desconhecida') + '</div>';
+          }
+        })
+        .withFailureHandler((err) => {
+          if (iframe) iframe.srcdoc = '<div style="color:red;padding:20px;">Erro de conexão: ' + (err.message || err) + '</div>';
+        })
+        .gerarPreviaHtml(payload);
+    }
+  },
+
+  trocarDocPrevia(tipo) {
+    this.docPreviaAtual = tipo;
+    ['dossie', 'checklist', 'relatorio', 'garantia', 'feedback', 'fotos'].forEach(t => {
+      const btn = document.getElementById('tabPrevia_' + t);
+      if (btn) btn.classList.toggle('active', t === tipo);
+    });
+
+    const iframe = document.getElementById('iframePrevia');
+    if (!iframe) return;
+
+    let html = '';
+    if (typeof gerarHtmlDossieCompleto === 'function') {
+      html = this.renderizarPreviaLocal(tipo);
+    } else if (this.docsPreviaHtml && this.docsPreviaHtml[tipo]) {
+      html = this.docsPreviaHtml[tipo];
+    }
+
+    if (html) {
+      this.ultimoHtmlPrevia = html;
+      iframe.srcdoc = html;
+    }
+  },
+
+  imprimirDocPrevia() {
+    const iframe = document.getElementById('iframePrevia');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+    }
+  },
+
+  abrirDocNovaJanela() {
+    let html = this.ultimoHtmlPrevia;
+    if (!html && typeof gerarHtmlDossieCompleto === 'function') {
+      html = this.renderizarPreviaLocal(this.docPreviaAtual);
+    }
+    if (html) {
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.open();
+        win.document.write(html);
+        win.document.close();
+      }
+    }
+  },
+
+  baixarDossiePdf() {
+    let html = '';
+    if (typeof gerarHtmlDossieCompleto === 'function') {
+      html = this.renderizarPreviaLocal('dossie');
+    } else if (this.docsPreviaHtml && this.docsPreviaHtml.dossie) {
+      html = this.docsPreviaHtml.dossie;
+    }
+    if (html) {
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.open();
+        win.document.write(html);
+        win.document.close();
+        setTimeout(() => {
+          win.focus();
+          win.print();
+        }, 350);
+      }
+    }
+  },
+
+  fecharModalSuccess() {
+    const modal = document.getElementById('modalSuccess');
+    if (modal) modal.style.display = 'none';
+  },
+
+  fecharModaisAbertos() {
+    // 1. Fecha prévia de documentos se estiver aberta
+    const modalPrevia = document.getElementById('modalPrevia');
+    if (modalPrevia && modalPrevia.style.display === 'flex') {
+      modalPrevia.style.display = 'none';
+      return;
+    }
+
+    // 2. Fecha modal de foto ampliada se estiver aberto
+    const modalFoto = document.getElementById('modalFotoAmpliada');
+    if (modalFoto && modalFoto.style.display === 'flex') {
+      modalFoto.style.display = 'none';
+      return;
+    }
+
+    // 3. Fecha modal admin de nova OS se estiver aberto
+    const modalAdmin = document.getElementById('modalAdminNovaOS');
+    if (modalAdmin && modalAdmin.style.display === 'flex') {
+      modalAdmin.style.display = 'none';
+      return;
+    }
+
+    // 4. Fecha modal de sucesso / homologação para voltar e editar dados
+    const modalSuccess = document.getElementById('modalSuccess');
+    if (modalSuccess && modalSuccess.style.display === 'flex') {
+      modalSuccess.style.display = 'none';
+      return;
+    }
+  },
+
+  onSubmissaoErro(err) {
+    document.getElementById('modalLoading').style.display = 'none';
+    alert('Erro ao processar e salvar no Google Drive: ' + (err.message || err.toString()));
+  }
+};
+
+window.app = app;
+
+window.addEventListener('DOMContentLoaded', () => {
+  app.init();
+});
+
+// Listener global para fechar modais com a tecla ESC
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) {
+    if (typeof app !== 'undefined' && app.fecharModaisAbertos) {
+      app.fecharModaisAbertos();
+    }
+  }
+});
+</script>

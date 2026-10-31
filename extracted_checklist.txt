@@ -1,0 +1,318 @@
+2026-09-30
+Técnico 
+Lucas Gato
+Empresa 
+Cliente
+Cidade/ UF
+PaX-i
+n. Série:
+Nº
+Categoria
+1
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+2
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+3
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+4
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+5
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+6
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+7
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+8
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+9
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+10
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+11
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+12
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+13
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+14
+Estabil.###ESC###    ###ESC###
+Nobreak ###ESC###    ###ESC###
+15
+16
+Estabil.###ESC###    ###ESC###
+Nobreak ###ESC###    ###ESC###
+17
+18
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+19
+F+F ###ESC###    ###ESC###
+F+N ###ESC###    ###ESC###
+20
+21
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+22
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+23
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+24
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+25
+ABNT 20A ###ESC###    ###ESC###
+Tipo Borne ###ESC###    ###ESC###
+26
+CHÃO ###ESC###    ###ESC###
+BASE ###ESC###    ###ESC###
+27
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+28
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+29
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+30
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+31
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+32
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+33
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+34
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+35
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+36
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+37
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+38
+39
+40
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+41
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+42
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+43
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+44
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+45
+46
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+47
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+48
+49
+Número Série do Pen Drive
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+50
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+51
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+52
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+53
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+54
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+55
+56
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+57
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+58
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+59
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+60
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+61
+62
+SIM ###ESC###    ###ESC###
+NÃO ###ESC###    ###ESC###
+###ESC###Assinatura###ESC###
+Há Ar-condicionado com funcionamento em conformidade?
+Cliente irá imprimir em impresora DRY pelo Software Vatech?
+A im
+agem está
+ sendo salva no EzDent-i?
+O computador possui placa de Video dedicada ?
+O equipamento possui barramentos internos de Aterramento?  ###ESC###3 barras cobre + cabo terra###ESC### - 
+Bush Brass
+CBCT:     ###ESC###    ###ESC###5x5           ###ESC###   ###ESC### 8x5               ###ESC###    ###ESC###8x8           ###ESC###    ###ESC###8x9            ###ESC###    ###ESC### 10x7     
+    
+ ###ESC###    ###ESC###10x8.5            ###ESC###    ###ESC###12x9          ###ESC###    ###ESC###16x9                   ###ESC###    ###ESC###Double Scan
+O Painel de Led ###ESC###verde###ESC### está ligado e a movimentação está conforme ?
+O computador possui placa de Rede Gigabit ? Foi instalado a PCI do Kit? ###ESC###PaX-i###ESC###
+A rede de internet está disponível para o PC ?
+###ESC###Assinatura###ESC###
+Conferido por 
+###ESC###Vatech BR###ESC###:
+*Nome Cliente
+Foi realizada entrega técnica?
+Nome dos Participantes:            
+Foi explicado a importância do PenDrive de Licenças e CD/Pendrive de Software?
+Entrega 
+Técnica
+63
+PANO:    ###ESC###    ###ESC### Standard                    ###ESC###     ###ESC### Ortogonal Bitewing               ###ESC###    ###ESC### ATM Open/ Close
+CEPH:     ###ESC###    ###ESC### Lateral                  ###ESC###    ###ESC### Full Lateral                 ###ESC###    ###ESC### PA                 ###ESC###     ###ESC### Carpal
+            Check List Pós Instalação - Installation Report 
+ver.05
+Data de Instalação
+EXACTA MANUTENCOES
+1. Informações do Cliente
+Local/ Clínica
+G. Assinatura de confirmação de Instalação Completa
+*Nome 
+Instalador
+Lucas Gato
+Aquisição 
+de imagem 
+Dados Impressora:  Marca:                                  Modelo:                                         AE TITLE:                           IP:                                                    Porta:
+Realizado captura de todos os modos de exames?
+Versões:  
+Win:                  EzServer:                  EzDent-i:                   CaptureSW:                  ImplantDB:             
+Consult:                  Ez3D-i:                  Fibra Óptica:
+Antes de 
+Iniciar 
+Instalação
+A tomada de saída do Nobreak/Etabilizador é com plugues 20A?
+A Tomada da sala é 220V?
+O instalador tem certeza que os cabos estão bem conectados ao equipamento e computador?
+O equipamento foi bem nivelado/ balanceado ###ESC###Esquerda/ Direita e Frente/ Trás###ESC###?
+O equipamento foi corretamento fixado na parede?
+Terá softwares terceiros a serem instalados ?      Qual?  _________________________
+Feito configuração do banco de dados no HD secundário? ###ESC###Caso possuir HD secundário###ESC###
+MAC ADDRESS coletado para solicitar licença ? ###ESC###se necessário###ESC###
+Foi feito o alinhamento do colimador
+ em 
+todos 
+os modos e FOVs
+?
+Foi realizado a calibração de impressão e testes?
+ Rua Barão de Cascalho 554, Centro
+Endereço
+SOUZA & CARVALHO ODONTOLOGIA LTDA
+GABRIEL LEITE SOUZA
+Ez3D-i instalado? ###ESC###se necessário###ESC###
+###ESC###apenas para PaX-i###ESC### O equipamento é Fixado no chão e Parede ou em base? 
+O Instalador tem a certeza de que os cabos, especialmente de fibra óptica, não estão dobrados 
+ou muito enrolados?
+A tomada da sala é com plugues 20A?
+Há Nobreak ou Estabilizador instalado e dedicado para o equipamento?
+O Instalador acompanhou a entrega do equipamento?
+O instalador certificou-se de que não há furos ou riscos suspeitos na caixa?
+O indicador TiltWatch está vermelho? ###ESC###indicador de tombamento da caixa###ESC###
+Todos os cabos estão bem organizados ?
+O equipamento está apresentando algum problema ou defeito visualmente ?
+PC
+Softwares instalados e ativados:              Ezdent-i: ###ESC###    ###ESC### Floating  ou  ###ESC###    ###ESC### 30dias                Ez3D-i: ###ESC###    ###ESC### Floating  ou  ###ESC###    ###ESC### 30dias
+ Biblioteca Consult: ###ESC###    ###ESC### Floating  ou  ###ESC###    ###ESC### 30dias                Biblioteca Implant: ###ESC###    ###ESC### Floating  ou  ###ESC###    ###ESC### 30dias
+LIMEIRA/SP
+Há um nobreak ou estabilizador para o computador? ###ESC###   ###ESC### Sim      ###ESC###   ###ESC### Não
+O Aterramento está instalado e o cabo de terra está chegando na tomada do equipamento e do 
+Computador?
+O Equipamento e computador estão ligados no mesmo Estabilizador/ Nobreak?
+Foi capturada foto da Etiqueta do numero de série ###ESC###coluna do equipamento###ESC### ?
+Nº Contato
+35-98897-5567
+N. Série Monitor:
+N. Série CPU:
+Computador e Monitor inclusos
+ 
+no equipamento?
+Após 
+abertura da 
+Caixa
+Os instaladores certificaram-se de que não há arranhões ou superfícies quebradas equipamento?
+Foi realizado o check-list de conferência de itens no Kit de instalação?
+ ###ESC###    ###ESC### Disparador           ###ESC###   ###ESC### Cabos de comunicação               ###ESC###    ###ESC###Posicionadores           
+###ESC###    ###ESC###Pendrives            ###ESC###    ###ESC### Manuais      ###ESC###    ###ESC###Fixadores de parede        
+###ESC###    ###ESC###Placa de fibra ótica - somente tomógrafo         ###ESC###    ###ESC###Controle up/down 
+Todos os acessórios e caixas estão incluídos na embalagem?
+Antes da 
+abertura 
+das Caixas
+Durante a 
+Instalação
+Informações:  Marca:                                                  Modelo:                                                              Potência:             Kva
+Informações:  Marca:                      Modelo:                                                 Potência:             Kva
+Valor de saída do nobreak/estabilizador:    F+F =                       F+N=                              F1+T=                             F2+T =                          
+N+T = 
+Número de Série da etiqueta confere com Caixa e NF ?
+Foi entregue para: 
+2. Informações do Equipamento
+Equipamento
+O disjuntor está instalado no painel de distribuição ?       Valor: ___________
+Há DPS instalado no circuito dedicado ao equipamento?
+Foi capturada foto do Cabo de energia do Equipamento ###ESC###Power Cord###ESC###?
+Cabo Energia, Qual o Tipo do Plug:
+O botão up/down do equipamento funciona corretamente?
+Modelo CPU:
+Adicionado mousepad temátivo Vatech Brasil?
+Modelo Monitor:
+047-024913
+Deixado o kit de barras de transporte junto com o kit de acessórios do equipamento?
+Depois de
+instalação
+Feito o reforço preventivo no cabo do sensor Pan/Tomo? Realizar registro com foto do mesmo 
+*###ESC###Exclusivo para casos de vatech A9###ESC###*
+D. Check list
+Conteúdo
+Confirmação
+Foi instalado em PCs Clients ?                   Quantos?
+s.n.: 
+O indicador ShockWatch está vermelho? ###ESC###indicador de impacto da caixa###ESC###
+A empresa de entrega transportou e manuseou com cautela?
+#
+ Copyright © 2022 VATECH Networks | All Rights Reserved. / Confidential

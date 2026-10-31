@@ -1,0 +1,20 @@
+{
+  "name": "vatech-exacta-saas",
+  "version": "1.0.0",
+  "description": "DocToField SaaS Platform - Vatech & Exacta Manutenções",
+  "main": "saas-platform/server.js",
+  "scripts": {
+    "start": "node saas-platform/server.js",
+    "server": "node saas-platform/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "mammoth": "^1.13.0",
+    "multer": "^2.5.0",
+    "pdf-parse": "^2.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

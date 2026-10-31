@@ -1,0 +1,24 @@
+# Node modules
+node_modules/
+saas-platform/node_modules/
+
+# Uploads and temporary files
+saas-platform/uploads/*
+!saas-platform/uploads/.gitkeep
+saas-platform/data/*
+!saas-platform/data/.gitkeep
+
+# Logs and environment
+*.log
+.env
+.env.local
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Cloudflare binaries and temp
+cloudflared*
+tunnel_saas_url.txt

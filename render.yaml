@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: vatech-saas-platform
+    env: node
+    plan: free
+    buildCommand: npm install && cd saas-platform && npm install
+    startCommand: node saas-platform/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000

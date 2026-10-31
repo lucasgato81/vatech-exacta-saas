@@ -1,0 +1,1592 @@
+[
+  {
+    "x": 256,
+    "y": 778.4,
+    "text": "            Check List Pós Instalação - Installation Report "
+  },
+  {
+    "x": 330.6,
+    "y": 778.4,
+    "text": "ver.05"
+  },
+  {
+    "x": 158.8,
+    "y": 769.7,
+    "text": "Data de Instalação"
+  },
+  {
+    "x": 217.4,
+    "y": 769.3,
+    "text": "2026-09-30"
+  },
+  {
+    "x": 264.7,
+    "y": 769.6,
+    "text": "Técnico "
+  },
+  {
+    "x": 288.7,
+    "y": 769.3,
+    "text": "Lucas Gato"
+  },
+  {
+    "x": 338.7,
+    "y": 769.6,
+    "text": "Empresa "
+  },
+  {
+    "x": 392.1,
+    "y": 769.8,
+    "text": "EXACTA MANUTENCOES"
+  },
+  {
+    "x": 154.7,
+    "y": 762.7,
+    "text": "1. Informações do Cliente"
+  },
+  {
+    "x": 162,
+    "y": 757.9,
+    "text": "Local/ Clínica"
+  },
+  {
+    "x": 189.8,
+    "y": 757.9,
+    "text": "SOUZA & CARVALHO ODONTOLOGIA LTDA"
+  },
+  {
+    "x": 291.7,
+    "y": 757.8,
+    "text": "Cliente"
+  },
+  {
+    "x": 360.7,
+    "y": 757.9,
+    "text": "GABRIEL LEITE SOUZA"
+  },
+  {
+    "x": 164.8,
+    "y": 752,
+    "text": "Endereço"
+  },
+  {
+    "x": 189.8,
+    "y": 752.1,
+    "text": " Rua Barão de Cascalho 554, Centro"
+  },
+  {
+    "x": 163.9,
+    "y": 746.1,
+    "text": "Nº Contato"
+  },
+  {
+    "x": 189.8,
+    "y": 746.1,
+    "text": "35-98897-5567"
+  },
+  {
+    "x": 288.5,
+    "y": 745.7,
+    "text": "Cidade/ UF"
+  },
+  {
+    "x": 368.6,
+    "y": 746.1,
+    "text": "LIMEIRA/SP"
+  },
+  {
+    "x": 154.7,
+    "y": 741.9,
+    "text": "2. Informações do Equipamento"
+  },
+  {
+    "x": 162.5,
+    "y": 737.9,
+    "text": "Equipamento"
+  },
+  {
+    "x": 189.8,
+    "y": 737.1,
+    "text": "PaX-i"
+  },
+  {
+    "x": 261.2,
+    "y": 737.1,
+    "text": "n. Série:"
+  },
+  {
+    "x": 280.9,
+    "y": 737.6,
+    "text": "047-024913"
+  },
+  {
+    "x": 154.8,
+    "y": 732,
+    "text": "D. Check list"
+  },
+  {
+    "x": 156.7,
+    "y": 725.4,
+    "text": "Nº"
+  },
+  {
+    "x": 167.3,
+    "y": 725.4,
+    "text": "Categoria"
+  },
+  {
+    "x": 274.1,
+    "y": 725.9,
+    "text": "Conteúdo"
+  },
+  {
+    "x": 397.3,
+    "y": 725.9,
+    "text": "Confirmação"
+  },
+  {
+    "x": 157.9,
+    "y": 718.4,
+    "text": "1"
+  },
+  {
+    "x": 189.9,
+    "y": 718.9,
+    "text": "O Instalador acompanhou a entrega do equipamento?"
+  },
+  {
+    "x": 384.2,
+    "y": 718.4,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 718.4,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 157.9,
+    "y": 710.4,
+    "text": "2"
+  },
+  {
+    "x": 167.9,
+    "y": 707.9,
+    "text": "Antes da "
+  },
+  {
+    "x": 189.9,
+    "y": 710.9,
+    "text": "A empresa de entrega transportou e manuseou com cautela?"
+  },
+  {
+    "x": 384.2,
+    "y": 710.4,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 710.4,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 157.9,
+    "y": 702,
+    "text": "3"
+  },
+  {
+    "x": 168.3,
+    "y": 702.7,
+    "text": "abertura "
+  },
+  {
+    "x": 189.9,
+    "y": 702,
+    "text": "O instalador certificou-se de que não há furos ou riscos suspeitos na caixa?"
+  },
+  {
+    "x": 384.2,
+    "y": 702,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 702,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 165.7,
+    "y": 697.5,
+    "text": "das Caixas"
+  },
+  {
+    "x": 157.9,
+    "y": 693.9,
+    "text": "4"
+  },
+  {
+    "x": 189.9,
+    "y": 694.4,
+    "text": "O indicador ShockWatch está vermelho? indicador de impacto da caixa\\"
+  },
+  {
+    "x": 384.2,
+    "y": 693.9,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 693.9,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 157.9,
+    "y": 686.5,
+    "text": "5"
+  },
+  {
+    "x": 189.9,
+    "y": 687,
+    "text": "O indicador TiltWatch está vermelho? indicador de tombamento da caixa\\"
+  },
+  {
+    "x": 384.2,
+    "y": 686.5,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 686.5,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 157.9,
+    "y": 677.4,
+    "text": "6"
+  },
+  {
+    "x": 189.9,
+    "y": 677.4,
+    "text": "Os instaladores certificaram-se de que não há arranhões ou superfícies quebradas equipamento?"
+  },
+  {
+    "x": 384.2,
+    "y": 677.4,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 677.4,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 157.9,
+    "y": 667.4,
+    "text": "7"
+  },
+  {
+    "x": 189.9,
+    "y": 667.4,
+    "text": "Todos os acessórios e caixas estão incluídos na embalagem?"
+  },
+  {
+    "x": 384.2,
+    "y": 667.4,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 667.4,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 171.4,
+    "y": 658.2,
+    "text": "Após "
+  },
+  {
+    "x": 189.9,
+    "y": 658.5,
+    "text": "Foi realizado o check-list de conferência de itens no Kit de instalação?"
+  },
+  {
+    "x": 165.3,
+    "y": 653,
+    "text": "abertura da "
+  },
+  {
+    "x": 170.9,
+    "y": 647.9,
+    "text": "Caixa"
+  },
+  {
+    "x": 189.9,
+    "y": 648.2,
+    "text": "     \\sparador              \\unicação                   \\cionadores           "
+  },
+  {
+    "x": 157.9,
+    "y": 642.9,
+    "text": "8"
+  },
+  {
+    "x": 384.2,
+    "y": 642.9,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 642.9,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 189.9,
+    "y": 637.9,
+    "text": "    \\ndrives                \\anuais          \\xadores de parede        "
+  },
+  {
+    "x": 189.9,
+    "y": 627.6,
+    "text": "    \\aca de fibra ótica - somente tomógrafo             \\trole up/down "
+  },
+  {
+    "x": 157.9,
+    "y": 619.1,
+    "text": "9"
+  },
+  {
+    "x": 189.9,
+    "y": 619.2,
+    "text": "O disjuntor está instalado no painel de distribuição ?       Valor: ___________"
+  },
+  {
+    "x": 384.2,
+    "y": 619.1,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 619.1,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 611,
+    "text": "10"
+  },
+  {
+    "x": 189.9,
+    "y": 611.5,
+    "text": "Há DPS instalado no circuito dedicado ao equipamento?"
+  },
+  {
+    "x": 384.2,
+    "y": 611,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 611,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 601.4,
+    "text": "11"
+  },
+  {
+    "x": 189.9,
+    "y": 604.1,
+    "text": "O Aterramento está instalado e o cabo de terra está chegando na tomada do equipamento e do "
+  },
+  {
+    "x": 189.9,
+    "y": 598.9,
+    "text": "Computador?"
+  },
+  {
+    "x": 384.2,
+    "y": 601.4,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 601.4,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 592.2,
+    "text": "12"
+  },
+  {
+    "x": 189.9,
+    "y": 592.7,
+    "text": "A tomada da sala é com plugues 20A?"
+  },
+  {
+    "x": 384.2,
+    "y": 592.2,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 592.2,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 585,
+    "text": "13"
+  },
+  {
+    "x": 189.9,
+    "y": 585,
+    "text": "O Equipamento e computador estão ligados no mesmo Estabilizador/ Nobreak?"
+  },
+  {
+    "x": 384.2,
+    "y": 585,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 585,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 577.5,
+    "text": "14"
+  },
+  {
+    "x": 189.9,
+    "y": 577.6,
+    "text": "Há Nobreak ou Estabilizador instalado e dedicado para o equipamento?"
+  },
+  {
+    "x": 381.2,
+    "y": 577.2,
+    "text": "Estabil.    \\"
+  },
+  {
+    "x": 411.4,
+    "y": 577.5,
+    "text": "Nobreak     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 568.5,
+    "text": "15"
+  },
+  {
+    "x": 167.9,
+    "y": 571.2,
+    "text": "Antes de "
+  },
+  {
+    "x": 170.8,
+    "y": 566,
+    "text": "Iniciar "
+  },
+  {
+    "x": 189.9,
+    "y": 568.5,
+    "text": "Informações:  Marca:                                                  Modelo:                                                              Potência:             Kva"
+  },
+  {
+    "x": 156.7,
+    "y": 559.3,
+    "text": "16"
+  },
+  {
+    "x": 166.6,
+    "y": 560.8,
+    "text": "Instalação"
+  },
+  {
+    "x": 189.9,
+    "y": 559.4,
+    "text": "Há um nobreak ou estabilizador para o computador?    \\m         \\"
+  },
+  {
+    "x": 381.2,
+    "y": 558.9,
+    "text": "Estabil.    \\"
+  },
+  {
+    "x": 411.4,
+    "y": 559.3,
+    "text": "Nobreak     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 549.3,
+    "text": "17"
+  },
+  {
+    "x": 189.9,
+    "y": 549.4,
+    "text": "Informações:  Marca:                      Modelo:                                                 Potência:             Kva"
+  },
+  {
+    "x": 156.7,
+    "y": 539.7,
+    "text": "18"
+  },
+  {
+    "x": 189.9,
+    "y": 540.2,
+    "text": "A tomada de saída do Nobreak/Etabilizador é com plugues 20A?"
+  },
+  {
+    "x": 384.2,
+    "y": 539.7,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 539.7,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 532,
+    "text": "19"
+  },
+  {
+    "x": 189.9,
+    "y": 532.2,
+    "text": "A Tomada da sala é 220V?"
+  },
+  {
+    "x": 384,
+    "y": 532,
+    "text": "F+F     \\"
+  },
+  {
+    "x": 415.5,
+    "y": 532,
+    "text": "F+N     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 522.6,
+    "text": "20"
+  },
+  {
+    "x": 189.9,
+    "y": 525.2,
+    "text": "Valor de saída do nobreak/estabilizador:    F+F =                       F+N=                              F1+T=                             F2+T =                          "
+  },
+  {
+    "x": 189.9,
+    "y": 520,
+    "text": "N+T = "
+  },
+  {
+    "x": 156.7,
+    "y": 513,
+    "text": "21"
+  },
+  {
+    "x": 189.9,
+    "y": 513,
+    "text": "Há Ar-condicionado com funcionamento em conformidade?"
+  },
+  {
+    "x": 384.2,
+    "y": 513,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 513,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 505.2,
+    "text": "22"
+  },
+  {
+    "x": 189.9,
+    "y": 505.6,
+    "text": "Foi capturada foto da Etiqueta do numero de série coluna do equipamento\\"
+  },
+  {
+    "x": 384.2,
+    "y": 505.2,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 505.2,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 497.7,
+    "text": "23"
+  },
+  {
+    "x": 189.9,
+    "y": 497.7,
+    "text": "Número de Série da etiqueta confere com Caixa e NF ?"
+  },
+  {
+    "x": 384.2,
+    "y": 497.7,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 497.7,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 490.2,
+    "text": "24"
+  },
+  {
+    "x": 189.9,
+    "y": 490.2,
+    "text": "Foi capturada foto do Cabo de energia do Equipamento Power Cord\\"
+  },
+  {
+    "x": 384.2,
+    "y": 490.2,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 490.2,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 482.4,
+    "text": "25"
+  },
+  {
+    "x": 189.9,
+    "y": 482.5,
+    "text": "Cabo Energia, Qual o Tipo do Plug:"
+  },
+  {
+    "x": 377.8,
+    "y": 482.4,
+    "text": "ABNT 20A     \\"
+  },
+  {
+    "x": 409.3,
+    "y": 482.4,
+    "text": "Tipo Borne     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 474.4,
+    "text": "26"
+  },
+  {
+    "x": 166.9,
+    "y": 477.3,
+    "text": "Durante a "
+  },
+  {
+    "x": 166.6,
+    "y": 472.2,
+    "text": "Instalação"
+  },
+  {
+    "x": 189.9,
+    "y": 474.9,
+    "text": "apenas para PaX-i\\ipamento é Fixado no chão e Parede ou em base? "
+  },
+  {
+    "x": 381.7,
+    "y": 474.4,
+    "text": "CHÃO     \\"
+  },
+  {
+    "x": 414,
+    "y": 474.4,
+    "text": "BASE     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 464.2,
+    "text": "27"
+  },
+  {
+    "x": 189.9,
+    "y": 466.9,
+    "text": "O Instalador tem a certeza de que os cabos, especialmente de fibra óptica, não estão dobrados "
+  },
+  {
+    "x": 189.9,
+    "y": 461.7,
+    "text": "ou muito enrolados?"
+  },
+  {
+    "x": 384.2,
+    "y": 464.2,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 464.2,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 452.7,
+    "text": "28"
+  },
+  {
+    "x": 189.9,
+    "y": 452.8,
+    "text": "O instalador tem certeza que os cabos estão bem conectados ao equipamento e computador?"
+  },
+  {
+    "x": 384.2,
+    "y": 452.7,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 452.7,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 443.8,
+    "text": "29"
+  },
+  {
+    "x": 189.9,
+    "y": 444.3,
+    "text": "O equipamento foi bem nivelado/ balanceado Esquerda/ Direita e Frente/ Trás\\"
+  },
+  {
+    "x": 384.2,
+    "y": 443.8,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 443.8,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 436.6,
+    "text": "30"
+  },
+  {
+    "x": 189.9,
+    "y": 437.1,
+    "text": "O equipamento foi corretamento fixado na parede?"
+  },
+  {
+    "x": 384.2,
+    "y": 436.6,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 436.6,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 428.8,
+    "text": "31"
+  },
+  {
+    "x": 189.9,
+    "y": 429.3,
+    "text": "Todos os cabos estão bem organizados ?"
+  },
+  {
+    "x": 384.2,
+    "y": 428.8,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 428.8,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 420.7,
+    "text": "32"
+  },
+  {
+    "x": 189.9,
+    "y": 421.2,
+    "text": "O equipamento está apresentando algum problema ou defeito visualmente ?"
+  },
+  {
+    "x": 384.2,
+    "y": 420.7,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 420.7,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 412.3,
+    "text": "33"
+  },
+  {
+    "x": 189.9,
+    "y": 412.3,
+    "text": "O Painel de Led verde\\igado e a movimentação está conforme ?"
+  },
+  {
+    "x": 384.2,
+    "y": 412.3,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 412.3,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 166.6,
+    "y": 408,
+    "text": "Depois de"
+  },
+  {
+    "x": 156.7,
+    "y": 404,
+    "text": "34"
+  },
+  {
+    "x": 166.7,
+    "y": 402.8,
+    "text": "instalação"
+  },
+  {
+    "x": 189.9,
+    "y": 404.1,
+    "text": "Deixado o kit de barras de transporte junto com o kit de acessórios do equipamento?"
+  },
+  {
+    "x": 384.2,
+    "y": 404,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 404,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 395.8,
+    "text": "35"
+  },
+  {
+    "x": 189.9,
+    "y": 395.8,
+    "text": "O botão up/down do equipamento funciona corretamente?"
+  },
+  {
+    "x": 384.2,
+    "y": 395.8,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 395.8,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 386.5,
+    "text": "36"
+  },
+  {
+    "x": 189.9,
+    "y": 389,
+    "text": "O equipamento possui barramentos internos de Aterramento?  3 barras cobre + cabo terra\\"
+  },
+  {
+    "x": 189.9,
+    "y": 383.8,
+    "text": "Bush Brass"
+  },
+  {
+    "x": 384.2,
+    "y": 386.5,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 386.5,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 189.9,
+    "y": 378.3,
+    "text": "Feito o reforço preventivo no cabo do sensor Pan/Tomo? Realizar registro com foto do mesmo "
+  },
+  {
+    "x": 189.9,
+    "y": 373.1,
+    "text": "*Exclusivo para casos de vatech A9\\"
+  },
+  {
+    "x": 384.2,
+    "y": 375.9,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 375.9,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 366.2,
+    "text": "37"
+  },
+  {
+    "x": 189.9,
+    "y": 366.3,
+    "text": "Computador e Monitor inclusos"
+  },
+  {
+    "x": 248.8,
+    "y": 366.3,
+    "text": " "
+  },
+  {
+    "x": 250,
+    "y": 366.3,
+    "text": "no equipamento?"
+  },
+  {
+    "x": 384.2,
+    "y": 366.2,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 366.2,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 356.7,
+    "text": "38"
+  },
+  {
+    "x": 189.9,
+    "y": 357.2,
+    "text": "Modelo CPU:"
+  },
+  {
+    "x": 281,
+    "y": 357.2,
+    "text": "N. Série CPU:"
+  },
+  {
+    "x": 156.7,
+    "y": 346.1,
+    "text": "39"
+  },
+  {
+    "x": 189.9,
+    "y": 346.6,
+    "text": "Modelo Monitor:"
+  },
+  {
+    "x": 281,
+    "y": 346.6,
+    "text": "N. Série Monitor:"
+  },
+  {
+    "x": 156.7,
+    "y": 336.9,
+    "text": "40"
+  },
+  {
+    "x": 189.9,
+    "y": 337.4,
+    "text": "O computador possui placa de Rede Gigabit ? Foi instalado a PCI do Kit? PaX-i\\"
+  },
+  {
+    "x": 384.2,
+    "y": 336.9,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 336.9,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 329.6,
+    "text": "41"
+  },
+  {
+    "x": 189.9,
+    "y": 330.1,
+    "text": "O computador possui placa de Video dedicada ?"
+  },
+  {
+    "x": 384.2,
+    "y": 329.6,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 329.6,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 322.4,
+    "text": "42"
+  },
+  {
+    "x": 189.9,
+    "y": 322.9,
+    "text": "A rede de internet está disponível para o PC ?"
+  },
+  {
+    "x": 384.2,
+    "y": 322.4,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 322.4,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 315.1,
+    "text": "43"
+  },
+  {
+    "x": 189.9,
+    "y": 315.5,
+    "text": "Ez3D-i instalado? se necessário\\"
+  },
+  {
+    "x": 384.2,
+    "y": 315.1,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 315.1,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 307.6,
+    "text": "44"
+  },
+  {
+    "x": 189.9,
+    "y": 308.1,
+    "text": "Cliente irá imprimir em impresora DRY pelo Software Vatech?"
+  },
+  {
+    "x": 384.2,
+    "y": 307.6,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 307.6,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 299.6,
+    "text": "45"
+  },
+  {
+    "x": 189.9,
+    "y": 300.1,
+    "text": "Dados Impressora:  Marca:                                  Modelo:                                         AE TITLE:                           IP:                                                    Porta:"
+  },
+  {
+    "x": 156.7,
+    "y": 290.9,
+    "text": "46"
+  },
+  {
+    "x": 189.9,
+    "y": 291.4,
+    "text": "Foi realizado a calibração de impressão e testes?"
+  },
+  {
+    "x": 384.2,
+    "y": 290.9,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 290.9,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 281.7,
+    "text": "47"
+  },
+  {
+    "x": 189.9,
+    "y": 282.2,
+    "text": "Feito configuração do banco de dados no HD secundário? Caso possuir HD secundário\\"
+  },
+  {
+    "x": 384.2,
+    "y": 281.7,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 281.7,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 173.7,
+    "y": 275.6,
+    "text": "PC"
+  },
+  {
+    "x": 189.9,
+    "y": 273.7,
+    "text": "Softwares instalados e ativados:              Ezdent-i:     \\oating  ou      \\as                Ez3D-i:     \\oating  ou      \\as"
+  },
+  {
+    "x": 156.7,
+    "y": 268.3,
+    "text": "48"
+  },
+  {
+    "x": 189.9,
+    "y": 263.3,
+    "text": " Biblioteca Consult:     \\oating  ou      \\as                Biblioteca Implant:     \\oating  ou      \\as"
+  },
+  {
+    "x": 156.7,
+    "y": 256,
+    "text": "49"
+  },
+  {
+    "x": 189.9,
+    "y": 256,
+    "text": "Número Série do Pen Drive"
+  },
+  {
+    "x": 378.3,
+    "y": 256.5,
+    "text": "s.n.: "
+  },
+  {
+    "x": 189.9,
+    "y": 249.1,
+    "text": "Adicionado mousepad temátivo Vatech Brasil?"
+  },
+  {
+    "x": 384.2,
+    "y": 248.6,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 248.6,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 240.9,
+    "text": "50"
+  },
+  {
+    "x": 189.9,
+    "y": 241.4,
+    "text": "MAC ADDRESS coletado para solicitar licença ? se necessário\\"
+  },
+  {
+    "x": 384.2,
+    "y": 240.9,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 240.9,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 232.7,
+    "text": "51"
+  },
+  {
+    "x": 189.9,
+    "y": 232.7,
+    "text": "Foi feito o alinhamento do colimador"
+  },
+  {
+    "x": 258.7,
+    "y": 232.7,
+    "text": " em "
+  },
+  {
+    "x": 267.2,
+    "y": 232.7,
+    "text": "todos "
+  },
+  {
+    "x": 278.9,
+    "y": 232.7,
+    "text": "os modos e FOVs"
+  },
+  {
+    "x": 313.6,
+    "y": 232.7,
+    "text": "?"
+  },
+  {
+    "x": 384.2,
+    "y": 232.7,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 232.7,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 224.1,
+    "text": "52"
+  },
+  {
+    "x": 189.9,
+    "y": 224.2,
+    "text": "A im"
+  },
+  {
+    "x": 198.4,
+    "y": 224.2,
+    "text": "agem está"
+  },
+  {
+    "x": 218.7,
+    "y": 224.2,
+    "text": " sendo salva no EzDent-i?"
+  },
+  {
+    "x": 384.2,
+    "y": 224.1,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 224.1,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 215.4,
+    "text": "53"
+  },
+  {
+    "x": 189.9,
+    "y": 215.9,
+    "text": "Terá softwares terceiros a serem instalados ?      Qual?  _________________________"
+  },
+  {
+    "x": 384.2,
+    "y": 215.4,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 215.4,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 206.4,
+    "text": "54"
+  },
+  {
+    "x": 189.9,
+    "y": 206.9,
+    "text": "Foi instalado em PCs Clients ?                   Quantos?"
+  },
+  {
+    "x": 384.2,
+    "y": 206.4,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 206.4,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 189.9,
+    "y": 198.6,
+    "text": "Versões:  "
+  },
+  {
+    "x": 156.7,
+    "y": 190.8,
+    "text": "55"
+  },
+  {
+    "x": 189.9,
+    "y": 193.5,
+    "text": "Win:                  EzServer:                  EzDent-i:                   CaptureSW:                  ImplantDB:             "
+  },
+  {
+    "x": 189.9,
+    "y": 183.1,
+    "text": "Consult:                  Ez3D-i:                  Fibra Óptica:"
+  },
+  {
+    "x": 156.7,
+    "y": 176.3,
+    "text": "56"
+  },
+  {
+    "x": 189.9,
+    "y": 176.3,
+    "text": "Realizado captura de todos os modos de exames?"
+  },
+  {
+    "x": 384.2,
+    "y": 176.3,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 176.3,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 168.6,
+    "text": "57"
+  },
+  {
+    "x": 189.9,
+    "y": 168.7,
+    "text": "PANO:        \\dard                         \\rtogonal Bitewing                   \\TM Open/ Close"
+  },
+  {
+    "x": 384.2,
+    "y": 168.6,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 168.6,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 160.7,
+    "text": "58"
+  },
+  {
+    "x": 167.2,
+    "y": 161.7,
+    "text": "Aquisição "
+  },
+  {
+    "x": 189.9,
+    "y": 160.7,
+    "text": "CEPH:         \\ateral                      \\ll Lateral                     \\PA                      \\"
+  },
+  {
+    "x": 384.2,
+    "y": 160.7,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 160.7,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 165.5,
+    "y": 156.5,
+    "text": "de imagem "
+  },
+  {
+    "x": 189.9,
+    "y": 152.7,
+    "text": "CBCT:         \\5              \\5                   \\8               \\9                \\7     "
+  },
+  {
+    "x": 156.7,
+    "y": 147.5,
+    "text": "59"
+  },
+  {
+    "x": 189.9,
+    "y": 147.5,
+    "text": "    "
+  },
+  {
+    "x": 384.2,
+    "y": 147.5,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 147.5,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 189.9,
+    "y": 142.3,
+    "text": "     \\8.5                \\9              \\9                       \\ble Scan"
+  },
+  {
+    "x": 156.7,
+    "y": 134.3,
+    "text": "60"
+  },
+  {
+    "x": 189.9,
+    "y": 134.8,
+    "text": "Foi realizada entrega técnica?"
+  },
+  {
+    "x": 384.2,
+    "y": 134.3,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 134.3,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 156.7,
+    "y": 125.5,
+    "text": "61"
+  },
+  {
+    "x": 189.9,
+    "y": 127.3,
+    "text": "Nome dos Participantes:            "
+  },
+  {
+    "x": 168.7,
+    "y": 121.2,
+    "text": "Entrega "
+  },
+  {
+    "x": 156.7,
+    "y": 117.3,
+    "text": "62"
+  },
+  {
+    "x": 168.9,
+    "y": 116.1,
+    "text": "Técnica"
+  },
+  {
+    "x": 189.9,
+    "y": 117.7,
+    "text": "Foi explicado a importância do PenDrive de Licenças e CD/Pendrive de Software?"
+  },
+  {
+    "x": 384.2,
+    "y": 117.3,
+    "text": "SIM     \\"
+  },
+  {
+    "x": 414.9,
+    "y": 117.3,
+    "text": "NÃO     \\"
+  },
+  {
+    "x": 189.9,
+    "y": 110.8,
+    "text": "Foi entregue para: "
+  },
+  {
+    "x": 156.7,
+    "y": 106.8,
+    "text": "63"
+  },
+  {
+    "x": 154.8,
+    "y": 97,
+    "text": "G. Assinatura de confirmação de Instalação Completa"
+  },
+  {
+    "x": 154.8,
+    "y": 91,
+    "text": "Conferido por "
+  },
+  {
+    "x": 154.8,
+    "y": 85.7,
+    "text": "Vatech BR\\"
+  },
+  {
+    "x": 281.6,
+    "y": 85.1,
+    "text": "*Nome Cliente"
+  },
+  {
+    "x": 164.5,
+    "y": 79.3,
+    "text": "*Nome "
+  },
+  {
+    "x": 223,
+    "y": 77.2,
+    "text": "Lucas Gato"
+  },
+  {
+    "x": 161.2,
+    "y": 74.1,
+    "text": "Instalador"
+  },
+  {
+    "x": 159,
+    "y": 64.9,
+    "text": "Assinatura\\"
+  },
+  {
+    "x": 283.7,
+    "y": 64.5,
+    "text": "Assinatura\\"
+  },
+  {
+    "x": 163.5,
+    "y": 24.8,
+    "text": "#"
+  },
+  {
+    "x": 163.9,
+    "y": 24.8,
+    "text": " Copyright © 2022 VATECH Networks | All Rights Reserved. / Confidential"
+  }
+]
