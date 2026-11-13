@@ -182,6 +182,319 @@ function formatBrDate(dateInput) {
  * 1. CHECKLIST PÓS-INSTALAÇÃO (Check List Pós Instalação - Installation Report)
  * ============================================================================
  */
+function checkMark(val, expected) {
+  if (!val) return '( &nbsp; )';
+  const v = String(val).trim().toUpperCase();
+  const exp = String(expected).trim().toUpperCase();
+  if (v === exp) return '<b>( X )</b>';
+  return '( &nbsp; )';
+}
+
+/**
+ * ============================================================================
+ * 1.1 CHECKLIST DE DESMONTAGEM (Check list de Desmontagem - Equipamentos rev.00)
+ * 1:1 Pixel-Perfect Mirroring of Official Vatech Sheet (40 items, 1 Page)
+ * ============================================================================
+ */
+function gerarHtmlChecklistDesmontagem(dados, desm, sigs) {
+  desm = desm || {};
+  sigs = sigs || {};
+  dados = dados || {};
+  const cli = dados.cliente || {};
+  const eq = dados.equipamento || {};
+  const tec = dados.tecnico || {};
+
+  const rowsHtml = `
+    <tr>
+      <td>BackUp de Imagens</td>
+      <td>${checkMark(desm.backup, 'SIM')} SIM &nbsp; ${checkMark(desm.backup, 'NÃO')} NÃO &nbsp; ${checkMark(desm.backup, 'N/A')} N/A</td>
+      <td>${safeText(desm.backup_obs)}</td>
+    </tr>
+    <tr>
+      <td>Foto da etiqueta Numero de Série</td>
+      <td>${checkMark(desm.foto_etiqueta_sn, 'SIM')} SIM &nbsp; ${checkMark(desm.foto_etiqueta_sn, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.foto_etiqueta_sn_obs)}</td>
+    </tr>
+    <tr>
+      <td>PC de aquisição tem senha?</td>
+      <td>${checkMark(desm.pc_senha, 'SIM')} SIM &nbsp; ${checkMark(desm.pc_senha, 'NÃO')} NÃO</td>
+      <td>Senha: <u>${safeText(desm.pc_senha_val, '__________________________')}</u></td>
+    </tr>
+    <tr>
+      <td>Foto de Contador Imagens</td>
+      <td>${checkMark(desm.contador_foto, 'SIM')} SIM &nbsp; ${checkMark(desm.contador_foto, 'NÃO')} NÃO</td>
+      <td>CBCT: <u>${safeText(desm.cbct, '____')}</u> PANO: <u>${safeText(desm.pano, '____')}</u> CEPH: <u>${safeText(desm.ceph, '____')}</u></td>
+    </tr>
+    <tr>
+      <td>Modo Embalagem PKEN_1</td>
+      <td>${checkMark(desm.modo_embalagem, 'SIM')} SIM &nbsp; ${checkMark(desm.modo_embalagem, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.modo_embalagem_obs)}</td>
+    </tr>
+    <tr>
+      <td>Retirar Licença Ezdent-i</td>
+      <td>${checkMark(desm.licenca_ezdent, 'SIM')} SIM &nbsp; ${checkMark(desm.licenca_ezdent, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.licenca_ezdent_obs)}</td>
+    </tr>
+    <tr>
+      <td>Retirar Licença Ez3D-i</td>
+      <td>${checkMark(desm.licenca_ez3d, 'SIM')} SIM &nbsp; ${checkMark(desm.licenca_ez3d, 'NÃO')} NÃO &nbsp; ${checkMark(desm.licenca_ez3d, 'N/A')} N/A</td>
+      <td>${safeText(desm.licenca_ez3d_obs)}</td>
+    </tr>
+    <tr>
+      <td>Verificar acessorios conforme Manual</td>
+      <td>${checkMark(desm.verif_acessorios, 'SIM')} SIM &nbsp; ${checkMark(desm.verif_acessorios, 'NÃO')} NÃO &nbsp; ${checkMark(desm.verif_acessorios, 'N/A')} N/A</td>
+      <td>${safeText(desm.verif_acessorios_obs)}</td>
+    </tr>
+    <tr>
+      <td>USB - Licenças</td>
+      <td>${checkMark(desm.usb_licencas, 'SIM')} SIM &nbsp; ${checkMark(desm.usb_licencas, 'NÃO')} NÃO &nbsp; ${checkMark(desm.usb_licencas, 'N/A')} N/A</td>
+      <td>${safeText(desm.usb_licencas_obs)}</td>
+    </tr>
+    <tr>
+      <td>CD / USB - Software Captura</td>
+      <td colspan="2">${checkMark(desm.sw_captura, 'SIM, CD')} SIM, CD &nbsp; ${checkMark(desm.sw_captura, 'SIM, USB')} SIM, USB &nbsp; ${checkMark(desm.sw_captura, 'NÃO')} NÃO</td>
+    </tr>
+    <tr>
+      <td>USB - Recovery PC</td>
+      <td colspan="2">${checkMark(desm.recovery_pc, 'SIM')} SIM &nbsp; ${checkMark(desm.recovery_pc, 'NÃO')} NÃO &nbsp; ${checkMark(desm.recovery_pc, 'PC do Cliente')} PC do CLiente</td>
+    </tr>
+    <tr>
+      <td>Apoio de Tempora Direito e Esquerdo</td>
+      <td>${checkMark(desm.item_tempora, 'SIM')} SIM &nbsp; ${checkMark(desm.item_tempora, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_tempora, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_tempora, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_tempora, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Posicionador - Apoio queixo ALTO (tirar foto)</td>
+      <td>${checkMark(desm.item_queixo_alto, 'SIM')} SIM &nbsp; ${checkMark(desm.item_queixo_alto, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_queixo_alto, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_queixo_alto, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_queixo_alto, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Posicionador - Apoio queixo Baixo (tirar foto)</td>
+      <td>${checkMark(desm.item_queixo_baixo, 'SIM')} SIM &nbsp; ${checkMark(desm.item_queixo_baixo, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_queixo_baixo, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_queixo_baixo, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_queixo_baixo, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Mordedor Padrao</td>
+      <td>${checkMark(desm.item_mordedor, 'SIM')} SIM &nbsp; ${checkMark(desm.item_mordedor, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_mordedor, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_mordedor, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_mordedor, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Posicionador Edentulo</td>
+      <td>${checkMark(desm.item_edentulo, 'SIM')} SIM &nbsp; ${checkMark(desm.item_edentulo, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_edentulo, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_edentulo, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_edentulo, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Posicionador ATM</td>
+      <td>${checkMark(desm.item_atm, 'SIM')} SIM &nbsp; ${checkMark(desm.item_atm, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_atm, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_atm, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_atm, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Apoio Nariz (modo Ceph)</td>
+      <td>${checkMark(desm.item_nariz, 'SIM')} SIM &nbsp; ${checkMark(desm.item_nariz, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_nariz, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_nariz, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_nariz, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Suporte de Olivas (modo Ceph)</td>
+      <td>${checkMark(desm.item_olivas, 'SIM')} SIM &nbsp; ${checkMark(desm.item_olivas, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_olivas, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_olivas, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_olivas, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Riscos na carenagem Coluna</td>
+      <td>${checkMark(desm.risco_coluna, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_coluna, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_coluna, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_coluna, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Riscos na Carenagem Superior Principal</td>
+      <td>${checkMark(desm.risco_superior, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_superior, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_superior, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_superior, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Riscos na Carenagem apoio de queixo</td>
+      <td>${checkMark(desm.risco_apoio_queixo, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_apoio_queixo, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_apoio_queixo, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_apoio_queixo, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Riscos na Carenagem da Base</td>
+      <td>${checkMark(desm.risco_base, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_base, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_base, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_base, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Riscos na Unidade Ceph</td>
+      <td>${checkMark(desm.risco_ceph, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_ceph, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_ceph, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_ceph, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Suporte Fixação Parede Removido e Guardado</td>
+      <td>${checkMark(desm.parede_removido_1, 'SIM')} SIM &nbsp; ${checkMark(desm.parede_removido_1, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.parede_removido_1_obs)}</td>
+    </tr>
+    <tr>
+      <td>Fixaçao dos parafusos de travas Rotator</td>
+      <td>${checkMark(desm.trava_rotator, 'SIM')} SIM &nbsp; ${checkMark(desm.trava_rotator, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.trava_rotator, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Removido Unidade ROTATOR</td>
+      <td>${checkMark(desm.removido_rotator, 'SIM')} SIM &nbsp; ${checkMark(desm.removido_rotator, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.removido_rotator, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Fixaçao dos parafusos de travas Coluna</td>
+      <td>${checkMark(desm.trava_coluna, 'SIM')} SIM &nbsp; ${checkMark(desm.trava_coluna, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.trava_coluna, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Suporte Fixação Parede Removido e Guardado</td>
+      <td>${checkMark(desm.parede_removido_2, 'SIM')} SIM &nbsp; ${checkMark(desm.parede_removido_2, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.parede_removido_2, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Retirada da Base</td>
+      <td>${checkMark(desm.retirada_base, 'SIM')} SIM &nbsp; ${checkMark(desm.retirada_base, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.retirada_base, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Fotos do Kit de barras de transporte</td>
+      <td>${checkMark(desm.foto_barras, 'SIM')} SIM &nbsp; ${checkMark(desm.foto_barras, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.foto_barras_obs)}</td>
+    </tr>
+    <tr>
+      <td>Base foi guardada</td>
+      <td>${checkMark(desm.emb_base, 'Caixa Original')} Caixa Original &nbsp; ${checkMark(desm.emb_base, 'Outra embalagem')} Outra embalagem</td>
+      <td>${safeText(desm.emb_base_detalhe)}</td>
+    </tr>
+    <tr>
+      <td>Unidade Principal embalada</td>
+      <td>${checkMark(desm.emb_principal, 'Caixa Original')} Caixa Original &nbsp; ${checkMark(desm.emb_principal, 'Outra embalagem')} Outra embalagem</td>
+      <td>${safeText(desm.emb_principal_detalhe)}</td>
+    </tr>
+    <tr>
+      <td>Unidade ROTATOR embalada</td>
+      <td>${checkMark(desm.emb_rotator, 'Caixa Original')} Caixa Original &nbsp; ${checkMark(desm.emb_rotator, 'Outra embalagem')} Outra embalagem</td>
+      <td>${safeText(desm.emb_rotator_detalhe)}</td>
+    </tr>
+    <tr>
+      <td>Unidade CEPH embalada</td>
+      <td>${checkMark(desm.emb_ceph, 'Caixa Original')} Caixa Original &nbsp; ${checkMark(desm.emb_ceph, 'Outra embalagem')} Outra embalagem</td>
+      <td>${safeText(desm.emb_ceph_detalhe)}</td>
+    </tr>
+    <tr>
+      <td>Foto da embalagem</td>
+      <td>${checkMark(desm.foto_embalagem, 'SIM')} SIM &nbsp; ${checkMark(desm.foto_embalagem, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.foto_embalagem_obs)}</td>
+    </tr>
+    <tr>
+      <td>Foto das Caixas</td>
+      <td>${checkMark(desm.foto_caixas, 'SIM')} SIM &nbsp; ${checkMark(desm.foto_caixas, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.foto_caixas_obs)}</td>
+    </tr>
+    <tr>
+      <td>Liberado para transporte</td>
+      <td>${checkMark(desm.liberado_transporte, 'SIM')} SIM &nbsp; ${checkMark(desm.liberado_transporte, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.liberado_transporte_obs)}</td>
+    </tr>
+    <tr>
+      <td>Volumes:</td>
+      <td colspan="2">Qquantidade: <b>${safeText(desm.volumes_qtd, '_____')}</b></td>
+    </tr>
+    <tr>
+      <td>Transportadora</td>
+      <td colspan="2">Nome: <b>${safeText(desm.transportadora_nome, '_________________________________')}</b></td>
+    </tr>
+  `;
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>${PDF_GLOBAL_STYLE}</style>
+</head>
+<body>
+
+  <!-- CABEÇALHO -->
+  <table class="header-table" style="margin-bottom: 2px;">
+    <tr>
+      <td style="width: 30%; vertical-align: middle;">
+        <img src="${VATECH_LOGO_BASE64}" style="height: 20px; width: auto;" alt="Vatech" />
+      </td>
+      <td style="width: 70%; text-align: right; vertical-align: middle;">
+        <span style="font-size: 7.5pt; color: #555; margin-right: 12px;">rev.00</span>
+        <b style="font-size: 10.5pt; color: #000;">Check list de Desmontagem - Equipamentos</b>
+      </td>
+    </tr>
+  </table>
+
+  <!-- DADOS IDENTIFICAÇÃO -->
+  <table style="margin-bottom: 3px;">
+    <tr>
+      <td style="width: 14%; font-weight: bold; background: #fafafa;">Cliente:</td>
+      <td colspan="3" style="font-weight: bold;">${safeText(cli.razaoSocial)}</td>
+    </tr>
+    <tr>
+      <td style="width: 14%; font-weight: bold; background: #fafafa;">Data:</td>
+      <td style="width: 36%;">${safeText(dados.dataCriacao || formatBrDate(new Date()))}</td>
+      <td style="width: 16%; font-weight: bold; background: #fafafa;">Equipamento:</td>
+      <td style="width: 34%; font-weight: bold;">${safeText(eq.modelo || 'PaX-i')}</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; background: #fafafa;">N. Série:</td>
+      <td colspan="3" style="font-weight: bold;">${safeText(eq.nSerie)}</td>
+    </tr>
+  </table>
+
+  <!-- TABELA DE 40 ATIVIDADES -->
+  <table class="chk-table">
+    <thead>
+      <tr>
+        <th style="width: 44%;">Atividade</th>
+        <th style="width: 28%;">Check</th>
+        <th style="width: 28%;">Observação</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rowsHtml}
+    </tbody>
+  </table>
+
+  <!-- OBSERVAÇÃO -->
+  <div style="border: 1px solid #000; border-top: none; padding: 3px 5px; font-size: 7pt; min-height: 34px;">
+    <b>Observação:</b><br>
+    ${safeText(desm.observacoes, '').replace(/\n/g, '<br>')}
+  </div>
+
+  <!-- TÉCNICO E ASSINATURA -->
+  <table style="margin-top: 4px; border: 1px solid #000;">
+    <tr>
+      <td colspan="3" style="font-size: 7pt; font-weight: bold; background: #fafafa; padding: 1.5px 4px; border-bottom: 1px solid #000;">
+        Técnico:
+      </td>
+    </tr>
+    <tr style="height: 44px; vertical-align: bottom;">
+      <td style="width: 36%; text-align: center; border-right: 1px solid #000; padding: 2px;">
+        ${sigs.tecnico ? `<img src="${sigs.tecnico}" style="max-height: 32px; max-width: 90%;" alt="Assinatura" />` : '<div style="height: 26px;"></div>'}
+        <div style="border-top: 1px solid #000; font-size: 7pt; font-weight: bold; padding-top: 1px;">Assinatura</div>
+      </td>
+      <td style="width: 32%; text-align: center; border-right: 1px solid #000; padding: 2px; font-size: 7pt;">
+        <div style="font-weight: bold; min-height: 22px; display: flex; align-items: flex-end; justify-content: center;">${safeText(tec.nomeTecnico, 'Lucas Gato')}</div>
+        <div style="border-top: 1px solid #000; font-size: 7pt; font-weight: bold; padding-top: 1px;">Nome</div>
+      </td>
+      <td style="width: 32%; text-align: center; padding: 2px; font-size: 7pt;">
+        <div style="font-weight: bold; min-height: 22px; display: flex; align-items: flex-end; justify-content: center;">${safeText(tec.empresa, 'EXACTA MANUTENCOES')}</div>
+        <div style="border-top: 1px solid #000; font-size: 7pt; font-weight: bold; padding-top: 1px;">Empresa</div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- RODAPÉ CONFIDENCIAL -->
+  <div style="margin-top: 4px; text-align: center; font-size: 6.5pt; color: #555;">
+    Copyright © 2022 VATECH Networks | All Rights Reserved. / Confidential
+  </div>
+
+</body>
+</html>`;
+}
+
+
 function gerarHtmlChecklist(dados, c, sigs) {
   c = c || {};
   sigs = sigs || {};
@@ -1426,10 +1739,31 @@ function gerarHtmlAnexoFotos(dados, fotos, sigs) {
  * 6. DOSSIÊ COMPLETO CONSOLIDADO (PDF ÚNICO COM TODOS OS DOCUMENTOS E FOTOS)
  * ============================================================================
  */
-function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos) {
+function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos, desm) {
   function extrairCorpo(html) {
     const m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
     return m ? m[1] : html;
+  }
+
+  const isDesmontagem = (dados && (dados.servico === 'DESMONTAGEM DE EQUIPAMENTO' || dados.tipoServico === 'desmontagem')) ||
+                        (rel && /DESMONTAGEM/i.test(rel.motivo));
+
+  if (isDesmontagem) {
+    const hDesm = extrairCorpo(gerarHtmlChecklistDesmontagem(dados, desm || chk, sigs));
+    const hRel = extrairCorpo(gerarHtmlRelatorio(dados, rel, sigs));
+    return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vatech Exacta - Desmontagem de Equipamento</title>
+<style>${PDF_GLOBAL_STYLE}</style>
+</head>
+<body>
+  ${hDesm}
+  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
+  ${hRel}
+</body>
+</html>`;
   }
 
   const hChk = extrairCorpo(gerarHtmlChecklist(dados, chk, sigs));

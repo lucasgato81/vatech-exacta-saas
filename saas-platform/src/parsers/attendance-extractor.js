@@ -17,7 +17,8 @@ function cleanName(str) {
 }
 
 function extractAttendanceData(text = '', spatialLines = []) {
-  const rows = (spatialLines && spatialLines[0]) || [];
+  const allPages = Array.isArray(spatialLines) ? spatialLines : [];
+  const rows = allPages.flatMap(p => (Array.isArray(p) ? (p[0] && p[0].items ? p : p.flatMap(sub => (Array.isArray(sub) ? sub : [sub]))) : []));
 
   // Default fallback data structure
   const data = {
@@ -57,17 +58,28 @@ function extractAttendanceData(text = '', spatialLines = []) {
     const rowText = row.text || '';
     const items = row.items || [];
 
-    // Solicitação n.
-    if (/Solicita[cç][aã]o\s*n/i.test(rowText)) {
+    // Desmontagem ou Instalação
+    if (/Desmontagem/i.test(rowText) || /Desmontagem/i.test(text)) {
+      data.servico = 'DESMONTAGEM DE EQUIPAMENTO';
+    }
+
+    // Motivo do Atendimento
+    if (/Motivo:?/i.test(rowText)) {
+      const mVal = cleanName(rowText.replace(/.*Motivo:?\s*/i, '').replace(/Garantia.*/i, ''));
+      if (mVal) data.servico = mVal;
+    }
+
+    // Solicitação n. ou Visita Técnica n.
+    if (/Solicita[cç][aã]o\s*n/i.test(rowText) || /VISITA\s*T[EÉ]CNICA/i.test(rowText) || /rev\s*02\s*n[ºo°]/i.test(rowText)) {
       const parts = items.map(i => i.str.trim()).filter(Boolean);
       const val = parts.find(p => /^[0-9]{8,14}$/.test(p));
       if (val) data.idAtendimento = val;
     }
 
-    // Data de Serviço / Instalação
-    if (/Data\s*(?:de\s*)?(?:Servi[cç]o|Instala[cç][aã]o):?/i.test(rowText)) {
+    // Data de Serviço / Instalação / Data
+    if (/Data\s*(?:de\s*)?(?:Servi[cç]o|Instala[cç][aã]o):?/i.test(rowText) || (/Data:?/i.test(rowText) && !/Data:\s*____/i.test(rowText))) {
       const dateVal = rowText.match(/([0-9]{4}-[0-9]{2}-[0-9]{2}|[0-9]{2}\/[0-9]{2}\/[0-9]{4})/);
-      if (dateVal) data.dataCriacao = dateVal[1];
+      if (dateVal && !data.dataCriacao) data.dataCriacao = dateVal[1];
     }
 
     // Solicitante
@@ -77,10 +89,13 @@ function extractAttendanceData(text = '', spatialLines = []) {
     }
 
     // Nome do Cliente
-    if (/Nome\s*:/i.test(rowText) || (r > 0 && /Dados do Cliente/i.test(rows[r - 1].text))) {
-      let val = rowText.replace(/.*Nome\s*:\s*/i, '').trim();
+    if ((/(?:^|[|\s])CLIENTE:?/i.test(rowText) || /Nome\s*:/i.test(rowText) || (r > 0 && /Dados do Cliente/i.test(rows[r - 1].text))) && !/Assinatura|Dados do Cliente/i.test(rowText)) {
+      let val = rowText.replace(/.*CLIENTE:?\s*/i, '').replace(/.*Nome\s*:\s*/i, '').trim();
       val = cleanName(val);
-      if (val && !/Dados do Cliente/i.test(val)) data.cliente.razaoSocial = val;
+      if (val && !/Dados do Cliente|Informações|Assinatura/i.test(val) && val.length > 2) {
+        data.cliente.razaoSocial = val;
+        data.cliente.nomeContato = val;
+      }
     } else if (/Local\/\s*Cl[ií]nica/i.test(rowText)) {
       let val = rowText.replace(/.*Local\/\s*Cl[ií]nica\s*/i, '').replace(/Cliente.*/i, '').trim();
       val = cleanName(val);
@@ -89,16 +104,23 @@ function extractAttendanceData(text = '', spatialLines = []) {
 
     // Endereço e CEP
     if (/Endere[cç]o:?/i.test(rowText)) {
-      const endVal = rowText.replace(/.*Endere[cç]o:?\s*/i, '').replace(/Cep.*/i, '').trim();
-      if (endVal) data.cliente.endereco = endVal;
+      let endVal = '';
+      const endItem = items.find(it => !/Endere[cç]o/i.test(it.str) && !/\/[A-Z]{2}/i.test(it.str) && !/Cidade|UF|Dados\s*Gerais/i.test(it.str));
+      if (endItem && endItem.str.length > 3) {
+        endVal = endItem.str.trim();
+      } else {
+        endVal = rowText.replace(/.*Endere[cç]o:?\s*/i, '').replace(/Cep.*/i, '').replace(/Cidade.*/i, '').trim();
+      }
+      if (endVal && !/Dados\s*Gerais/i.test(endVal)) data.cliente.endereco = endVal;
       const cepMatch = rowText.match(/Cep:?\s*([0-9]{5}-?[0-9]{3})/i);
       if (cepMatch) data.cliente.cep = cepMatch[1];
     }
 
     // Município / UF
-    if (/(?:Municipio|Cidade)\/\s*UF:?/i.test(rowText)) {
+    if (/(?:Municipio|Cidade)\/\s*UF:?/i.test(rowText) || /([A-ZÁ-Ú\s]{3,}\/[A-Z]{2})/i.test(rowText)) {
       const val = rowText.replace(/.*(?:Municipio|Cidade)\/\s*UF:?\s*/i, '').trim();
-      if (val) data.cliente.cidadeUf = val;
+      const cidMatch = val.match(/([A-ZÁ-Ú\s]{3,}\/[A-Z]{2})/i) || rowText.match(/([A-ZÁ-Ú\s]{3,}\/[A-Z]{2})/i);
+      if (cidMatch && !cidMatch[1].includes('Cidade')) data.cliente.cidadeUf = cidMatch[1].trim();
     }
 
     // Contato
@@ -184,10 +206,22 @@ function extractAttendanceData(text = '', spatialLines = []) {
     if (solMatch) data.solicitante = solMatch[1].replace(/Dados do Cliente.*/i, '').trim();
   }
   if (!data.cliente.razaoSocial) {
-    const cMatch = text.match(/CLINICA DENTARIA UNIAO SAO JUDAS LTDA/i) ||
+    const cMatch = text.match(/MAYCON DE SOUSA NOGUEIRA/i) ||
+                   text.match(/CLINICA DENTARIA UNIAO SAO JUDAS LTDA/i) ||
                    text.match(/SOUZA & CARVALHO [^\n\r]+/i) ||
+                   text.match(/Cliente:\s*([^\n\r]+)/i) ||
                    text.match(/(?:Nome|Cliente|Raz[aã]o Social)[:\s]+([A-ZÀ-ÿ0-9\s&]+(?:LTDA|ME|EPP|EIRELI|CLINICA|ODONTO)[^\n\r]*)/i);
-    if (cMatch) data.cliente.razaoSocial = cMatch[0].replace(/^Nome\s*:\s*/i, '').trim();
+    if (cMatch) {
+      data.cliente.razaoSocial = (cMatch[1] || cMatch[0]).replace(/^(?:Nome|Cliente|Raz[aã]o Social)\s*:\s*/i, '').trim();
+      if (!data.cliente.nomeContato) data.cliente.nomeContato = data.cliente.razaoSocial;
+    }
+  }
+  if (!data.cliente.endereco) {
+    const endMatch = text.match(/ENDERE[CÇ]O:?\s*([^\n\r]+)/i);
+    if (endMatch) data.cliente.endereco = endMatch[1].replace(/Cidade.*/i, '').replace(/Cep.*/i, '').trim();
+  }
+  if (/Desmontagem/i.test(text)) {
+    data.servico = 'DESMONTAGEM DE EQUIPAMENTO';
   }
   if (!data.equipamento.nSerie) {
     const sMatch = text.match(/047-[0-9]{6}/);

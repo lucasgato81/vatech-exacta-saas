@@ -1054,7 +1054,16 @@
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGMAAAAfCAYAAADz23MvAAAEMUlEQVR4nO1Xa2hcRRQ+M3NnZpuwu0kbG6u7eTSbzb5u6uuHUPJDMEVFi00p2JYWpAhawQdUELTgj4KhWMFSC4qPID7AUhupaAnRQopaTdNtQpt2G7Hgg4JSKjGF1miUEW88Ge69e3eTZhs6HxxYZs535pzzzZ3ZATAwMDAwMDAwMDCoCMZCK/52rCDbpyqdz3UNI8Y1hOtGDA4gcbESyKJK56TDiHENYV7FiACrPSnty471i9R3Xr4vWrG3sG8VkLAaPyxS5/IyN35a2n/i5JWpsWMiezEOPKHH08XAsbHpvAbgCRXztLQn9WYNy9ylx9nSF7xqiAJd8q3IXtBzLUh7alTaf6i4T9L6HY6/Xs8paV85K9un8NgJmZt4gEQ3li0CBg6sEvLy04v3StjLvhTp8zieLoaXYU5eZMeDcNTm0PN/kzcfCsL9XKS+L7U2ZzPNqRjKLAARxK+chLex+p3lirHfSgyWstYeEvvI4a4k1Z1BeeWKoewp9v9XVRbuIuHVOOAdpKpD92EADPtsoXXPOHMhoFVesSkQVtA+ay8xit0Z2HdApH8iAGRmjmRGjoMie8GNq6wBxHKvdcJAa9x4bndGPbCY35dcMurAWoaD7eeJQd3nAG8dwj4pkLcEjb/Xajww12LsZPF3ivmo899tvJSGFRND4ajI/DpnYiickfZffgELst13/j/Qe2lk3RZWt63bivXkRfZ3v2NnNmJ0s/jbzrjibaZLnviYt+ZnHDfc+7gJ2pcgYgyI9A9zKkYvbzmOA+J7Q/3Gcyd4dgJz2yF0ZynnqsObjRilrOPGDdqXioihL/wsXbbLGV9FImvxXAToYmduOYi0VzNGpT3Zy1uPHxWZX+ZLjDPSnurhjf3FuOX0pGJi9Iu26fdGH0+O4Tn6730+nciPeO5RdsNzetxXr8KdMSSyv30mkqN7rIbeNpAr9Mvcj7sgxHiJxd91C4rH9vHEN5gzJLIXiyWylzf2Bjk+VtOaTX75Yd/XraZPSqltwYmhXrY46C4r9t7z7MbdeKwReBJzvhKZ836JuL0l/IoNAan2yk+Pg/+C6ugk4bV+3HU0+ogX90Fas9krPzf/qyKGW9LFdtTTrH5HkLPcsQ20divmj4j05aBrrqeLHytlLbxOGFg0KM/r0TfvYtwMvNkrybtJZI0b5wPeciRIkVvp0u06V305wzI3EbSpr1lNB8sRQ+F+Et2woMRQSEPo1j6ePOsE/8JqO3cbqVrpx1GX6HZ20+48z0w39pTMTX5otXzdScJrqHqM++B2sqjjFdawb1jkLjmFD/DUzy+z+Pu6bzWQ8H00+lAfbxsryNz0635EZq4c4slCF619uINU3+O2DgfCO2mk6yBvHcENPCbS429YTZ+uopGuZhApx1/dTY6pjeAWs5vFerCfb3MNDAwMDAwMDAxmgX8A6OJG9F8OI3AAAAAASUVORK5CYII=" class="brand-logo" alt="Vatech Logo">
         <span style="font-size: 13px; font-weight: 700; color: #64748b;">| EXACTA</span>
       </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <!-- SELETOR GLOBAL DE SERVIÇO (INSTALAÇÃO / DESMONTAGEM) -->
+        <div style="display: inline-flex; background: #e2e8f0; padding: 2px; border-radius: 8px; gap: 2px; border: 1px solid #cbd5e1;">
+          <button type="button" id="topBtnInstalacao" onclick="app.setTipoServico('instalacao')" style="border: none; background: #2563eb; color: #ffffff; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;">
+            🔧 Instalação
+          </button>
+          <button type="button" id="topBtnDesmontagem" onclick="app.setTipoServico('desmontagem')" style="border: none; background: transparent; color: #475569; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;">
+            📦 Desmontagem
+          </button>
+        </div>
         <button type="button" class="btn-sig-action" style="background:#0f172a !important; color:#ffffff !important; border:none; padding:5px 12px; font-weight:700; font-size:12px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="app.abrirModalAdminNovaOS()" title="Cadastrar nova Ordem de Serviço e gerar link para o técnico">
           ➕ Nova OS
         </button>
@@ -1072,7 +1081,7 @@
 
     <!-- ABAS DO FORMULÁRIO -->
     <nav class="stepper-nav">
-      <div class="stepper-container">
+      <div class="stepper-container" id="stepperContainer">
         <div class="step-tab active" onclick="app.navegarPara(1)">1. OS & Dados</div>
         <div class="step-tab" onclick="app.navegarPara(2)">2. Checklist (61 Itens)</div>
         <div class="step-tab" onclick="app.navegarPara(3)">3. Relatório Visita</div>
@@ -1129,6 +1138,17 @@
           <div class="form-group">
             <label class="form-label">Data de Abertura</label>
             <input type="text" id="osData" class="form-input" readonly>
+          </div>
+          <div class="form-group" style="margin-top: 14px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
+            <label class="form-label" style="font-weight: 800; color: #1e293b; font-size: 13px;">Tipo de Atendimento / Serviço</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+              <button type="button" id="btnTipoInstalacao" onclick="app.setTipoServico('instalacao')" style="padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 12.5px; border: 2px solid #2563eb; background: #eff6ff; color: #1d4ed8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+                🔧 Instalação de Equipamento
+              </button>
+              <button type="button" id="btnTipoDesmontagem" onclick="app.setTipoServico('desmontagem')" style="padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 12.5px; border: 2px solid #cbd5e1; background: #ffffff; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+                📦 Desmontagem de Equipamento
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1241,6 +1261,675 @@
     <!-- =================================================================== -->
     <!-- ABA 2: CHECKLIST PÓS-INSTALAÇÃO (61 ITENS OFICIAIS VATECH)          -->
     <!-- =================================================================== -->
+    
+    <!-- PASSO 2 (DESMONTAGEM): CHECKLIST DE DESMONTAGEM (40 ITENS) -->
+    <section id="stepDesmontagem" class="step-section" style="display: none;">
+      <div class="card" style="border-left: 4px solid #dc2626; margin-bottom: 16px;">
+        <div class="card-header" style="background: #fef2f2; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span style="font-weight: 800; color: #991b1b; font-size: 15px;">📦 Check list de Desmontagem - Equipamentos (rev.00)</span>
+            <p style="margin: 2px 0 0 0; font-size: 11.5px; color: #b91c1c;">Vatech Brasil & Exacta Manutenções &bull; 40 Itens de Inspeção, Carenagens e Embalagem</p>
+          </div>
+          <span style="background: #dc2626; color: #ffffff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px;">Padrão Vatech</span>
+        </div>
+      </div>
+
+      <!-- 1. PREPARAÇÃO & SOFTWARE -->
+      <div class="card">
+        <div class="card-header">
+          <span>💾 1. Preparação, Senhas e Licenças</span>
+          <span style="font-size: 11px; color: #64748b; font-weight: 600;">Itens 1 a 11</span>
+        </div>
+        <div class="card-body">
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">1</span> BackUp de Imagens</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_backup" id="desm_backup_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('backup','SIM')">
+              <label for="desm_backup_sim">SIM</label>
+              <input type="radio" name="desm_backup" id="desm_backup_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('backup','NÃO')">
+              <label for="desm_backup_nao">NÃO</label>
+              <input type="radio" name="desm_backup" id="desm_backup_na" value="N/A" onchange="app.atualizarDesmontagemRadio('backup','N/A')">
+              <label for="desm_backup_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">2</span> Foto da etiqueta Numero de Série</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_foto_sn" id="desm_foto_sn_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('foto_etiqueta_sn','SIM')">
+              <label for="desm_foto_sn_sim">SIM</label>
+              <input type="radio" name="desm_foto_sn" id="desm_foto_sn_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('foto_etiqueta_sn','NÃO')">
+              <label for="desm_foto_sn_nao">NÃO</label>
+            </div>
+          </div>
+
+          <div class="checklist-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div class="checklist-label"><span class="checklist-num">3</span> PC de aquisição tem senha?</div>
+              <div class="btn-group-toggle">
+                <input type="radio" name="desm_pc_senha" id="desm_pc_senha_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('pc_senha','SIM')">
+                <label for="desm_pc_senha_sim">SIM</label>
+                <input type="radio" name="desm_pc_senha" id="desm_pc_senha_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('pc_senha','NÃO')">
+                <label for="desm_pc_senha_nao">NÃO</label>
+              </div>
+            </div>
+            <div>
+              <input type="text" id="desm_pc_senha_val" class="form-input" placeholder="Informe a senha do computador (se houver)" oninput="app.salvarRascunho()">
+            </div>
+          </div>
+
+          <div class="checklist-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <div class="checklist-label"><span class="checklist-num">4</span> Foto de Contador Imagens</div>
+              <div class="btn-group-toggle">
+                <input type="radio" name="desm_contador_foto" id="desm_contador_foto_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('contador_foto','SIM')">
+                <label for="desm_contador_foto_sim">SIM</label>
+                <input type="radio" name="desm_contador_foto" id="desm_contador_foto_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('contador_foto','NÃO')">
+                <label for="desm_contador_foto_nao">NÃO</label>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: #475569;">CBCT</label>
+                <input type="text" id="desm_cbct" class="form-input" placeholder="Qtd CBCT" oninput="app.salvarRascunho()">
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: #475569;">PANO</label>
+                <input type="text" id="desm_pano" class="form-input" placeholder="Qtd PANO" oninput="app.salvarRascunho()">
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: #475569;">CEPH</label>
+                <input type="text" id="desm_ceph" class="form-input" placeholder="Qtd CEPH" oninput="app.salvarRascunho()">
+              </div>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">5</span> Modo Embalagem PKEN_1</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_modo_embalagem" id="desm_modo_embalagem_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('modo_embalagem','SIM')">
+              <label for="desm_modo_embalagem_sim">SIM</label>
+              <input type="radio" name="desm_modo_embalagem" id="desm_modo_embalagem_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('modo_embalagem','NÃO')">
+              <label for="desm_modo_embalagem_nao">NÃO</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">6</span> Retirar Licença Ezdent-i</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_licenca_ezdent" id="desm_licenca_ezdent_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('licenca_ezdent','SIM')">
+              <label for="desm_licenca_ezdent_sim">SIM</label>
+              <input type="radio" name="desm_licenca_ezdent" id="desm_licenca_ezdent_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('licenca_ezdent','NÃO')">
+              <label for="desm_licenca_ezdent_nao">NÃO</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">7</span> Retirar Licença Ez3D-i</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_licenca_ez3d" id="desm_licenca_ez3d_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('licenca_ez3d','SIM')">
+              <label for="desm_licenca_ez3d_sim">SIM</label>
+              <input type="radio" name="desm_licenca_ez3d" id="desm_licenca_ez3d_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('licenca_ez3d','NÃO')">
+              <label for="desm_licenca_ez3d_nao">NÃO</label>
+              <input type="radio" name="desm_licenca_ez3d" id="desm_licenca_ez3d_na" value="N/A" onchange="app.atualizarDesmontagemRadio('licenca_ez3d','N/A')">
+              <label for="desm_licenca_ez3d_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">8</span> Verificar acessorios conforme Manual</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_verif_acessorios" id="desm_verif_acessorios_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('verif_acessorios','SIM')">
+              <label for="desm_verif_acessorios_sim">SIM</label>
+              <input type="radio" name="desm_verif_acessorios" id="desm_verif_acessorios_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('verif_acessorios','NÃO')">
+              <label for="desm_verif_acessorios_nao">NÃO</label>
+              <input type="radio" name="desm_verif_acessorios" id="desm_verif_acessorios_na" value="N/A" onchange="app.atualizarDesmontagemRadio('verif_acessorios','N/A')">
+              <label for="desm_verif_acessorios_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">9</span> USB - Licenças</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_usb_licencas" id="desm_usb_licencas_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('usb_licencas','SIM')">
+              <label for="desm_usb_licencas_sim">SIM</label>
+              <input type="radio" name="desm_usb_licencas" id="desm_usb_licencas_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('usb_licencas','NÃO')">
+              <label for="desm_usb_licencas_nao">NÃO</label>
+              <input type="radio" name="desm_usb_licencas" id="desm_usb_licencas_na" value="N/A" onchange="app.atualizarDesmontagemRadio('usb_licencas','N/A')">
+              <label for="desm_usb_licencas_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">10</span> CD / USB - Software Captura</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_sw_captura" id="desm_sw_captura_cd" value="SIM, CD" onchange="app.atualizarDesmontagemRadio('sw_captura','SIM, CD')">
+              <label for="desm_sw_captura_cd">SIM, CD</label>
+              <input type="radio" name="desm_sw_captura" id="desm_sw_captura_usb" value="SIM, USB" onchange="app.atualizarDesmontagemRadio('sw_captura','SIM, USB')">
+              <label for="desm_sw_captura_usb">SIM, USB</label>
+              <input type="radio" name="desm_sw_captura" id="desm_sw_captura_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('sw_captura','NÃO')">
+              <label for="desm_sw_captura_nao">NÃO</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">11</span> USB - Recovery PC</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_recovery_pc" id="desm_recovery_pc_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('recovery_pc','SIM')">
+              <label for="desm_recovery_pc_sim">SIM</label>
+              <input type="radio" name="desm_recovery_pc" id="desm_recovery_pc_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('recovery_pc','NÃO')">
+              <label for="desm_recovery_pc_nao">NÃO</label>
+              <input type="radio" name="desm_recovery_pc" id="desm_recovery_pc_pc" value="PC do CLiente" onchange="app.atualizarDesmontagemRadio('recovery_pc','PC do CLiente')">
+              <label for="desm_recovery_pc_pc">PC Cliente</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ACESSÓRIOS & POSICIONADORES -->
+      <div class="card">
+        <div class="card-header">
+          <span>🩺 2. Acessórios e Posicionadores</span>
+          <span style="font-size: 11px; color: #64748b; font-weight: 600;">Itens 12 a 19</span>
+        </div>
+        <div class="card-body">
+          <p style="font-size: 11.5px; color: #64748b; margin-top: 0; margin-bottom: 10px;">Para cada acessório, marque a presença e a condição constatada:</p>
+          
+          <div class="space-y-4">
+            <!-- 12. Apoio Tempora -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">12</span> Apoio de Tempora Direito e Esquerdo</span>
+                <div class="btn-group-toggle">
+                  <input type="radio" name="desm_item_tempora" id="desm_item_tempora_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('item_tempora','SIM')">
+                  <label for="desm_item_tempora_sim">SIM</label>
+                  <input type="radio" name="desm_item_tempora" id="desm_item_tempora_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('item_tempora','NÃO')">
+                  <label for="desm_item_tempora_nao">NÃO</label>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">Condição:</span>
+                <div class="btn-group-toggle" style="flex: 1;">
+                  <input type="radio" name="desm_cond_tempora" id="desm_cond_tempora_marca" value="Marca de Uso" onchange="app.atualizarDesmontagemRadio('cond_tempora','Marca de Uso')">
+                  <label for="desm_cond_tempora_marca" style="font-size: 11px;">Marca de Uso</label>
+                  <input type="radio" name="desm_cond_tempora" id="desm_cond_tempora_danif" value="Danificado" onchange="app.atualizarDesmontagemRadio('cond_tempora','Danificado')">
+                  <label for="desm_cond_tempora_danif" style="font-size: 11px;">Danificado</label>
+                  <input type="radio" name="desm_cond_tempora" id="desm_cond_tempora_na" value="N/A" onchange="app.atualizarDesmontagemRadio('cond_tempora','N/A')">
+                  <label for="desm_cond_tempora_na" style="font-size: 11px;">N/A</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 13. Apoio Queixo Alto -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">13</span> Posicionador - Apoio queixo ALTO (tirar foto)</span>
+                <div class="btn-group-toggle">
+                  <input type="radio" name="desm_item_queixo_alto" id="desm_item_queixo_alto_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('item_queixo_alto','SIM')">
+                  <label for="desm_item_queixo_alto_sim">SIM</label>
+                  <input type="radio" name="desm_item_queixo_alto" id="desm_item_queixo_alto_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('item_queixo_alto','NÃO')">
+                  <label for="desm_item_queixo_alto_nao">NÃO</label>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">Condição:</span>
+                <div class="btn-group-toggle" style="flex: 1;">
+                  <input type="radio" name="desm_cond_queixo_alto" id="desm_cond_queixo_alto_marca" value="Marca de Uso" onchange="app.atualizarDesmontagemRadio('cond_queixo_alto','Marca de Uso')">
+                  <label for="desm_cond_queixo_alto_marca" style="font-size: 11px;">Marca de Uso</label>
+                  <input type="radio" name="desm_cond_queixo_alto" id="desm_cond_queixo_alto_danif" value="Danificado" onchange="app.atualizarDesmontagemRadio('cond_queixo_alto','Danificado')">
+                  <label for="desm_cond_queixo_alto_danif" style="font-size: 11px;">Danificado</label>
+                  <input type="radio" name="desm_cond_queixo_alto" id="desm_cond_queixo_alto_na" value="N/A" onchange="app.atualizarDesmontagemRadio('cond_queixo_alto','N/A')">
+                  <label for="desm_cond_queixo_alto_na" style="font-size: 11px;">N/A</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 14. Apoio Queixo Baixo -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">14</span> Posicionador - Apoio queixo Baixo (tirar foto)</span>
+                <div class="btn-group-toggle">
+                  <input type="radio" name="desm_item_queixo_baixo" id="desm_item_queixo_baixo_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('item_queixo_baixo','SIM')">
+                  <label for="desm_item_queixo_baixo_sim">SIM</label>
+                  <input type="radio" name="desm_item_queixo_baixo" id="desm_item_queixo_baixo_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('item_queixo_baixo','NÃO')">
+                  <label for="desm_item_queixo_baixo_nao">NÃO</label>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">Condição:</span>
+                <div class="btn-group-toggle" style="flex: 1;">
+                  <input type="radio" name="desm_cond_queixo_baixo" id="desm_cond_queixo_baixo_marca" value="Marca de Uso" onchange="app.atualizarDesmontagemRadio('cond_queixo_baixo','Marca de Uso')">
+                  <label for="desm_cond_queixo_baixo_marca" style="font-size: 11px;">Marca de Uso</label>
+                  <input type="radio" name="desm_cond_queixo_baixo" id="desm_cond_queixo_baixo_danif" value="Danificado" onchange="app.atualizarDesmontagemRadio('cond_queixo_baixo','Danificado')">
+                  <label for="desm_cond_queixo_baixo_danif" style="font-size: 11px;">Danificado</label>
+                  <input type="radio" name="desm_cond_queixo_baixo" id="desm_cond_queixo_baixo_na" value="N/A" onchange="app.atualizarDesmontagemRadio('cond_queixo_baixo','N/A')">
+                  <label for="desm_cond_queixo_baixo_na" style="font-size: 11px;">N/A</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 15. Mordedor Padrão -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">15</span> Mordedor Padrao</span>
+                <div class="btn-group-toggle">
+                  <input type="radio" name="desm_item_mordedor" id="desm_item_mordedor_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('item_mordedor','SIM')">
+                  <label for="desm_item_mordedor_sim">SIM</label>
+                  <input type="radio" name="desm_item_mordedor" id="desm_item_mordedor_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('item_mordedor','NÃO')">
+                  <label for="desm_item_mordedor_nao">NÃO</label>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">Condição:</span>
+                <div class="btn-group-toggle" style="flex: 1;">
+                  <input type="radio" name="desm_cond_mordedor" id="desm_cond_mordedor_marca" value="Marca de Uso" onchange="app.atualizarDesmontagemRadio('cond_mordedor','Marca de Uso')">
+                  <label for="desm_cond_mordedor_marca" style="font-size: 11px;">Marca de Uso</label>
+                  <input type="radio" name="desm_cond_mordedor" id="desm_cond_mordedor_danif" value="Danificado" onchange="app.atualizarDesmontagemRadio('cond_mordedor','Danificado')">
+                  <label for="desm_cond_mordedor_danif" style="font-size: 11px;">Danificado</label>
+                  <input type="radio" name="desm_cond_mordedor" id="desm_cond_mordedor_na" value="N/A" onchange="app.atualizarDesmontagemRadio('cond_mordedor','N/A')">
+                  <label for="desm_cond_mordedor_na" style="font-size: 11px;">N/A</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 16. Posicionador Edentulo -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">16</span> Posicionador Edentulo</span>
+                <div class="btn-group-toggle">
+                  <input type="radio" name="desm_item_edentulo" id="desm_item_edentulo_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('item_edentulo','SIM')">
+                  <label for="desm_item_edentulo_sim">SIM</label>
+                  <input type="radio" name="desm_item_edentulo" id="desm_item_edentulo_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('item_edentulo','NÃO')">
+                  <label for="desm_item_edentulo_nao">NÃO</label>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">Condição:</span>
+                <div class="btn-group-toggle" style="flex: 1;">
+                  <input type="radio" name="desm_cond_edentulo" id="desm_cond_edentulo_marca" value="Marca de Uso" onchange="app.atualizarDesmontagemRadio('cond_edentulo','Marca de Uso')">
+                  <label for="desm_cond_edentulo_marca" style="font-size: 11px;">Marca de Uso</label>
+                  <input type="radio" name="desm_cond_edentulo" id="desm_cond_edentulo_danif" value="Danificado" onchange="app.atualizarDesmontagemRadio('cond_edentulo','Danificado')">
+                  <label for="desm_cond_edentulo_danif" style="font-size: 11px;">Danificado</label>
+                  <input type="radio" name="desm_cond_edentulo" id="desm_cond_edentulo_na" value="N/A" onchange="app.atualizarDesmontagemRadio('cond_edentulo','N/A')">
+                  <label for="desm_cond_edentulo_na" style="font-size: 11px;">N/A</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 17. Posicionador ATM -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">17</span> Posicionador ATM</span>
+                <div class="btn-group-toggle">
+                  <input type="radio" name="desm_item_atm" id="desm_item_atm_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('item_atm','SIM')">
+                  <label for="desm_item_atm_sim">SIM</label>
+                  <input type="radio" name="desm_item_atm" id="desm_item_atm_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('item_atm','NÃO')">
+                  <label for="desm_item_atm_nao">NÃO</label>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">Condição:</span>
+                <div class="btn-group-toggle" style="flex: 1;">
+                  <input type="radio" name="desm_cond_atm" id="desm_cond_atm_marca" value="Marca de Uso" onchange="app.atualizarDesmontagemRadio('cond_atm','Marca de Uso')">
+                  <label for="desm_cond_atm_marca" style="font-size: 11px;">Marca de Uso</label>
+                  <input type="radio" name="desm_cond_atm" id="desm_cond_atm_danif" value="Danificado" onchange="app.atualizarDesmontagemRadio('cond_atm','Danificado')">
+                  <label for="desm_cond_atm_danif" style="font-size: 11px;">Danificado</label>
+                  <input type="radio" name="desm_cond_atm" id="desm_cond_atm_na" value="N/A" onchange="app.atualizarDesmontagemRadio('cond_atm','N/A')">
+                  <label for="desm_cond_atm_na" style="font-size: 11px;">N/A</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 18. Apoio Nariz -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">18</span> Apoio Nariz (modo Ceph)</span>
+                <div class="btn-group-toggle">
+                  <input type="radio" name="desm_item_nariz" id="desm_item_nariz_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('item_nariz','SIM')">
+                  <label for="desm_item_nariz_sim">SIM</label>
+                  <input type="radio" name="desm_item_nariz" id="desm_item_nariz_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('item_nariz','NÃO')">
+                  <label for="desm_item_nariz_nao">NÃO</label>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">Condição:</span>
+                <div class="btn-group-toggle" style="flex: 1;">
+                  <input type="radio" name="desm_cond_nariz" id="desm_cond_nariz_marca" value="Marca de Uso" onchange="app.atualizarDesmontagemRadio('cond_nariz','Marca de Uso')">
+                  <label for="desm_cond_nariz_marca" style="font-size: 11px;">Marca de Uso</label>
+                  <input type="radio" name="desm_cond_nariz" id="desm_cond_nariz_danif" value="Danificado" onchange="app.atualizarDesmontagemRadio('cond_nariz','Danificado')">
+                  <label for="desm_cond_nariz_danif" style="font-size: 11px;">Danificado</label>
+                  <input type="radio" name="desm_cond_nariz" id="desm_cond_nariz_na" value="N/A" onchange="app.atualizarDesmontagemRadio('cond_nariz','N/A')">
+                  <label for="desm_cond_nariz_na" style="font-size: 11px;">N/A</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 19. Suporte Olivas -->
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+                <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">19</span> Suporte de Olivas (modo Ceph)</span>
+                <div class="btn-group-toggle">
+                  <input type="radio" name="desm_item_olivas" id="desm_item_olivas_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('item_olivas','SIM')">
+                  <label for="desm_item_olivas_sim">SIM</label>
+                  <input type="radio" name="desm_item_olivas" id="desm_item_olivas_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('item_olivas','NÃO')">
+                  <label for="desm_item_olivas_nao">NÃO</label>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #64748b; font-weight: 600;">Condição:</span>
+                <div class="btn-group-toggle" style="flex: 1;">
+                  <input type="radio" name="desm_cond_olivas" id="desm_cond_olivas_marca" value="Marca de Uso" onchange="app.atualizarDesmontagemRadio('cond_olivas','Marca de Uso')">
+                  <label for="desm_cond_olivas_marca" style="font-size: 11px;">Marca de Uso</label>
+                  <input type="radio" name="desm_cond_olivas" id="desm_cond_olivas_danif" value="Danificado" onchange="app.atualizarDesmontagemRadio('cond_olivas','Danificado')">
+                  <label for="desm_cond_olivas_danif" style="font-size: 11px;">Danificado</label>
+                  <input type="radio" name="desm_cond_olivas" id="desm_cond_olivas_na" value="N/A" onchange="app.atualizarDesmontagemRadio('cond_olivas','N/A')">
+                  <label for="desm_cond_olivas_na" style="font-size: 11px;">N/A</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. RISCOS NAS CARENAGENS -->
+      <div class="card">
+        <div class="card-header">
+          <span>🔍 3. Riscos e Avarias nas Carenagens</span>
+          <span style="font-size: 11px; color: #64748b; font-weight: 600;">Itens 20 a 24</span>
+        </div>
+        <div class="card-body">
+          <p style="font-size: 11.5px; color: #64748b; margin-top: 0; margin-bottom: 10px;">Classifique o nível de riscos ou arranhões encontrados:</p>
+
+          <div class="space-y-4">
+            <div class="checklist-item" style="flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 10px; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;">
+              <div class="checklist-label"><span class="checklist-num">20</span> Riscos na carenagem Coluna</div>
+              <div class="btn-group-toggle" style="display: grid; grid-template-columns: repeat(4, 1fr);">
+                <input type="radio" name="desm_risco_coluna" id="desm_risco_coluna_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('risco_coluna','NÃO')">
+                <label for="desm_risco_coluna_nao" style="font-size: 11.5px;">NÃO</label>
+                <input type="radio" name="desm_risco_coluna" id="desm_risco_coluna_leve" value="Leve" onchange="app.atualizarDesmontagemRadio('risco_coluna','Leve')">
+                <label for="desm_risco_coluna_leve" style="font-size: 11.5px;">Leve</label>
+                <input type="radio" name="desm_risco_coluna" id="desm_risco_coluna_mod" value="Moderado" onchange="app.atualizarDesmontagemRadio('risco_coluna','Moderado')">
+                <label for="desm_risco_coluna_mod" style="font-size: 11.5px;">Moderado</label>
+                <input type="radio" name="desm_risco_coluna" id="desm_risco_coluna_prof" value="Profundos" onchange="app.atualizarDesmontagemRadio('risco_coluna','Profundos')">
+                <label for="desm_risco_coluna_prof" style="font-size: 11.5px;">Profundos</label>
+              </div>
+            </div>
+
+            <div class="checklist-item" style="flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 10px; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;">
+              <div class="checklist-label"><span class="checklist-num">21</span> Riscos na Carenagem Superior Principal</div>
+              <div class="btn-group-toggle" style="display: grid; grid-template-columns: repeat(4, 1fr);">
+                <input type="radio" name="desm_risco_superior" id="desm_risco_superior_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('risco_superior','NÃO')">
+                <label for="desm_risco_superior_nao" style="font-size: 11.5px;">NÃO</label>
+                <input type="radio" name="desm_risco_superior" id="desm_risco_superior_leve" value="Leve" onchange="app.atualizarDesmontagemRadio('risco_superior','Leve')">
+                <label for="desm_risco_superior_leve" style="font-size: 11.5px;">Leve</label>
+                <input type="radio" name="desm_risco_superior" id="desm_risco_superior_mod" value="Moderado" onchange="app.atualizarDesmontagemRadio('risco_superior','Moderado')">
+                <label for="desm_risco_superior_mod" style="font-size: 11.5px;">Moderado</label>
+                <input type="radio" name="desm_risco_superior" id="desm_risco_superior_prof" value="Profundos" onchange="app.atualizarDesmontagemRadio('risco_superior','Profundos')">
+                <label for="desm_risco_superior_prof" style="font-size: 11.5px;">Profundos</label>
+              </div>
+            </div>
+
+            <div class="checklist-item" style="flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 10px; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;">
+              <div class="checklist-label"><span class="checklist-num">22</span> Riscos na Carenagem apoio de queixo</div>
+              <div class="btn-group-toggle" style="display: grid; grid-template-columns: repeat(4, 1fr);">
+                <input type="radio" name="desm_risco_apoio_queixo" id="desm_risco_apoio_queixo_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('risco_apoio_queixo','NÃO')">
+                <label for="desm_risco_apoio_queixo_nao" style="font-size: 11.5px;">NÃO</label>
+                <input type="radio" name="desm_risco_apoio_queixo" id="desm_risco_apoio_queixo_leve" value="Leve" onchange="app.atualizarDesmontagemRadio('risco_apoio_queixo','Leve')">
+                <label for="desm_risco_apoio_queixo_leve" style="font-size: 11.5px;">Leve</label>
+                <input type="radio" name="desm_risco_apoio_queixo" id="desm_risco_apoio_queixo_mod" value="Moderado" onchange="app.atualizarDesmontagemRadio('risco_apoio_queixo','Moderado')">
+                <label for="desm_risco_apoio_queixo_mod" style="font-size: 11.5px;">Moderado</label>
+                <input type="radio" name="desm_risco_apoio_queixo" id="desm_risco_apoio_queixo_prof" value="Profundos" onchange="app.atualizarDesmontagemRadio('risco_apoio_queixo','Profundos')">
+                <label for="desm_risco_apoio_queixo_prof" style="font-size: 11.5px;">Profundos</label>
+              </div>
+            </div>
+
+            <div class="checklist-item" style="flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 10px; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;">
+              <div class="checklist-label"><span class="checklist-num">23</span> Riscos na Carenagem da Base</div>
+              <div class="btn-group-toggle" style="display: grid; grid-template-columns: repeat(4, 1fr);">
+                <input type="radio" name="desm_risco_base" id="desm_risco_base_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('risco_base','NÃO')">
+                <label for="desm_risco_base_nao" style="font-size: 11.5px;">NÃO</label>
+                <input type="radio" name="desm_risco_base" id="desm_risco_base_leve" value="Leve" onchange="app.atualizarDesmontagemRadio('risco_base','Leve')">
+                <label for="desm_risco_base_leve" style="font-size: 11.5px;">Leve</label>
+                <input type="radio" name="desm_risco_base" id="desm_risco_base_mod" value="Moderado" onchange="app.atualizarDesmontagemRadio('risco_base','Moderado')">
+                <label for="desm_risco_base_mod" style="font-size: 11.5px;">Moderado</label>
+                <input type="radio" name="desm_risco_base" id="desm_risco_base_prof" value="Profundos" onchange="app.atualizarDesmontagemRadio('risco_base','Profundos')">
+                <label for="desm_risco_base_prof" style="font-size: 11.5px;">Profundos</label>
+              </div>
+            </div>
+
+            <div class="checklist-item" style="flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 10px; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;">
+              <div class="checklist-label"><span class="checklist-num">24</span> Riscos na Unidade Ceph</div>
+              <div class="btn-group-toggle" style="display: grid; grid-template-columns: repeat(4, 1fr);">
+                <input type="radio" name="desm_risco_ceph" id="desm_risco_ceph_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('risco_ceph','NÃO')">
+                <label for="desm_risco_ceph_nao" style="font-size: 11.5px;">NÃO</label>
+                <input type="radio" name="desm_risco_ceph" id="desm_risco_ceph_leve" value="Leve" onchange="app.atualizarDesmontagemRadio('risco_ceph','Leve')">
+                <label for="desm_risco_ceph_leve" style="font-size: 11.5px;">Leve</label>
+                <input type="radio" name="desm_risco_ceph" id="desm_risco_ceph_mod" value="Moderado" onchange="app.atualizarDesmontagemRadio('risco_ceph','Moderado')">
+                <label for="desm_risco_ceph_mod" style="font-size: 11.5px;">Moderado</label>
+                <input type="radio" name="desm_risco_ceph" id="desm_risco_ceph_prof" value="Profundos" onchange="app.atualizarDesmontagemRadio('risco_ceph','Profundos')">
+                <label for="desm_risco_ceph_prof" style="font-size: 11.5px;">Profundos</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. DESMONTAGEM E TRAVAS MECÂNICAS -->
+      <div class="card">
+        <div class="card-header">
+          <span>🔧 4. Desmontagem e Travas Mecânicas</span>
+          <span style="font-size: 11px; color: #64748b; font-weight: 600;">Itens 25 a 31</span>
+        </div>
+        <div class="card-body">
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">25</span> Suporte Fixação Parede Removido e Guardado</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_parede_1" id="desm_parede_1_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('parede_removido_1','SIM')">
+              <label for="desm_parede_1_sim">SIM</label>
+              <input type="radio" name="desm_parede_1" id="desm_parede_1_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('parede_removido_1','NÃO')">
+              <label for="desm_parede_1_nao">NÃO</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">26</span> Fixaçao dos parafusos de travas Rotator</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_trava_rotator" id="desm_trava_rotator_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('trava_rotator','SIM')">
+              <label for="desm_trava_rotator_sim">SIM</label>
+              <input type="radio" name="desm_trava_rotator" id="desm_trava_rotator_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('trava_rotator','NÃO')">
+              <label for="desm_trava_rotator_nao">NÃO</label>
+              <input type="radio" name="desm_trava_rotator" id="desm_trava_rotator_na" value="N/A" onchange="app.atualizarDesmontagemRadio('trava_rotator','N/A')">
+              <label for="desm_trava_rotator_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">27</span> Removido Unidade ROTATOR</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_remov_rotator" id="desm_remov_rotator_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('removido_rotator','SIM')">
+              <label for="desm_remov_rotator_sim">SIM</label>
+              <input type="radio" name="desm_remov_rotator" id="desm_remov_rotator_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('removido_rotator','NÃO')">
+              <label for="desm_remov_rotator_nao">NÃO</label>
+              <input type="radio" name="desm_remov_rotator" id="desm_remov_rotator_na" value="N/A" onchange="app.atualizarDesmontagemRadio('removido_rotator','N/A')">
+              <label for="desm_remov_rotator_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">28</span> Fixaçao dos parafusos de travas Coluna</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_trava_coluna" id="desm_trava_coluna_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('trava_coluna','SIM')">
+              <label for="desm_trava_coluna_sim">SIM</label>
+              <input type="radio" name="desm_trava_coluna" id="desm_trava_coluna_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('trava_coluna','NÃO')">
+              <label for="desm_trava_coluna_nao">NÃO</label>
+              <input type="radio" name="desm_trava_coluna" id="desm_trava_coluna_na" value="N/A" onchange="app.atualizarDesmontagemRadio('trava_coluna','N/A')">
+              <label for="desm_trava_coluna_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">29</span> Suporte Fixação Parede Removido e Guardado</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_parede_2" id="desm_parede_2_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('parede_removido_2','SIM')">
+              <label for="desm_parede_2_sim">SIM</label>
+              <input type="radio" name="desm_parede_2" id="desm_parede_2_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('parede_removido_2','NÃO')">
+              <label for="desm_parede_2_nao">NÃO</label>
+              <input type="radio" name="desm_parede_2" id="desm_parede_2_na" value="N/A" onchange="app.atualizarDesmontagemRadio('parede_removido_2','N/A')">
+              <label for="desm_parede_2_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">30</span> Retirada da Base</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_retirada_base" id="desm_retirada_base_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('retirada_base','SIM')">
+              <label for="desm_retirada_base_sim">SIM</label>
+              <input type="radio" name="desm_retirada_base" id="desm_retirada_base_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('retirada_base','NÃO')">
+              <label for="desm_retirada_base_nao">NÃO</label>
+              <input type="radio" name="desm_retirada_base" id="desm_retirada_base_na" value="N/A" onchange="app.atualizarDesmontagemRadio('retirada_base','N/A')">
+              <label for="desm_retirada_base_na">N/A</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">31</span> Fotos do Kit de barras de transporte</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_foto_barras" id="desm_foto_barras_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('foto_barras','SIM')">
+              <label for="desm_foto_barras_sim">SIM</label>
+              <input type="radio" name="desm_foto_barras" id="desm_foto_barras_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('foto_barras','NÃO')">
+              <label for="desm_foto_barras_nao">NÃO</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. EMBALAGENS & EXPEDIÇÃO -->
+      <div class="card">
+        <div class="card-header">
+          <span>📦 5. Embalagens e Expedição para Transporte</span>
+          <span style="font-size: 11px; color: #64748b; font-weight: 600;">Itens 32 a 40</span>
+        </div>
+        <div class="card-body">
+          <!-- 32. Base -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+              <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">32</span> Base foi guardada</span>
+              <div class="btn-group-toggle">
+                <input type="radio" name="desm_emb_base" id="desm_emb_base_orig" value="Caixa Original" onchange="app.atualizarDesmontagemRadio('emb_base','Caixa Original')">
+                <label for="desm_emb_base_orig">Caixa Original</label>
+                <input type="radio" name="desm_emb_base" id="desm_emb_base_outra" value="Outra embalagem" onchange="app.atualizarDesmontagemRadio('emb_base','Outra embalagem')">
+                <label for="desm_emb_base_outra">Outra embalagem</label>
+              </div>
+            </div>
+            <div>
+              <input type="text" id="desm_emb_base_detalhe" class="form-input" placeholder="Detalhes da embalagem da base (se outra)" oninput="app.salvarRascunho()" style="font-size: 12px; padding: 4px 8px;">
+            </div>
+          </div>
+
+          <!-- 33. Unidade Principal -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+              <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">33</span> Unidade Principal embalada</span>
+              <div class="btn-group-toggle">
+                <input type="radio" name="desm_emb_principal" id="desm_emb_principal_orig" value="Caixa Original" onchange="app.atualizarDesmontagemRadio('emb_principal','Caixa Original')">
+                <label for="desm_emb_principal_orig">Caixa Original</label>
+                <input type="radio" name="desm_emb_principal" id="desm_emb_principal_outra" value="Outra embalagem" onchange="app.atualizarDesmontagemRadio('emb_principal','Outra embalagem')">
+                <label for="desm_emb_principal_outra">Outra embalagem</label>
+              </div>
+            </div>
+            <div>
+              <input type="text" id="desm_emb_principal_detalhe" class="form-input" placeholder="Detalhes da embalagem principal (se outra)" oninput="app.salvarRascunho()" style="font-size: 12px; padding: 4px 8px;">
+            </div>
+          </div>
+
+          <!-- 34. Rotator -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+              <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">34</span> Unidade ROTATOR embalada</span>
+              <div class="btn-group-toggle">
+                <input type="radio" name="desm_emb_rotator" id="desm_emb_rotator_orig" value="Caixa Original" onchange="app.atualizarDesmontagemRadio('emb_rotator','Caixa Original')">
+                <label for="desm_emb_rotator_orig">Caixa Original</label>
+                <input type="radio" name="desm_emb_rotator" id="desm_emb_rotator_outra" value="Outra embalagem" onchange="app.atualizarDesmontagemRadio('emb_rotator','Outra embalagem')">
+                <label for="desm_emb_rotator_outra">Outra embalagem</label>
+              </div>
+            </div>
+            <div>
+              <input type="text" id="desm_emb_rotator_detalhe" class="form-input" placeholder="Detalhes da embalagem rotator (se outra)" oninput="app.salvarRascunho()" style="font-size: 12px; padding: 4px 8px;">
+            </div>
+          </div>
+
+          <!-- 35. Ceph -->
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; background: #fafafa;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+              <span style="font-size: 12.5px; font-weight: 700; color: #1e293b;"><span class="checklist-num">35</span> Unidade CEPH embalada</span>
+              <div class="btn-group-toggle">
+                <input type="radio" name="desm_emb_ceph" id="desm_emb_ceph_orig" value="Caixa Original" onchange="app.atualizarDesmontagemRadio('emb_ceph','Caixa Original')">
+                <label for="desm_emb_ceph_orig">Caixa Original</label>
+                <input type="radio" name="desm_emb_ceph" id="desm_emb_ceph_outra" value="Outra embalagem" onchange="app.atualizarDesmontagemRadio('emb_ceph','Outra embalagem')">
+                <label for="desm_emb_ceph_outra">Outra embalagem</label>
+              </div>
+            </div>
+            <div>
+              <input type="text" id="desm_emb_ceph_detalhe" class="form-input" placeholder="Detalhes da embalagem ceph (se outra)" oninput="app.salvarRascunho()" style="font-size: 12px; padding: 4px 8px;">
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">36</span> Foto da embalagem</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_foto_embalagem" id="desm_foto_embalagem_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('foto_embalagem','SIM')">
+              <label for="desm_foto_embalagem_sim">SIM</label>
+              <input type="radio" name="desm_foto_embalagem" id="desm_foto_embalagem_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('foto_embalagem','NÃO')">
+              <label for="desm_foto_embalagem_nao">NÃO</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">37</span> Foto das Caixas</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_foto_caixas" id="desm_foto_caixas_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('foto_caixas','SIM')">
+              <label for="desm_foto_caixas_sim">SIM</label>
+              <input type="radio" name="desm_foto_caixas" id="desm_foto_caixas_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('foto_caixas','NÃO')">
+              <label for="desm_foto_caixas_nao">NÃO</label>
+            </div>
+          </div>
+
+          <div class="checklist-item">
+            <div class="checklist-label"><span class="checklist-num">38</span> Liberado para transporte</div>
+            <div class="btn-group-toggle">
+              <input type="radio" name="desm_liberado" id="desm_liberado_sim" value="SIM" onchange="app.atualizarDesmontagemRadio('liberado_transporte','SIM')">
+              <label for="desm_liberado_sim">SIM</label>
+              <input type="radio" name="desm_liberado" id="desm_liberado_nao" value="NÃO" onchange="app.atualizarDesmontagemRadio('liberado_transporte','NÃO')">
+              <label for="desm_liberado_nao">NÃO</label>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 10px;">
+            <div class="form-group">
+              <label class="form-label"><span class="checklist-num">39</span> Volumes (Quantidade)</label>
+              <input type="text" id="desm_volumes_qtd" class="form-input" placeholder="Ex: 4 caixas" oninput="app.salvarRascunho()">
+            </div>
+            <div class="form-group">
+              <label class="form-label"><span class="checklist-num">40</span> Transportadora (Nome)</label>
+              <input type="text" id="desm_transportadora_nome" class="form-input" placeholder="Ex: Jadlog / Próprio" oninput="app.salvarRascunho()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OBSERVAÇÕES DA DESMONTAGEM -->
+      <div class="card">
+        <div class="card-header">
+          <span>📝 Observações Gerais da Desmontagem</span>
+        </div>
+        <div class="card-body">
+          <textarea id="desm_observacoes" class="form-textarea" rows="3" placeholder="Anotações técnicas adicionais sobre a desmontagem, estado geral do equipamento, etc." oninput="app.salvarRascunho()"></textarea>
+        </div>
+      </div>
+
+    </section>
+
     <section id="step2" class="step-section" style="display: none;">
 
       <!-- CAT 1: Antes da abertura das Caixas -->
@@ -3245,6 +3934,111 @@ class SmoothSignaturePad {
 const app = {
   passoAtual: 1,
   totalPassos: 6,
+  modoDesmontagem: false,
+  tipoServico: 'instalacao',
+  desmontagemData: {},
+
+  setTipoServico(tipo) {
+    this.tipoServico = tipo;
+    this.modoDesmontagem = (tipo === 'desmontagem');
+    this.totalPassos = this.modoDesmontagem ? 4 : 6;
+
+    const btnInst = document.getElementById('btnTipoInstalacao');
+    const btnDesm = document.getElementById('btnTipoDesmontagem');
+    if (btnInst && btnDesm) {
+      if (this.modoDesmontagem) {
+        btnInst.style.border = '2px solid #cbd5e1';
+        btnInst.style.background = '#ffffff';
+        btnInst.style.color = '#475569';
+        btnDesm.style.border = '2px solid #dc2626';
+        btnDesm.style.background = '#fef2f2';
+        btnDesm.style.color = '#b91c1c';
+      } else {
+        btnInst.style.border = '2px solid #2563eb';
+        btnInst.style.background = '#eff6ff';
+        btnInst.style.color = '#1d4ed8';
+        btnDesm.style.border = '2px solid #cbd5e1';
+        btnDesm.style.background = '#ffffff';
+        btnDesm.style.color = '#475569';
+      }
+    }
+
+    const topInst = document.getElementById('topBtnInstalacao');
+    const topDesm = document.getElementById('topBtnDesmontagem');
+    if (topInst && topDesm) {
+      if (this.modoDesmontagem) {
+        topInst.style.background = 'transparent';
+        topInst.style.color = '#475569';
+        topDesm.style.background = '#dc2626';
+        topDesm.style.color = '#ffffff';
+      } else {
+        topInst.style.background = '#2563eb';
+        topInst.style.color = '#ffffff';
+        topDesm.style.background = 'transparent';
+        topDesm.style.color = '#475569';
+      }
+    }
+
+    const sc = document.getElementById('stepperContainer');
+    if (sc) {
+      if (this.modoDesmontagem) {
+        sc.innerHTML = `
+          <div class="step-tab ${this.passoAtual===1?'active':''}" onclick="app.navegarPara(1)">1. OS & Dados</div>
+          <div class="step-tab ${this.passoAtual===2?'active':''}" onclick="app.navegarPara(2)">2. Checklist Desmontagem (40 Itens)</div>
+          <div class="step-tab ${this.passoAtual===3?'active':''}" onclick="app.navegarPara(3)">3. Relatório Visita</div>
+          <div class="step-tab ${this.passoAtual===4?'active':''}" onclick="app.navegarPara(4)">4. Assinaturas</div>
+        `;
+      } else {
+        sc.innerHTML = `
+          <div class="step-tab ${this.passoAtual===1?'active':''}" onclick="app.navegarPara(1)">1. OS & Dados</div>
+          <div class="step-tab ${this.passoAtual===2?'active':''}" onclick="app.navegarPara(2)">2. Checklist (61 Itens)</div>
+          <div class="step-tab ${this.passoAtual===3?'active':''}" onclick="app.navegarPara(3)">3. Relatório Visita</div>
+          <div class="step-tab ${this.passoAtual===4?'active':''}" onclick="app.navegarPara(4)">4. Garantia</div>
+          <div class="step-tab ${this.passoAtual===5?'active':''}" onclick="app.navegarPara(5)">5. Feedback Cliente</div>
+          <div class="step-tab ${this.passoAtual===6?'active':''}" onclick="app.navegarPara(6)">6. Assinaturas</div>
+        `;
+      }
+    }
+
+    const relMotivo = document.getElementById('relMotivo');
+    if (relMotivo) {
+      if (this.modoDesmontagem) {
+        relMotivo.value = 'DESMONTAGEM DE EQUIPAMENTO';
+      } else if (!relMotivo.value || relMotivo.value === 'DESMONTAGEM DE EQUIPAMENTO') {
+        relMotivo.value = 'INSTALAÇÃO DE EQUIPAMENTO';
+      }
+    }
+
+    if (this.passoAtual > this.totalPassos) {
+      this.navegarPara(this.totalPassos);
+    } else {
+      this.navegarPara(this.passoAtual);
+    }
+  },
+
+  atualizarDesmontagemRadio(campo, valor) {
+    if (!this.desmontagemData) this.desmontagemData = {};
+    this.desmontagemData[campo] = valor;
+    this.salvarRascunho();
+  },
+
+  coletarDesmontagem() {
+    const d = Object.assign({}, this.desmontagemData || {});
+    d.pc_senha_val = (document.getElementById('desm_pc_senha_val')?.value || '').trim();
+    d.cbct = (document.getElementById('desm_cbct')?.value || '').trim();
+    d.pano = (document.getElementById('desm_pano')?.value || '').trim();
+    d.ceph = (document.getElementById('desm_ceph')?.value || '').trim();
+
+    ['base', 'principal', 'rotator', 'ceph'].forEach(item => {
+      const elDet = document.getElementById('desm_emb_' + item + '_detalhe');
+      if (elDet) d['emb_' + item + '_detalhe'] = elDet.value.trim();
+    });
+
+    d.volumes_qtd = (document.getElementById('desm_volumes_qtd')?.value || '').trim();
+    d.transportadora_nome = (document.getElementById('desm_transportadora_nome')?.value || '').trim();
+    d.observacoes = (document.getElementById('desm_observacoes')?.value || '').trim();
+    return d;
+  },
   dados: null,
   toggles: {},
   fotos: {},
@@ -3297,6 +4091,11 @@ const app = {
         localStorage.removeItem(draftKey);
       }
     } catch(e) {}
+    if (this.dados && (/DESMONTAGEM/i.test(this.dados.servico) || this.dados.tipoServico === 'desmontagem')) {
+      this.setTipoServico('desmontagem');
+    } else {
+      this.setTipoServico('instalacao');
+    }
     this.restaurarRascunho();
     this.atualizarProgresso();
 
@@ -3890,9 +4689,27 @@ const app = {
     if (passo < 1 || passo > this.totalPassos) return;
     this.passoAtual = passo;
 
-    for (let i = 1; i <= this.totalPassos; i++) {
-      const sec = document.getElementById('step' + i);
-      if (sec) sec.style.display = (i === passo) ? 'block' : 'none';
+    const allStepIds = ['step1', 'stepDesmontagem', 'step2', 'step3', 'step4', 'step5', 'step6'];
+    allStepIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    if (this.modoDesmontagem) {
+      if (passo === 1) {
+        const s1 = document.getElementById('step1'); if (s1) s1.style.display = 'block';
+      } else if (passo === 2) {
+        const sD = document.getElementById('stepDesmontagem'); if (sD) sD.style.display = 'block';
+      } else if (passo === 3) {
+        const s3 = document.getElementById('step3'); if (s3) s3.style.display = 'block';
+      } else if (passo === 4) {
+        const s6 = document.getElementById('step6'); if (s6) s6.style.display = 'block';
+      }
+    } else {
+      const standardSteps = ['step1', 'step2', 'step3', 'step4', 'step5', 'step6'];
+      const currentId = standardSteps[passo - 1];
+      const curEl = document.getElementById(currentId);
+      if (curEl) curEl.style.display = 'block';
     }
 
     document.querySelectorAll('.step-tab').forEach((tab, idx) => {
@@ -3922,7 +4739,7 @@ const app = {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Quando o usuário chega na aba de assinaturas, calibra os canvases com as dimensões exatas da tela
-    if (passo === 6) {
+    if (passo === this.totalPassos || passo === 6) {
       setTimeout(() => {
         if (this.sigTecnico) this.sigTecnico.setupCanvas();
         if (this.sigCliente) this.sigCliente.setupCanvas();
@@ -4364,8 +5181,10 @@ const app = {
 
     return {
       idAtendimento: this.dados ? this.dados.idAtendimento : '260930092200',
+      tipoServico: this.tipoServico || (this.modoDesmontagem ? 'desmontagem' : 'instalacao'),
       dadosAtendimento: this.dados || (typeof this.mockDados === 'function' ? this.mockDados() : {}),
       checklist: checklist,
+      desmontagem: (typeof this.coletarDesmontagem === 'function') ? this.coletarDesmontagem() : {},
       relatorio: relatorio,
       garantia: garantia,
       feedback: feedback,
@@ -4385,6 +5204,13 @@ const app = {
       const key = group.dataset.key;
       if (!key || key.includes('${')) return;
 
+      if (this.modoDesmontagem && (group.closest('#step2') || group.closest('#step4') || group.closest('#step5'))) {
+        return;
+      }
+      if (!this.modoDesmontagem && group.closest('#stepDesmontagem')) {
+        return;
+      }
+
       if (!this.toggles[key]) {
         // Se for questão do software Ez3D-i e o equipamento for 2D (ex: PaX-i), não bloqueia se não preenchido
         const is3D = this.dados && this.dados.equipamento && (
@@ -4398,7 +5224,11 @@ const app = {
         }
 
         const stepSection = group.closest('.step-section');
-        const stepNum = stepSection ? (parseInt(stepSection.id.replace('step', '')) || 2) : 2;
+        let stepNum = 2;
+        if (stepSection) {
+          if (stepSection.id === 'stepDesmontagem') stepNum = 2;
+          else stepNum = parseInt(stepSection.id.replace('step', '')) || 2;
+        }
 
         let titulo = '';
         const checklistItem = group.closest('.checklist-item');
@@ -4428,33 +5258,60 @@ const app = {
       }
     });
 
-    // 2. Medições elétricas obrigatórias
-    const q20_nt = document.getElementById('q20_nt');
-    if (q20_nt && !q20_nt.value.trim()) {
-      pendencias.push({
-        tipo: 'input',
-        id: 'q20_nt',
-        step: 2,
-        categoria: '4. Durante a Instalação (Medições Elétricas)',
-        titulo: 'Tensão Neutro-Terra (V) - medição obrigatória',
-        element: q20_nt
-      });
+    if (!this.modoDesmontagem) {
+      // 2. Medições elétricas obrigatórias (somente Instalação)
+      const q20_nt = document.getElementById('q20_nt');
+      if (q20_nt && !q20_nt.value.trim()) {
+        pendencias.push({
+          tipo: 'input',
+          id: 'q20_nt',
+          step: 2,
+          categoria: '4. Durante a Instalação (Medições Elétricas)',
+          titulo: 'Tensão Neutro-Terra (V) - medição obrigatória',
+          element: q20_nt
+        });
+      }
+
+      const q20_ff = document.getElementById('q20_ff');
+      const q20_fn = document.getElementById('q20_fn');
+      if (q20_ff && q20_fn && !q20_ff.value.trim() && !q20_fn.value.trim()) {
+        pendencias.push({
+          tipo: 'input',
+          id: 'q20_fn',
+          step: 2,
+          categoria: '4. Durante a Instalação (Medições Elétricas)',
+          titulo: 'Tensão de Alimentação (Fase-Neutro ou Fase-Fase)',
+          element: q20_fn
+        });
+      }
+
+      // 4. Termo de Garantia (somente Instalação)
+      const chkGarantia = document.getElementById('chkAceiteGarantia');
+      if (chkGarantia && !chkGarantia.checked) {
+        pendencias.push({
+          tipo: 'checkbox',
+          id: 'chkAceiteGarantia',
+          step: 4,
+          categoria: '4. Termo de Garantia',
+          titulo: 'Confirmação e Aceite dos Termos de Garantia',
+          element: chkGarantia
+        });
+      }
+
+      // 5. Feedback do Cliente (somente Instalação)
+      if (!this.toggles['fb_q1_opiniao']) {
+        pendencias.push({
+          tipo: 'toggle',
+          key: 'fb_q1_opiniao',
+          step: 5,
+          categoria: '5. Feedback do Cliente',
+          titulo: 'Avaliação Geral do Treinamento (Ótimo, Bom, Neutro...)',
+          element: document.querySelector('.touch-toggle-group[data-key="fb_q1_opiniao"]')
+        });
+      }
     }
 
-    const q20_ff = document.getElementById('q20_ff');
-    const q20_fn = document.getElementById('q20_fn');
-    if (q20_ff && q20_fn && !q20_ff.value.trim() && !q20_fn.value.trim()) {
-      pendencias.push({
-        tipo: 'input',
-        id: 'q20_fn',
-        step: 2,
-        categoria: '4. Durante a Instalação (Medições Elétricas)',
-        titulo: 'Tensão de Alimentação (Fase-Neutro ou Fase-Fase)',
-        element: q20_fn
-      });
-    }
-
-    // 3. Relatório Técnico
+    // 3. Relatório Técnico (ambos)
     const relDesc = document.getElementById('relDescricao');
     if (relDesc && (!relDesc.value.trim() || relDesc.value.trim().length < 10)) {
       pendencias.push({
@@ -4467,39 +5324,15 @@ const app = {
       });
     }
 
-    // 4. Termo de Garantia
-    const chkGarantia = document.getElementById('chkAceiteGarantia');
-    if (chkGarantia && !chkGarantia.checked) {
-      pendencias.push({
-        tipo: 'checkbox',
-        id: 'chkAceiteGarantia',
-        step: 4,
-        categoria: '4. Termo de Garantia',
-        titulo: 'Confirmação e Aceite dos Termos de Garantia',
-        element: chkGarantia
-      });
-    }
-
-    // 5. Feedback do Cliente
-    if (!this.toggles['fb_q1_opiniao']) {
-      pendencias.push({
-        tipo: 'toggle',
-        key: 'fb_q1_opiniao',
-        step: 5,
-        categoria: '5. Feedback do Cliente',
-        titulo: 'Avaliação Geral do Treinamento (Ótimo, Bom, Neutro...)',
-        element: document.querySelector('.touch-toggle-group[data-key="fb_q1_opiniao"]')
-      });
-    }
-
-    // 6. Assinaturas
+    // Assinaturas (Passo 4 para Desmontagem, Passo 6 para Instalação)
+    const stepAssinaturas = this.modoDesmontagem ? 4 : 6;
     if (!this.sigTecnico || this.sigTecnico.isEmpty()) {
       pendencias.push({
         tipo: 'signature',
         id: 'canvasTecnico',
-        step: 6,
-        categoria: '6. Assinaturas',
-        titulo: 'Assinatura do Instalador / Técnico Responsável',
+        step: stepAssinaturas,
+        categoria: `${stepAssinaturas}. Assinaturas`,
+        titulo: 'Assinatura do Técnico Responsável',
         element: document.getElementById('canvasTecnico')
       });
     }
@@ -4508,8 +5341,8 @@ const app = {
       pendencias.push({
         tipo: 'signature',
         id: 'canvasCliente',
-        step: 6,
-        categoria: '6. Assinaturas',
+        step: stepAssinaturas,
+        categoria: `${stepAssinaturas}. Assinaturas`,
         titulo: 'Assinatura do Cliente / Responsável da Clínica',
         element: document.getElementById('canvasCliente')
       });
@@ -4794,14 +5627,22 @@ const app = {
     const sigs = payload.assinaturas;
     const fotos = payload.fotos || this.fotos || {};
 
+    const desm = payload.desmontagem || {};
     let html = '';
     if (typeof gerarHtmlDossieCompleto === 'function') {
-      if (docTipo === 'dossie') html = gerarHtmlDossieCompleto(d, c, rel, gar, fb, sigs, fotos);
-      else if (docTipo === 'checklist') html = gerarHtmlChecklist(d, c, sigs);
-      else if (docTipo === 'relatorio') html = gerarHtmlRelatorio(d, rel, sigs);
-      else if (docTipo === 'garantia') html = gerarHtmlGarantia(d, gar, sigs);
-      else if (docTipo === 'feedback') html = gerarHtmlFeedback(d, fb, sigs);
-      else if (docTipo === 'fotos') html = gerarHtmlAnexoFotos(d, fotos, sigs);
+      if (this.modoDesmontagem) {
+        if (docTipo === 'dossie') html = gerarHtmlDossieCompleto(d, c, rel, gar, fb, sigs, fotos, desm);
+        else if (docTipo === 'checklist') html = gerarHtmlChecklistDesmontagem(d, desm, sigs);
+        else if (docTipo === 'relatorio') html = gerarHtmlRelatorio(d, rel, sigs);
+        else html = gerarHtmlDossieCompleto(d, c, rel, gar, fb, sigs, fotos, desm);
+      } else {
+        if (docTipo === 'dossie') html = gerarHtmlDossieCompleto(d, c, rel, gar, fb, sigs, fotos, desm);
+        else if (docTipo === 'checklist') html = gerarHtmlChecklist(d, c, sigs);
+        else if (docTipo === 'relatorio') html = gerarHtmlRelatorio(d, rel, sigs);
+        else if (docTipo === 'garantia') html = gerarHtmlGarantia(d, gar, sigs);
+        else if (docTipo === 'feedback') html = gerarHtmlFeedback(d, fb, sigs);
+        else if (docTipo === 'fotos') html = gerarHtmlAnexoFotos(d, fotos, sigs);
+      }
     }
     return html;
   },
@@ -4843,6 +5684,27 @@ const app = {
 
   trocarDocPrevia(tipo) {
     this.docPreviaAtual = tipo;
+
+    const btnGar = document.getElementById('tabPrevia_garantia');
+    const btnFb = document.getElementById('tabPrevia_feedback');
+    const btnFt = document.getElementById('tabPrevia_fotos');
+    const btnChk = document.getElementById('tabPrevia_checklist');
+    const btnDos = document.getElementById('tabPrevia_dossie');
+
+    if (this.modoDesmontagem) {
+      if (btnGar) btnGar.style.display = 'none';
+      if (btnFb) btnFb.style.display = 'none';
+      if (btnFt) btnFt.style.display = 'none';
+      if (btnChk) btnChk.textContent = 'Checklist Desmontagem';
+      if (btnDos) btnDos.textContent = 'Dossiê Desmontagem (2 Págs)';
+    } else {
+      if (btnGar) btnGar.style.display = '';
+      if (btnFb) btnFb.style.display = '';
+      if (btnFt) btnFt.style.display = '';
+      if (btnChk) btnChk.textContent = 'Checklist';
+      if (btnDos) btnDos.textContent = 'Dossiê Completo';
+    }
+
     ['dossie', 'checklist', 'relatorio', 'garantia', 'feedback', 'fotos'].forEach(t => {
       const btn = document.getElementById('tabPrevia_' + t);
       if (btn) btn.classList.toggle('active', t === tipo);
@@ -5165,6 +6027,319 @@ function formatBrDate(dateInput) {
  * 1. CHECKLIST PÓS-INSTALAÇÃO (Check List Pós Instalação - Installation Report)
  * ============================================================================
  */
+
+function checkMark(val, expected) {
+  if (!val) return '( &nbsp; )';
+  const v = String(val).trim().toUpperCase();
+  const exp = String(expected).trim().toUpperCase();
+  if (v === exp) return '<b>( X )</b>';
+  return '( &nbsp; )';
+}
+
+/**
+ * ============================================================================
+ * 1.1 CHECKLIST DE DESMONTAGEM (Check list de Desmontagem - Equipamentos rev.00)
+ * 1:1 Pixel-Perfect Mirroring of Official Vatech Sheet (40 items, 1 Page)
+ * ============================================================================
+ */
+function gerarHtmlChecklistDesmontagem(dados, desm, sigs) {
+  desm = desm || {};
+  sigs = sigs || {};
+  dados = dados || {};
+  const cli = dados.cliente || {};
+  const eq = dados.equipamento || {};
+  const tec = dados.tecnico || {};
+
+  const rowsHtml = `
+    <tr>
+      <td>BackUp de Imagens</td>
+      <td>${checkMark(desm.backup, 'SIM')} SIM &nbsp; ${checkMark(desm.backup, 'NÃO')} NÃO &nbsp; ${checkMark(desm.backup, 'N/A')} N/A</td>
+      <td>${safeText(desm.backup_obs)}</td>
+    </tr>
+    <tr>
+      <td>Foto da etiqueta Numero de Série</td>
+      <td>${checkMark(desm.foto_etiqueta_sn, 'SIM')} SIM &nbsp; ${checkMark(desm.foto_etiqueta_sn, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.foto_etiqueta_sn_obs)}</td>
+    </tr>
+    <tr>
+      <td>PC de aquisição tem senha?</td>
+      <td>${checkMark(desm.pc_senha, 'SIM')} SIM &nbsp; ${checkMark(desm.pc_senha, 'NÃO')} NÃO</td>
+      <td>Senha: <u>${safeText(desm.pc_senha_val, '__________________________')}</u></td>
+    </tr>
+    <tr>
+      <td>Foto de Contador Imagens</td>
+      <td>${checkMark(desm.contador_foto, 'SIM')} SIM &nbsp; ${checkMark(desm.contador_foto, 'NÃO')} NÃO</td>
+      <td>CBCT: <u>${safeText(desm.cbct, '____')}</u> PANO: <u>${safeText(desm.pano, '____')}</u> CEPH: <u>${safeText(desm.ceph, '____')}</u></td>
+    </tr>
+    <tr>
+      <td>Modo Embalagem PKEN_1</td>
+      <td>${checkMark(desm.modo_embalagem, 'SIM')} SIM &nbsp; ${checkMark(desm.modo_embalagem, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.modo_embalagem_obs)}</td>
+    </tr>
+    <tr>
+      <td>Retirar Licença Ezdent-i</td>
+      <td>${checkMark(desm.licenca_ezdent, 'SIM')} SIM &nbsp; ${checkMark(desm.licenca_ezdent, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.licenca_ezdent_obs)}</td>
+    </tr>
+    <tr>
+      <td>Retirar Licença Ez3D-i</td>
+      <td>${checkMark(desm.licenca_ez3d, 'SIM')} SIM &nbsp; ${checkMark(desm.licenca_ez3d, 'NÃO')} NÃO &nbsp; ${checkMark(desm.licenca_ez3d, 'N/A')} N/A</td>
+      <td>${safeText(desm.licenca_ez3d_obs)}</td>
+    </tr>
+    <tr>
+      <td>Verificar acessorios conforme Manual</td>
+      <td>${checkMark(desm.verif_acessorios, 'SIM')} SIM &nbsp; ${checkMark(desm.verif_acessorios, 'NÃO')} NÃO &nbsp; ${checkMark(desm.verif_acessorios, 'N/A')} N/A</td>
+      <td>${safeText(desm.verif_acessorios_obs)}</td>
+    </tr>
+    <tr>
+      <td>USB - Licenças</td>
+      <td>${checkMark(desm.usb_licencas, 'SIM')} SIM &nbsp; ${checkMark(desm.usb_licencas, 'NÃO')} NÃO &nbsp; ${checkMark(desm.usb_licencas, 'N/A')} N/A</td>
+      <td>${safeText(desm.usb_licencas_obs)}</td>
+    </tr>
+    <tr>
+      <td>CD / USB - Software Captura</td>
+      <td colspan="2">${checkMark(desm.sw_captura, 'SIM, CD')} SIM, CD &nbsp; ${checkMark(desm.sw_captura, 'SIM, USB')} SIM, USB &nbsp; ${checkMark(desm.sw_captura, 'NÃO')} NÃO</td>
+    </tr>
+    <tr>
+      <td>USB - Recovery PC</td>
+      <td colspan="2">${checkMark(desm.recovery_pc, 'SIM')} SIM &nbsp; ${checkMark(desm.recovery_pc, 'NÃO')} NÃO &nbsp; ${checkMark(desm.recovery_pc, 'PC do Cliente')} PC do CLiente</td>
+    </tr>
+    <tr>
+      <td>Apoio de Tempora Direito e Esquerdo</td>
+      <td>${checkMark(desm.item_tempora, 'SIM')} SIM &nbsp; ${checkMark(desm.item_tempora, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_tempora, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_tempora, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_tempora, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Posicionador - Apoio queixo ALTO (tirar foto)</td>
+      <td>${checkMark(desm.item_queixo_alto, 'SIM')} SIM &nbsp; ${checkMark(desm.item_queixo_alto, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_queixo_alto, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_queixo_alto, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_queixo_alto, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Posicionador - Apoio queixo Baixo (tirar foto)</td>
+      <td>${checkMark(desm.item_queixo_baixo, 'SIM')} SIM &nbsp; ${checkMark(desm.item_queixo_baixo, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_queixo_baixo, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_queixo_baixo, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_queixo_baixo, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Mordedor Padrao</td>
+      <td>${checkMark(desm.item_mordedor, 'SIM')} SIM &nbsp; ${checkMark(desm.item_mordedor, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_mordedor, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_mordedor, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_mordedor, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Posicionador Edentulo</td>
+      <td>${checkMark(desm.item_edentulo, 'SIM')} SIM &nbsp; ${checkMark(desm.item_edentulo, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_edentulo, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_edentulo, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_edentulo, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Posicionador ATM</td>
+      <td>${checkMark(desm.item_atm, 'SIM')} SIM &nbsp; ${checkMark(desm.item_atm, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_atm, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_atm, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_atm, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Apoio Nariz (modo Ceph)</td>
+      <td>${checkMark(desm.item_nariz, 'SIM')} SIM &nbsp; ${checkMark(desm.item_nariz, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_nariz, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_nariz, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_nariz, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Suporte de Olivas (modo Ceph)</td>
+      <td>${checkMark(desm.item_olivas, 'SIM')} SIM &nbsp; ${checkMark(desm.item_olivas, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.cond_olivas, 'Marca de Uso')} Marca de Uso &nbsp; ${checkMark(desm.cond_olivas, 'Danificado')} Danificado &nbsp; ${checkMark(desm.cond_olivas, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Riscos na carenagem Coluna</td>
+      <td>${checkMark(desm.risco_coluna, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_coluna, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_coluna, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_coluna, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Riscos na Carenagem Superior Principal</td>
+      <td>${checkMark(desm.risco_superior, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_superior, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_superior, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_superior, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Riscos na Carenagem apoio de queixo</td>
+      <td>${checkMark(desm.risco_apoio_queixo, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_apoio_queixo, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_apoio_queixo, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_apoio_queixo, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Riscos na Carenagem da Base</td>
+      <td>${checkMark(desm.risco_base, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_base, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_base, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_base, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Riscos na Unidade Ceph</td>
+      <td>${checkMark(desm.risco_ceph, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.risco_ceph, 'Leve')} Leve &nbsp; ${checkMark(desm.risco_ceph, 'Moderado')} Moderado &nbsp; ${checkMark(desm.risco_ceph, 'Profundos')} Profundos</td>
+    </tr>
+    <tr>
+      <td>Suporte Fixação Parede Removido e Guardado</td>
+      <td>${checkMark(desm.parede_removido_1, 'SIM')} SIM &nbsp; ${checkMark(desm.parede_removido_1, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.parede_removido_1_obs)}</td>
+    </tr>
+    <tr>
+      <td>Fixaçao dos parafusos de travas Rotator</td>
+      <td>${checkMark(desm.trava_rotator, 'SIM')} SIM &nbsp; ${checkMark(desm.trava_rotator, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.trava_rotator, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Removido Unidade ROTATOR</td>
+      <td>${checkMark(desm.removido_rotator, 'SIM')} SIM &nbsp; ${checkMark(desm.removido_rotator, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.removido_rotator, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Fixaçao dos parafusos de travas Coluna</td>
+      <td>${checkMark(desm.trava_coluna, 'SIM')} SIM &nbsp; ${checkMark(desm.trava_coluna, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.trava_coluna, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Suporte Fixação Parede Removido e Guardado</td>
+      <td>${checkMark(desm.parede_removido_2, 'SIM')} SIM &nbsp; ${checkMark(desm.parede_removido_2, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.parede_removido_2, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Retirada da Base</td>
+      <td>${checkMark(desm.retirada_base, 'SIM')} SIM &nbsp; ${checkMark(desm.retirada_base, 'NÃO')} NÃO</td>
+      <td>${checkMark(desm.retirada_base, 'N/A')} N/A</td>
+    </tr>
+    <tr>
+      <td>Fotos do Kit de barras de transporte</td>
+      <td>${checkMark(desm.foto_barras, 'SIM')} SIM &nbsp; ${checkMark(desm.foto_barras, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.foto_barras_obs)}</td>
+    </tr>
+    <tr>
+      <td>Base foi guardada</td>
+      <td>${checkMark(desm.emb_base, 'Caixa Original')} Caixa Original &nbsp; ${checkMark(desm.emb_base, 'Outra embalagem')} Outra embalagem</td>
+      <td>${safeText(desm.emb_base_detalhe)}</td>
+    </tr>
+    <tr>
+      <td>Unidade Principal embalada</td>
+      <td>${checkMark(desm.emb_principal, 'Caixa Original')} Caixa Original &nbsp; ${checkMark(desm.emb_principal, 'Outra embalagem')} Outra embalagem</td>
+      <td>${safeText(desm.emb_principal_detalhe)}</td>
+    </tr>
+    <tr>
+      <td>Unidade ROTATOR embalada</td>
+      <td>${checkMark(desm.emb_rotator, 'Caixa Original')} Caixa Original &nbsp; ${checkMark(desm.emb_rotator, 'Outra embalagem')} Outra embalagem</td>
+      <td>${safeText(desm.emb_rotator_detalhe)}</td>
+    </tr>
+    <tr>
+      <td>Unidade CEPH embalada</td>
+      <td>${checkMark(desm.emb_ceph, 'Caixa Original')} Caixa Original &nbsp; ${checkMark(desm.emb_ceph, 'Outra embalagem')} Outra embalagem</td>
+      <td>${safeText(desm.emb_ceph_detalhe)}</td>
+    </tr>
+    <tr>
+      <td>Foto da embalagem</td>
+      <td>${checkMark(desm.foto_embalagem, 'SIM')} SIM &nbsp; ${checkMark(desm.foto_embalagem, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.foto_embalagem_obs)}</td>
+    </tr>
+    <tr>
+      <td>Foto das Caixas</td>
+      <td>${checkMark(desm.foto_caixas, 'SIM')} SIM &nbsp; ${checkMark(desm.foto_caixas, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.foto_caixas_obs)}</td>
+    </tr>
+    <tr>
+      <td>Liberado para transporte</td>
+      <td>${checkMark(desm.liberado_transporte, 'SIM')} SIM &nbsp; ${checkMark(desm.liberado_transporte, 'NÃO')} NÃO</td>
+      <td>${safeText(desm.liberado_transporte_obs)}</td>
+    </tr>
+    <tr>
+      <td>Volumes:</td>
+      <td colspan="2">Qquantidade: <b>${safeText(desm.volumes_qtd, '_____')}</b></td>
+    </tr>
+    <tr>
+      <td>Transportadora</td>
+      <td colspan="2">Nome: <b>${safeText(desm.transportadora_nome, '_________________________________')}</b></td>
+    </tr>
+  `;
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>${PDF_GLOBAL_STYLE}</style>
+</head>
+<body>
+
+  <!-- CABEÇALHO -->
+  <table class="header-table" style="margin-bottom: 2px;">
+    <tr>
+      <td style="width: 30%; vertical-align: middle;">
+        <img src="${VATECH_LOGO_BASE64}" style="height: 20px; width: auto;" alt="Vatech" />
+      </td>
+      <td style="width: 70%; text-align: right; vertical-align: middle;">
+        <span style="font-size: 7.5pt; color: #555; margin-right: 12px;">rev.00</span>
+        <b style="font-size: 10.5pt; color: #000;">Check list de Desmontagem - Equipamentos</b>
+      </td>
+    </tr>
+  </table>
+
+  <!-- DADOS IDENTIFICAÇÃO -->
+  <table style="margin-bottom: 3px;">
+    <tr>
+      <td style="width: 14%; font-weight: bold; background: #fafafa;">Cliente:</td>
+      <td colspan="3" style="font-weight: bold;">${safeText(cli.razaoSocial)}</td>
+    </tr>
+    <tr>
+      <td style="width: 14%; font-weight: bold; background: #fafafa;">Data:</td>
+      <td style="width: 36%;">${safeText(dados.dataCriacao || formatBrDate(new Date()))}</td>
+      <td style="width: 16%; font-weight: bold; background: #fafafa;">Equipamento:</td>
+      <td style="width: 34%; font-weight: bold;">${safeText(eq.modelo || 'PaX-i')}</td>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; background: #fafafa;">N. Série:</td>
+      <td colspan="3" style="font-weight: bold;">${safeText(eq.nSerie)}</td>
+    </tr>
+  </table>
+
+  <!-- TABELA DE 40 ATIVIDADES -->
+  <table class="chk-table">
+    <thead>
+      <tr>
+        <th style="width: 44%;">Atividade</th>
+        <th style="width: 28%;">Check</th>
+        <th style="width: 28%;">Observação</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rowsHtml}
+    </tbody>
+  </table>
+
+  <!-- OBSERVAÇÃO -->
+  <div style="border: 1px solid #000; border-top: none; padding: 3px 5px; font-size: 7pt; min-height: 34px;">
+    <b>Observação:</b><br>
+    ${safeText(desm.observacoes, '').replace(/\n/g, '<br>')}
+  </div>
+
+  <!-- TÉCNICO E ASSINATURA -->
+  <table style="margin-top: 4px; border: 1px solid #000;">
+    <tr>
+      <td colspan="3" style="font-size: 7pt; font-weight: bold; background: #fafafa; padding: 1.5px 4px; border-bottom: 1px solid #000;">
+        Técnico:
+      </td>
+    </tr>
+    <tr style="height: 44px; vertical-align: bottom;">
+      <td style="width: 36%; text-align: center; border-right: 1px solid #000; padding: 2px;">
+        ${sigs.tecnico ? `<img src="${sigs.tecnico}" style="max-height: 32px; max-width: 90%;" alt="Assinatura" />` : '<div style="height: 26px;"></div>'}
+        <div style="border-top: 1px solid #000; font-size: 7pt; font-weight: bold; padding-top: 1px;">Assinatura</div>
+      </td>
+      <td style="width: 32%; text-align: center; border-right: 1px solid #000; padding: 2px; font-size: 7pt;">
+        <div style="font-weight: bold; min-height: 22px; display: flex; align-items: flex-end; justify-content: center;">${safeText(tec.nomeTecnico, 'Lucas Gato')}</div>
+        <div style="border-top: 1px solid #000; font-size: 7pt; font-weight: bold; padding-top: 1px;">Nome</div>
+      </td>
+      <td style="width: 32%; text-align: center; padding: 2px; font-size: 7pt;">
+        <div style="font-weight: bold; min-height: 22px; display: flex; align-items: flex-end; justify-content: center;">${safeText(tec.empresa, 'EXACTA MANUTENCOES')}</div>
+        <div style="border-top: 1px solid #000; font-size: 7pt; font-weight: bold; padding-top: 1px;">Empresa</div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- RODAPÉ CONFIDENCIAL -->
+  <div style="margin-top: 4px; text-align: center; font-size: 6.5pt; color: #555;">
+    Copyright © 2022 VATECH Networks | All Rights Reserved. / Confidential
+  </div>
+
+</body>
+</html>`;
+}
+
 function gerarHtmlChecklist(dados, c, sigs) {
   c = c || {};
   sigs = sigs || {};
@@ -6409,10 +7584,32 @@ function gerarHtmlAnexoFotos(dados, fotos, sigs) {
  * 6. DOSSIÊ COMPLETO CONSOLIDADO (PDF ÚNICO COM TODOS OS DOCUMENTOS E FOTOS)
  * ============================================================================
  */
-function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos) {
+function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos, desm) {
   function extrairCorpo(html) {
     const m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
     return m ? m[1] : html;
+  }
+
+  const isDesmontagem = (dados && (dados.servico === 'DESMONTAGEM DE EQUIPAMENTO' || dados.tipoServico === 'desmontagem')) ||
+                        (rel && /DESMONTAGEM/i.test(rel.motivo)) ||
+                        (typeof app !== 'undefined' && app.modoDesmontagem);
+
+  if (isDesmontagem) {
+    const hDesm = extrairCorpo(gerarHtmlChecklistDesmontagem(dados, desm || chk, sigs));
+    const hRel = extrairCorpo(gerarHtmlRelatorio(dados, rel, sigs));
+    return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vatech Exacta - Desmontagem de Equipamento</title>
+<style>${PDF_GLOBAL_STYLE}</style>
+</head>
+<body>
+  ${hDesm}
+  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
+  ${hRel}
+</body>
+</html>`;
   }
 
   const hChk = extrairCorpo(gerarHtmlChecklist(dados, chk, sigs));

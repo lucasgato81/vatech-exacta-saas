@@ -152,6 +152,58 @@ app.get('/api/convert-demo', async (req, res) => {
  * 1.2 GET /api/load-full-sequence
  * Instantly loads all reference documents of the installation into the official master sequence!
  */
+/**
+ * 1.3 GET /api/load-desmontagem-sequence
+ * Loads the 2 official Desmontagem documents (Checklist Desmontagem + Relatório Visita Desmontagem)
+ */
+app.get('/api/load-desmontagem-sequence', async (req, res) => {
+  try {
+    const parentDir = path.join(__dirname, '..');
+    const sequenceFiles = [
+      'Checklist desmontagem PaX-i 047-017430.pdf',
+      'Relatório visita tecnica desmontagem PaX-i 047-017430.pdf'
+    ];
+
+    let combinedText = '';
+    const combinedSpatial = [];
+    const convertedDocs = [];
+
+    for (const f of sequenceFiles) {
+      const filePath = path.join(parentDir, f);
+      if (fs.existsSync(filePath)) {
+        const buf = fs.readFileSync(filePath);
+        const docInfo = await ingestDocument(buf, f, 'application/pdf');
+        combinedText += '\n' + (docInfo.rawText || '');
+        if (docInfo.spatialLines) combinedSpatial.push(...docInfo.spatialLines);
+        convertedDocs.push({ name: f, text: docInfo.rawText });
+      }
+    }
+
+    const attendanceData = extractAttendanceData(combinedText, combinedSpatial);
+    const batchId = 'desm_' + (attendanceData.idAtendimento || Date.now());
+    const batch = {
+      id: batchId,
+      title: `${attendanceData.cliente.razaoSocial} — Desmontagem PaX-i (${attendanceData.equipamento.nSerie})`,
+      createdAt: new Date().toISOString(),
+      attendanceData,
+      documents: convertedDocs
+    };
+
+    storage.saveBatch(batch);
+
+    res.json({
+      success: true,
+      batchId,
+      workflowUrl: `/workflow/${batchId}`,
+      count: convertedDocs.length,
+      attendanceData
+    });
+  } catch (err) {
+    console.error('[Desmontagem Ingestion Error]', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 app.get('/api/load-full-sequence', async (req, res) => {
   try {
     const parentDir = path.join(__dirname, '..');

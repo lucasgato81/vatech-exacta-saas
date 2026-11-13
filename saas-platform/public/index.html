@@ -109,10 +109,18 @@
             <div class="space-y-2">
               <button onclick="loadFullSequence()" class="w-full text-left text-xs bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white p-3 rounded-xl shadow-md transition flex items-center justify-between group">
                 <span class="flex items-center gap-2 font-bold">
-                  <i class="fa-solid fa-layer-group text-cyan-300 text-sm"></i>
-                  <span>Sequência Completa (5 Documentos)</span>
+                  <i class="fa-solid fa-wrench text-cyan-300 text-sm"></i>
+                  <span>Instalação Completa (5 Documentos)</span>
                 </span>
                 <i class="fa-solid fa-arrow-right text-cyan-200 group-hover:translate-x-1 transition text-xs"></i>
+              </button>
+
+              <button onclick="loadDesmontagemSequence()" class="w-full text-left text-xs bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white p-3 rounded-xl shadow-md transition flex items-center justify-between group">
+                <span class="flex items-center gap-2 font-bold">
+                  <i class="fa-solid fa-box-archive text-amber-300 text-sm"></i>
+                  <span>Desmontagem Completa (2 Documentos)</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-amber-200 group-hover:translate-x-1 transition text-xs"></i>
               </button>
 
               <button onclick="loadDemoDocument('Solicitacao')" class="w-full text-left text-xs bg-blue-900/40 hover:bg-blue-900/70 p-2.5 rounded-xl border border-blue-700/60 transition flex items-center justify-between group">

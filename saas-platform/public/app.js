@@ -108,6 +108,28 @@ async function loadFullSequence() {
   }
 }
 
+// Desmontagem sequence loader (The 2 official Desmontagem documents)
+async function loadDesmontagemSequence() {
+  const loadingBox = document.getElementById('loadingBox');
+  loadingBox.classList.remove('hidden');
+
+  try {
+    const res = await fetch('/api/load-desmontagem-sequence');
+    const data = await res.json();
+    if (!data.success) {
+      loadingBox.classList.add('hidden');
+      alert('Erro ao carregar sequência de desmontagem: ' + data.error);
+      return;
+    }
+
+    // Immediately open the desmontagem workflow!
+    window.location.href = data.workflowUrl;
+  } catch (err) {
+    loadingBox.classList.add('hidden');
+    alert('Erro: ' + err.message);
+  }
+}
+
 // Config modal
 function openConfigModal() {
   document.getElementById('geminiApiKeyInput').value = localStorage.getItem('GEMINI_API_KEY') || '';
