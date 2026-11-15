@@ -9,18 +9,31 @@ if (!fs.existsSync(DB_DIR)) {
 const TEMPLATES_FILE = path.join(DB_DIR, 'templates.json');
 const ORDERS_FILE = path.join(DB_DIR, 'orders.json');
 const BATCHES_FILE = path.join(DB_DIR, 'batches.json');
+const ATTENDANCES_FILE = path.join(DB_DIR, 'attendances.json');
 
 function readJson(file, fallback = []) {
   try {
     if (!fs.existsSync(file)) return fallback;
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch {
+    const content = fs.readFileSync(file, 'utf8').trim();
+    if (!content) return fallback;
+    return JSON.parse(content);
+  } catch (err) {
+    console.error(`[Storage Read Error] ${file}:`, err.message);
     return fallback;
   }
 }
 
 function writeJson(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+  try {
+    fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+  } catch (err) {
+    console.error(`[Storage Write Error] ${file}:`, err.message);
+  }
+}
+
+function cleanClientName(name) {
+  if (!name) return 'Cliente Não Informado';
+  return String(name).replace(/^\|\s*/, '').replace(/\|\s*TEL:.*$/i, '').replace(/\|/g, '').trim();
 }
 
 module.exports = {
@@ -68,5 +81,196 @@ module.exports = {
     }
     writeJson(BATCHES_FILE, list);
     return batch;
+  },
+
+  /**
+   * BANCO DE DADOS DE ATENDIMENTOS E CLIENTES
+   * Salva e gerencia cada preenchimento organizado com o nome do cliente.
+   */
+  getAttendances(query = '') {
+    let list = readJson(ATTENDANCES_FILE, null);
+    if (!list) {
+      // Se attendances.json ainda não existe, importa os atendimentos existentes em batches.json
+      list = [];
+      const batches = readJson(BATCHES_FILE, []);
+      const map = new Map();
+
+      // Atendimento de Desmontagem de referência (PaX-i 047-017430)
+      map.set('261110191159', {
+        id: 'att_261110191159',
+        idAtendimento: '261110191159',
+        clienteNome: 'MAYCON DE SOUSA NOGUEIRA',
+        clienteContato: 'com pós venda e tirar duvidas antes de qualquer circunstância.',
+        clienteTelefone: '35 99960-7007',
+        clienteCidadeUf: 'ALTEROSA/MG',
+        clienteEndereco: 'R DO CONTORNO 253 , CRUZEIRO',
+        clienteCep: '37145-000',
+        equipamentoModelo: 'PaX-i',
+        equipamentoSerie: '047-017430',
+        equipamentoNF: '16208',
+        tipoServico: 'Desmontagem',
+        dataAtendimento: '2026-11-15',
+        tecnicoNome: 'Lucas Gato',
+        tecnicoEmpresa: 'EXACTA MANUTENCOES',
+        status: 'Homologado',
+        dataCriacao: new Date().toISOString(),
+        dataAtualizacao: new Date().toISOString(),
+        temAssinaturas: true,
+        temFotos: false,
+        payload: null
+      });
+
+      for (const b of batches) {
+        if (b && b.attendanceData) {
+          const ad = b.attendanceData;
+          const cliName = cleanClientName(ad.cliente?.razaoSocial);
+          const osId = ad.idAtendimento || '261029114334';
+          if (cliName && cliName !== '...' && !map.has(osId)) {
+            map.set(osId, {
+              id: b.id || ('att_' + osId),
+              idAtendimento: osId,
+              clienteNome: cliName,
+              clienteContato: cleanClientName(ad.cliente?.nomeContato),
+              clienteTelefone: cleanClientName(ad.cliente?.telefone),
+              clienteCidadeUf: cleanClientName(ad.cliente?.cidadeUf),
+              clienteEndereco: cleanClientName(ad.cliente?.endereco),
+              clienteCep: ad.cliente?.cep || '',
+              equipamentoModelo: ad.equipamento?.modelo || 'PaX-i',
+              equipamentoSerie: ad.equipamento?.nSerie || '',
+              equipamentoNF: ad.equipamento?.notaFiscal || '',
+              tipoServico: ad.servico && /DESMONTAGEM/i.test(ad.servico) ? 'Desmontagem' : 'Montagem',
+              dataAtendimento: ad.dataCriacao || new Date().toISOString().split('T')[0],
+              tecnicoNome: ad.tecnico?.nomeTecnico || 'Lucas Gato',
+              tecnicoEmpresa: ad.tecnico?.empresa || 'EXACTA MANUTENCOES',
+              status: 'Salvo',
+              dataCriacao: b.createdAt || new Date().toISOString(),
+              dataAtualizacao: b.createdAt || new Date().toISOString(),
+              temAssinaturas: false,
+              temFotos: false,
+              attendanceData: ad,
+              payload: b.savedPayload || null
+            });
+          }
+        }
+      }
+      list = Array.from(map.values());
+      writeJson(ATTENDANCES_FILE, list);
+    }
+
+    if (query) {
+      const q = query.toLowerCase().trim();
+      return list.filter(a =>
+        (a.clienteNome && a.clienteNome.toLowerCase().includes(q)) ||
+        (a.idAtendimento && a.idAtendimento.toLowerCase().includes(q)) ||
+        (a.equipamentoSerie && a.equipamentoSerie.toLowerCase().includes(q)) ||
+        (a.clienteCidadeUf && a.clienteCidadeUf.toLowerCase().includes(q)) ||
+        (a.tipoServico && a.tipoServico.toLowerCase().includes(q)) ||
+        (a.tecnicoNome && a.tecnicoNome.toLowerCase().includes(q))
+      );
+    }
+    return list;
+  },
+
+  getAttendanceById(id) {
+    const list = this.getAttendances();
+    return list.find(a => a.id === id || a.idAtendimento === id || ('os_' + a.idAtendimento) === id);
+  },
+
+  saveAttendance(data) {
+    const list = this.getAttendances();
+    
+    // Extrai e normaliza todos os metadados do cliente e do equipamento
+    const ad = data.attendanceData || data.dadosAtendimento || data;
+    const cli = ad.cliente || {};
+    const eq = ad.equipamento || {};
+    const tec = ad.tecnico || {};
+    const idAtendimento = data.idAtendimento || ad.idAtendimento || (data.inputs ? data.inputs.osId : null) || Date.now().toString();
+    const id = data.id || ('att_' + idAtendimento);
+
+    const rawClienteNome = cli.razaoSocial || (data.inputs ? data.inputs.cliRazao : null) || data.clienteNome || 'Cliente';
+    const clienteNome = cleanClientName(rawClienteNome);
+    
+    const isDesm = (data.tipoServico && /desmont/i.test(data.tipoServico)) ||
+                   (ad.servico && /desmont/i.test(ad.servico)) ||
+                   (data.modoDesmontagem === true);
+    const tipoServico = isDesm ? 'Desmontagem' : 'Montagem';
+
+    const record = {
+      id: id,
+      idAtendimento: idAtendimento,
+      clienteNome: clienteNome,
+      clienteContato: cleanClientName(cli.nomeContato || (data.inputs ? data.inputs.cliContato : '')),
+      clienteTelefone: cleanClientName(cli.telefone || (data.inputs ? data.inputs.cliTelefone : '')),
+      clienteCidadeUf: cleanClientName(cli.cidadeUf || (data.inputs ? data.inputs.cliCidadeUf : '')),
+      clienteEndereco: cleanClientName(cli.endereco || (data.inputs ? data.inputs.cliEndereco : '')),
+      clienteCep: cli.cep || (data.inputs ? data.inputs.cliCep : ''),
+      equipamentoModelo: eq.modelo || (data.inputs ? data.inputs.eqModelo : 'PaX-i'),
+      equipamentoSerie: eq.nSerie || (data.inputs ? data.inputs.eqSerie : ''),
+      equipamentoNF: eq.notaFiscal || (data.inputs ? data.inputs.eqNF : ''),
+      equipamentoGarantia: eq.anosGarantia || (data.inputs ? data.inputs.eqGarantia : '5 Anos'),
+      tipoServico: tipoServico,
+      dataAtendimento: (data.inputs ? data.inputs.osData : '') || ad.dataCriacao || new Date().toISOString().split('T')[0],
+      tecnicoNome: tec.nomeTecnico || (data.inputs ? data.inputs.tecNome : 'Lucas Gato'),
+      tecnicoEmpresa: tec.empresa || (data.inputs ? data.inputs.tecEmpresa : 'EXACTA MANUTENCOES'),
+      status: 'Homologado',
+      dataAtualizacao: new Date().toISOString(),
+      dataCriacao: data.dataCriacao || new Date().toISOString(),
+      temAssinaturas: !!(data.assinaturas && (data.assinaturas.cliente || data.assinaturas.tecnico)),
+      temFotos: !!(data.fotos && Object.keys(data.fotos).length > 0),
+      payload: data
+    };
+
+    // Atualiza registro existente ou insere no topo
+    const idx = list.findIndex(a => a.id === id || a.idAtendimento === idAtendimento);
+    if (idx >= 0) {
+      record.dataCriacao = list[idx].dataCriacao || record.dataCriacao;
+      list[idx] = record;
+    } else {
+      list.unshift(record);
+    }
+    writeJson(ATTENDANCES_FILE, list);
+
+    // Também atualiza o batch no servidor para acesso direto via /workflow/os_ID
+    const batchId = 'os_' + idAtendimento;
+    this.saveBatch({
+      id: batchId,
+      title: `${clienteNome} — ${record.equipamentoModelo} (${record.equipamentoSerie ? 'S/N: ' + record.equipamentoSerie : tipoServico})`,
+      createdAt: record.dataAtualizacao,
+      attendanceData: {
+        idAtendimento: idAtendimento,
+        status: record.status,
+        dataCriacao: record.dataAtendimento,
+        cliente: {
+          razaoSocial: record.clienteNome,
+          nomeContato: record.clienteContato,
+          telefone: record.clienteTelefone,
+          endereco: record.clienteEndereco,
+          cidadeUf: record.clienteCidadeUf,
+          cep: record.clienteCep
+        },
+        equipamento: {
+          modelo: record.equipamentoModelo,
+          nSerie: record.equipamentoSerie,
+          notaFiscal: record.equipamentoNF,
+          anosGarantia: record.equipamentoGarantia
+        },
+        tecnico: {
+          nomeTecnico: record.tecnicoNome,
+          empresa: record.tecnicoEmpresa
+        },
+        servico: tipoServico === 'Desmontagem' ? 'DESMONTAGEM DE EQUIPAMENTO' : 'INSTALAÇÃO DE EQUIPAMENTO'
+      },
+      savedPayload: data
+    });
+
+    console.log(`[Storage] Atendimento de "${clienteNome}" (OS #${idAtendimento} - ${tipoServico}) salvo com sucesso no banco de dados.`);
+    return record;
+  },
+
+  deleteAttendance(id) {
+    const list = this.getAttendances();
+    const filtered = list.filter(a => a.id !== id && a.idAtendimento !== id && ('os_' + a.idAtendimento) !== id);
+    writeJson(ATTENDANCES_FILE, filtered);
+    return true;
   }
 };

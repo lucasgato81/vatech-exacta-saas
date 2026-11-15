@@ -1064,6 +1064,9 @@
             🔧 Montagem
           </button>
         </div>
+        <button type="button" class="btn-sig-action" style="background:#047857 !important; color:#ffffff !important; border:none; padding:5px 12px; font-weight:700; font-size:12px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="app.abrirModalBancoDados()" title="Visualizar Banco de Dados com todos os clientes e atendimentos salvos">
+          📂 Banco de Dados
+        </button>
         <button type="button" class="btn-sig-action" style="background:#0f172a !important; color:#ffffff !important; border:none; padding:5px 12px; font-weight:700; font-size:12px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="app.abrirModalAdminNovaOS()" title="Cadastrar nova Ordem de Serviço e gerar link para o técnico">
           ➕ Nova OS
         </button>
@@ -3283,6 +3286,10 @@
           <button type="button" id="btnHomologarCard" class="btn btn-success" style="width: 100%; min-height: 54px; font-size: 16px; background: #059669 !important; background-color: #059669 !important; color: #ffffff !important; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4);" onclick="app.submeterAtendimento()">
             🚀 HOMOLOGAR E TRANSMITIR ATENDIMENTO
           </button>
+
+          <button type="button" class="btn" style="width: 100%; min-height: 44px; font-size: 14px; margin-top: 10px; background: #0f172a !important; color: #ffffff !important; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none;" onclick="app.salvarNoBancoDadosManual()" title="Salva os dados digitados até o momento no banco de dados de clientes">
+            💾 Salvar no Banco de Dados (Salvar Progresso)
+          </button>
           <div style="text-align: center; margin-top: 8px; font-size: 12px; color: var(--text-muted);">
             Esta ação gravará as assinaturas oficiais nos 4 PDFs e concluirá a OS.
           </div>
@@ -3564,8 +3571,9 @@
           ✓
         </div>
         <h3 style="margin: 0; font-size: 20px; color: #065f46;">Atendimento Homologado!</h3>
+        <div id="modalSuccessClienteInfo" style="margin-top: 6px; font-size: 15px; font-weight: 800; color: #1e3a8a;"></div>
         <p style="font-size: 13px; color: #64748b; margin-top: 4px;">
-          Os documentos técnicos foram gerados e salvos com sucesso na pasta do equipamento.
+          Salvo permanentemente com o nome do cliente no banco de dados da Exacta & Vatec.
         </p>
       </div>
 
@@ -3594,6 +3602,9 @@
       </a>
 
       <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary" style="flex: 1; font-size: 13.5px; min-width: 130px; background: #047857 !important; color: #ffffff !important; font-weight: 700; border: none;" onclick="app.abrirModalBancoDados()">
+          📂 Banco de Dados
+        </button>
         <button type="button" class="btn btn-secondary" style="flex: 1; font-size: 13.5px; min-width: 130px;" onclick="app.abrirModalPreviaHtml('dossie')">
           👁️ Ver Documentos
         </button>
@@ -3604,6 +3615,67 @@
           🔄 Novo Atendimento
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL DO BANCO DE DADOS DE ATENDIMENTOS E CLIENTES -->
+  <div id="modalBancoDados" class="modal-overlay" style="padding: 10px; z-index: 9999; display: none;">
+    <div class="modal-previa-card" style="max-width: 980px; max-height: 90vh; display: flex; flex-direction: column;">
+      
+      <!-- Cabeçalho do Banco de Dados -->
+      <div class="previa-header" style="background: #0f172a; color: #ffffff; padding: 14px 18px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span style="font-size: 20px;">📂</span>
+            <h3 style="margin: 0; font-size: 17px; font-weight: 800; color: #ffffff;">Banco de Dados de Atendimentos & Clientes</h3>
+            <span id="badgeTotalAtendimentos" style="background: #059669; color: #ffffff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;">
+              0 Registros
+            </span>
+          </div>
+          <p style="margin: 3px 0 0 28px; font-size: 11.5px; color: #94a3b8;">
+            Cada preenchimento concluído é salvo automaticamente com o nome do cliente, histórico e dados completos.
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="btn-sig-action" onclick="app.exportarBancoDadosJson()" style="background: #1e293b; color: #38bdf8; border: 1px solid #334155; font-size: 11.5px; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Baixar backup completo de todos os atendimentos em formato JSON">
+            📥 Exportar Backup
+          </button>
+          <button type="button" class="btn-sig-action btn-close-modal" onclick="document.getElementById('modalBancoDados').style.display='none'">
+            ✕ Fechar
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de Filtros e Busca Rápida -->
+      <div style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 12px 18px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+        <div style="flex: 1; min-width: 240px;">
+          <input type="text" id="buscaBancoDadosInput" class="form-input" placeholder="🔍 Pesquisar por nome do cliente, OS, nº de série, modelo, cidade..." oninput="app.filtrarBancoDados()" style="height: 38px; font-size: 13px; border-radius: 8px; background: #ffffff; width: 100%;">
+        </div>
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="btn-previa-tab active" id="btnFiltroDb_todos" onclick="app.setFiltroDb('todos')" style="padding: 6px 12px; font-size: 11.5px; font-weight: 700; border-radius: 6px;">
+            Todos
+          </button>
+          <button type="button" class="btn-previa-tab" id="btnFiltroDb_montagem" onclick="app.setFiltroDb('Montagem')" style="padding: 6px 12px; font-size: 11.5px; font-weight: 700; border-radius: 6px; border-left: 3px solid #2563eb;">
+            🔧 Montagens
+          </button>
+          <button type="button" class="btn-previa-tab" id="btnFiltroDb_desmontagem" onclick="app.setFiltroDb('Desmontagem')" style="padding: 6px 12px; font-size: 11.5px; font-weight: 700; border-radius: 6px; border-left: 3px solid #dc2626;">
+            📦 Desmontagens
+          </button>
+          <button type="button" class="btn-sig-action" onclick="app.carregarBancoDados()" style="padding: 6px 10px; font-size: 11.5px; border-radius: 6px;" title="Atualizar dados do banco">
+            🔄
+          </button>
+        </div>
+      </div>
+
+      <!-- Lista de Clientes e Atendimentos com Scroll -->
+      <div style="flex: 1; overflow-y: auto; padding: 16px 18px; background: #f1f5f9;">
+        <div id="listaAtendimentosDb" style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="text-align: center; color: #64748b; padding: 40px 0;">
+            ⏳ Carregando banco de dados de atendimentos...
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -4276,6 +4348,10 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
       this.setTipoServico('montagem');
     }
     this.restaurarRascunho();
+
+    if (typeof window !== 'undefined' && window.SAVED_PAYLOAD) {
+      this.restaurarPayloadSalvo(window.SAVED_PAYLOAD);
+    }
 
     // Se os campos de descrição estiverem vazios após restaurar rascunho, preenche com os textos oficiais
     const descDesm = document.getElementById('relDescricao_desm');
@@ -5577,29 +5653,48 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
     if (modalLoading) modalLoading.style.display = 'flex';
 
     const payload = this.coletarPayload(true);
+    const cliNome = (this.dados && this.dados.cliente && this.dados.cliente.razaoSocial)
+      ? this.dados.cliente.razaoSocial
+      : (document.getElementById('cliRazao')?.value || 'Cliente');
+    payload.clienteNome = cliNome;
 
+    // 1. Salva no Banco de Dados da plataforma (servidor Node.js / Render)
+    fetch('/api/save-attendance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(res => {
+      this.salvarLocalmenteDb(payload, res);
+      if (modalLoading) modalLoading.style.display = 'none';
+      this.onSubmissaoSucesso({
+        success: true,
+        clienteNome: cliNome,
+        idAtendimento: payload.idAtendimento,
+        nSerie: this.dados?.equipamento?.nSerie || payload.inputs?.eqSerie || '',
+        resServidor: res
+      });
+    })
+    .catch(err => {
+      console.warn('[Offline / Local DB Fallback]', err);
+      this.salvarLocalmenteDb(payload, { offline: true });
+      if (modalLoading) modalLoading.style.display = 'none';
+      this.onSubmissaoSucesso({
+        success: true,
+        clienteNome: cliNome,
+        idAtendimento: payload.idAtendimento,
+        nSerie: this.dados?.equipamento?.nSerie || payload.inputs?.eqSerie || '',
+        offline: true
+      });
+    });
+
+    // 2. Se Google Apps Script estiver ativo, salva também no Google Drive / Sheets
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run
-        .withSuccessHandler((res) => this.onSubmissaoSucesso(res))
-        .withFailureHandler((err) => this.onSubmissaoErro(err))
+        .withSuccessHandler((res) => console.log('GAS salvo com sucesso:', res))
+        .withFailureHandler((err) => console.warn('GAS erro:', err))
         .salvarAtendimento(payload);
-    } else {
-      setTimeout(() => {
-        const mockResult = {
-          success: true,
-          nSerie: this.dados.equipamento.nSerie,
-          pastaDriveUrl: 'https://drive.google.com/drive/folders/mock_folder_' + this.dados.equipamento.nSerie,
-          dossieUrl: 'https://drive.google.com/file/d/mock_dossie/view',
-          pdfs: {
-            dossieCompleto: 'https://drive.google.com/file/d/mock_dossie/view',
-            checklist: 'https://drive.google.com/file/d/mock_checklist/view',
-            relatorio: 'https://drive.google.com/file/d/mock_relatorio/view',
-            garantia: 'https://drive.google.com/file/d/mock_garantia/view',
-            feedback: 'https://drive.google.com/file/d/mock_feedback/view'
-          }
-        };
-        this.onSubmissaoSucesso(mockResult);
-      }, 1500);
     }
   },
 
@@ -5770,6 +5865,14 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
     try {
       localStorage.removeItem('vatech_draft_' + this.dados.idAtendimento);
     } catch(e) {}
+
+    const cliInfoEl = document.getElementById('modalSuccessClienteInfo');
+    if (cliInfoEl) {
+      const cliNome = res.clienteNome || (this.dados && this.dados.cliente ? this.dados.cliente.razaoSocial : '') || 'Cliente';
+      const osId = res.idAtendimento || (this.dados ? this.dados.idAtendimento : '');
+      const sSerie = res.nSerie || (this.dados && this.dados.equipamento ? this.dados.equipamento.nSerie : '');
+      cliInfoEl.innerHTML = `👤 <b>${cliNome}</b><br><span style="font-size:12px; color:#64748b; font-weight:600;">OS #${osId} &bull; S/N: ${sSerie}</span>`;
+    }
 
     const listContainer = document.getElementById('listPdfsLinks');
     if (listContainer) {
@@ -6050,12 +6153,332 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
       modalSuccess.style.display = 'none';
       return;
     }
+    // 5. Fecha modal do banco de dados se estiver aberto
+    const modalDb = document.getElementById('modalBancoDados');
+    if (modalDb && modalDb.style.display === 'flex') {
+      modalDb.style.display = 'none';
+      return;
+    }
   },
 
   onSubmissaoErro(err) {
     document.getElementById('modalLoading').style.display = 'none';
     alert('Erro ao processar e salvar no Google Drive: ' + (err.message || err.toString()));
-  }
+  },
+
+  // ============================================================================
+  // GESTÃO DO BANCO DE DADOS DE ATENDIMENTOS E CLIENTES
+  // ============================================================================
+  bancoDadosLista: [],
+  filtroDbAtual: 'todos',
+
+  restaurarPayloadSalvo(payload) {
+    if (!payload) return;
+    try {
+      if (payload.tipoServico === 'desmontagem' || payload.modoDesmontagem) {
+        this.setTipoServico('desmontagem');
+      } else if (payload.tipoServico === 'montagem') {
+        this.setTipoServico('montagem');
+      }
+
+      if (payload.toggles) {
+        Object.keys(payload.toggles).forEach(k => {
+          const val = payload.toggles[k];
+          if (val) this.setToggle(k, val);
+        });
+      }
+
+      if (payload.inputs) {
+        Object.keys(payload.inputs).forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            if (el.type === 'checkbox') el.checked = !!payload.inputs[id];
+            else el.value = payload.inputs[id];
+          }
+        });
+      }
+
+      if (payload.relatorio_desmontagem) {
+        const rd = payload.relatorio_desmontagem;
+        if (document.getElementById('relHoraInicio_desm') && rd.horaInicial) document.getElementById('relHoraInicio_desm').value = rd.horaInicial;
+        if (document.getElementById('relDataInicio_desm') && rd.dataInicial) document.getElementById('relDataInicio_desm').value = rd.dataInicial;
+        if (document.getElementById('relHoraFim_desm') && rd.horaFinal) document.getElementById('relHoraFim_desm').value = rd.horaFinal;
+        if (document.getElementById('relDataFim_desm') && rd.dataFim) document.getElementById('relDataFim_desm').value = rd.dataFim;
+        if (document.getElementById('relDescricao_desm') && rd.descricaoTecnica) document.getElementById('relDescricao_desm').value = rd.descricaoTecnica;
+      }
+
+      if (payload.relatorio_montagem) {
+        const rm = payload.relatorio_montagem;
+        if (document.getElementById('relHoraInicio_mont') && rm.horaInicial) document.getElementById('relHoraInicio_mont').value = rm.horaInicial;
+        if (document.getElementById('relDataInicio_mont') && rm.dataInicial) document.getElementById('relDataInicio_mont').value = rm.dataInicial;
+        if (document.getElementById('relHoraFim_mont') && rm.horaFinal) document.getElementById('relHoraFim_mont').value = rm.horaFinal;
+        if (document.getElementById('relDataFim_mont') && rm.dataFim) document.getElementById('relDataFim_mont').value = rm.dataFim;
+        if (document.getElementById('relDescricao_mont') && rm.descricaoTecnica) document.getElementById('relDescricao_mont').value = rm.descricaoTecnica;
+      }
+
+      if (payload.assinaturas) {
+        if (payload.assinaturas.tecnico && this.sigTecnico) {
+          this.sigTecnico.fromDataURL(payload.assinaturas.tecnico);
+        }
+        if (payload.assinaturas.cliente && this.sigCliente) {
+          this.sigCliente.fromDataURL(payload.assinaturas.cliente);
+        }
+      }
+
+      if (payload.fotos) {
+        this.fotos = payload.fotos;
+        Object.keys(this.fotos).forEach(k => {
+          const f = this.fotos[k];
+          if (f && f.dataUrl) {
+            const previewEl = document.getElementById('preview_foto_' + k);
+            if (previewEl) {
+              previewEl.src = f.dataUrl;
+              previewEl.style.display = 'block';
+            }
+          }
+        });
+      }
+
+      this.sincronizarCamposLegadosRelatorio();
+      this.atualizarProgresso();
+    } catch(e) {
+      console.warn('[Erro ao restaurar payload]', e);
+    }
+  },
+
+  salvarNoBancoDadosManual() {
+    const payload = this.coletarPayload(false);
+    const cliNome = (this.dados && this.dados.cliente && this.dados.cliente.razaoSocial)
+      ? this.dados.cliente.razaoSocial
+      : (document.getElementById('cliRazao')?.value || 'Cliente');
+    payload.clienteNome = cliNome;
+
+    fetch('/api/save-attendance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(res => {
+      this.salvarLocalmenteDb(payload, res);
+      alert(`✅ Atendimento de "${cliNome}" salvo com sucesso no Banco de Dados!`);
+    })
+    .catch(err => {
+      this.salvarLocalmenteDb(payload, { offline: true });
+      alert(`✅ Atendimento de "${cliNome}" salvo com sucesso no banco de dados local do navegador!`);
+    });
+  },
+
+  salvarLocalmenteDb(payload, serverRes = {}) {
+    try {
+      const cliNome = payload.clienteNome || payload.inputs?.cliRazao || (this.dados && this.dados.cliente ? this.dados.cliente.razaoSocial : '') || 'Cliente';
+      const osId = payload.idAtendimento || (this.dados ? this.dados.idAtendimento : '261110191159');
+      const isDesm = (payload.tipoServico === 'desmontagem') || this.modoDesmontagem;
+      const record = {
+        id: 'att_' + osId,
+        idAtendimento: osId,
+        clienteNome: cliNome,
+        clienteContato: payload.inputs?.cliContato || '',
+        clienteTelefone: payload.inputs?.cliTelefone || '',
+        clienteCidadeUf: payload.inputs?.cliCidadeUf || '',
+        clienteEndereco: payload.inputs?.cliEndereco || '',
+        equipamentoModelo: payload.inputs?.eqModelo || 'PaX-i',
+        equipamentoSerie: payload.inputs?.eqSerie || '',
+        equipamentoNF: payload.inputs?.eqNF || '',
+        tipoServico: isDesm ? 'Desmontagem' : 'Montagem',
+        dataAtendimento: payload.inputs?.osData || new Date().toISOString().split('T')[0],
+        tecnicoNome: payload.inputs?.tecNome || 'Lucas Gato',
+        status: 'Homologado',
+        dataAtualizacao: new Date().toISOString(),
+        payload: payload
+      };
+
+      let list = JSON.parse(localStorage.getItem('VATECH_ATTENDANCES_LOCAL_DB') || '[]');
+      const idx = list.findIndex(a => a.idAtendimento === osId);
+      if (idx >= 0) list[idx] = record;
+      else list.unshift(record);
+      localStorage.setItem('VATECH_ATTENDANCES_LOCAL_DB', JSON.stringify(list));
+    } catch(e) {
+      console.warn('Erro ao salvar localmente no banco:', e);
+    }
+  },
+
+  abrirModalBancoDados() {
+    const modal = document.getElementById('modalBancoDados');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    this.carregarBancoDados();
+  },
+
+  carregarBancoDados() {
+    const listEl = document.getElementById('listaAtendimentosDb');
+    if (listEl) {
+      listEl.innerHTML = '<div style="text-align: center; color: #64748b; padding: 40px 0;">⏳ Carregando banco de dados de atendimentos...</div>';
+    }
+
+    fetch('/api/attendances')
+      .then(r => r.json())
+      .then(data => {
+        let serverList = data.attendances || [];
+        let localList = [];
+        try {
+          localList = JSON.parse(localStorage.getItem('VATECH_ATTENDANCES_LOCAL_DB') || '[]');
+        } catch(e) {}
+
+        const map = new Map();
+        serverList.forEach(item => map.set(item.idAtendimento || item.id, item));
+        localList.forEach(item => {
+          const key = item.idAtendimento || item.id;
+          if (!map.has(key)) map.set(key, item);
+        });
+
+        this.bancoDadosLista = Array.from(map.values());
+        this.renderizarListaBancoDados();
+      })
+      .catch(err => {
+        console.warn('[Db Server Fetch Error]', err);
+        try {
+          this.bancoDadosLista = JSON.parse(localStorage.getItem('VATECH_ATTENDANCES_LOCAL_DB') || '[]');
+        } catch(e) {
+          this.bancoDadosLista = [];
+        }
+        this.renderizarListaBancoDados();
+      });
+  },
+
+  setFiltroDb(filtro) {
+    this.filtroDbAtual = filtro;
+    ['todos', 'montagem', 'desmontagem'].forEach(f => {
+      const btn = document.getElementById('btnFiltroDb_' + f);
+      if (btn) btn.classList.toggle('active', f.toLowerCase() === filtro.toLowerCase());
+    });
+    this.filtrarBancoDados();
+  },
+
+  filtrarBancoDados() {
+    const input = document.getElementById('buscaBancoDadosInput');
+    const q = input ? input.value.toLowerCase().trim() : '';
+    this.renderizarListaBancoDados(q);
+  },
+
+  renderizarListaBancoDados(query = '') {
+    const listEl = document.getElementById('listaAtendimentosDb');
+    const badgeTotal = document.getElementById('badgeTotalAtendimentos');
+    if (!listEl) return;
+
+    let filtrados = this.bancoDadosLista || [];
+
+    if (this.filtroDbAtual && this.filtroDbAtual !== 'todos') {
+      filtrados = filtrados.filter(a => (a.tipoServico || '').toLowerCase() === this.filtroDbAtual.toLowerCase());
+    }
+
+    if (query) {
+      filtrados = filtrados.filter(a =>
+        (a.clienteNome && a.clienteNome.toLowerCase().includes(query)) ||
+        (a.idAtendimento && a.idAtendimento.toLowerCase().includes(query)) ||
+        (a.equipamentoSerie && a.equipamentoSerie.toLowerCase().includes(query)) ||
+        (a.clienteCidadeUf && a.clienteCidadeUf.toLowerCase().includes(query)) ||
+        (a.tipoServico && a.tipoServico.toLowerCase().includes(query)) ||
+        (a.clienteContato && a.clienteContato.toLowerCase().includes(query))
+      );
+    }
+
+    if (badgeTotal) {
+      badgeTotal.textContent = `${filtrados.length} Registro${filtrados.length !== 1 ? 's' : ''}`;
+    }
+
+    if (filtrados.length === 0) {
+      listEl.innerHTML = `
+        <div style="background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 40px 20px; text-align: center;">
+          <div style="font-size: 32px; margin-bottom: 8px;">🔍</div>
+          <div style="font-weight: 700; color: #334155; font-size: 15px;">Nenhum atendimento encontrado</div>
+          <div style="font-size: 12.5px; color: #64748b; margin-top: 4px;">Tente buscar por outro nome de cliente, número de série ou OS.</div>
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = '';
+    filtrados.forEach(item => {
+      const isDesm = (item.tipoServico || '').toLowerCase().includes('desmont');
+      const badgeServico = isDesm
+        ? `<span style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;">📦 Desmontagem</span>`
+        : `<span style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;">🔧 Montagem</span>`;
+
+      const card = document.createElement('div');
+      card.style.cssText = 'background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 10px; transition: all 0.2s;';
+      card.onmouseover = () => { card.style.borderColor = '#94a3b8'; card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; };
+      card.onmouseout = () => { card.style.borderColor = '#e2e8f0'; card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)'; };
+
+      const dataFmt = item.dataAtendimento || (item.dataCriacao ? item.dataCriacao.slice(0, 10) : '-');
+      const osId = item.idAtendimento || item.id || '';
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 250px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <h4 style="margin: 0; font-size: 15.5px; font-weight: 800; color: #0f172a;">${item.clienteNome || 'Cliente Não Informado'}</h4>
+              ${badgeServico}
+              <span style="background: #f1f5f9; color: #475569; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; border: 1px solid #cbd5e1;">OS #${osId}</span>
+            </div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 5px; display: flex; gap: 12px; flex-wrap: wrap;">
+              <span>⚙️ <b>${item.equipamentoModelo || 'PaX-i'}</b> (S/N: ${item.equipamentoSerie || 'Sem Série'})</span>
+              <span>📍 ${item.clienteCidadeUf || 'Cidade não inf.'}</span>
+              <span>📅 ${dataFmt}</span>
+              ${item.clienteContato ? `<span>👤 ${item.clienteContato}</span>` : ''}
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <a href="/workflow/os_${osId}" class="btn-sig-action" style="background: #2563eb !important; color: #ffffff !important; border: none; padding: 6px 12px; font-weight: 700; font-size: 11.5px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Abrir e editar o atendimento deste cliente">
+              👁️ Abrir
+            </a>
+            <button type="button" class="btn-sig-action" onclick="app.imprimirAtendimentoDb('${osId}')" style="background: #0f172a !important; color: #ffffff !important; border: none; padding: 6px 12px; font-weight: 700; font-size: 11.5px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Visualizar e imprimir o Dossiê deste cliente">
+              🖨️ Dossiê
+            </button>
+            <button type="button" class="btn-sig-action" onclick="app.excluirAtendimentoDb('${osId}', '${encodeURIComponent(item.clienteNome || '')}')" style="background: #fef2f2 !important; color: #dc2626 !important; border: 1px solid #fecaca; padding: 6px 10px; font-weight: 700; font-size: 11.5px; border-radius: 6px; cursor: pointer;" title="Excluir este registro">
+              🗑️
+            </button>
+          </div>
+        </div>
+      `;
+      listEl.appendChild(card);
+    });
+  },
+
+  imprimirAtendimentoDb(osId) {
+    const item = (this.bancoDadosLista || []).find(a => a.idAtendimento === osId || a.id === osId);
+    if (item && item.payload) {
+      this.restaurarPayloadSalvo(item.payload);
+      document.getElementById('modalBancoDados').style.display = 'none';
+      const docTipo = (item.tipoServico || '').toLowerCase().includes('desmont') ? 'dossie_desm' : 'dossie_mont';
+      this.abrirModalPreviaHtml(docTipo);
+    } else {
+      window.location.href = `/workflow/os_${osId}`;
+    }
+  },
+
+  excluirAtendimentoDb(osId, cliNomeEncoded) {
+    const cliNome = decodeURIComponent(cliNomeEncoded || '');
+    if (!confirm(`Deseja realmente excluir o atendimento de "${cliNome}" (OS #${osId}) do banco de dados?`)) return;
+
+    fetch(`/api/attendance/${osId}`, { method: 'DELETE' })
+      .then(r => r.json())
+      .then(() => {
+        try {
+          let list = JSON.parse(localStorage.getItem('VATECH_ATTENDANCES_LOCAL_DB') || '[]');
+          list = list.filter(a => a.idAtendimento !== osId && a.id !== osId);
+          localStorage.setItem('VATECH_ATTENDANCES_LOCAL_DB', JSON.stringify(list));
+        } catch(e) {}
+        this.carregarBancoDados();
+      })
+      .catch(err => {
+        alert('Erro ao excluir: ' + err.message);
+      });
+  },
+
+  exportarBancoDadosJson() {
+    window.open('/api/export-database', '_blank');
+  },
 };
 
 window.app = app;

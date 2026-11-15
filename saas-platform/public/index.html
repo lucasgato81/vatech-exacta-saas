@@ -175,6 +175,58 @@
       </div>
     </div>
 
+    <!-- BANCO DE DADOS DE ATENDIMENTOS E CLIENTES -->
+    <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200/80 space-y-5">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+                Banco de Dados de Clientes & Atendimentos
+                <span id="homeDbBadgeCount" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">0 Salvos</span>
+              </h3>
+              <p class="text-xs text-slate-500">Cada preenchimento realizado fica armazenado permanentemente com o nome do cliente.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a href="/api/export-database" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-2 rounded-xl border border-slate-300 transition flex items-center gap-1.5" title="Baixar todos os registros em JSON">
+            <i class="fa-solid fa-download text-blue-600"></i>
+            <span>Exportar Banco (JSON)</span>
+          </a>
+          <button onclick="loadHomeDatabase()" class="text-xs bg-slate-800 hover:bg-slate-700 text-white font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5" title="Recarregar lista">
+            <i class="fa-solid fa-rotate"></i>
+            <span>Atualizar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de Pesquisa e Filtros -->
+      <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+          <input type="text" id="homeDbSearchInput" oninput="filterHomeDatabase()" placeholder="Buscar por nome do cliente, OS, número de série, cidade..." class="w-full text-xs rounded-xl border border-slate-300 pl-10 pr-4 py-2.5 outline-none focus:border-blue-500 bg-white">
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="setHomeDbFilter('todos')" id="homeFilter_todos" class="text-xs font-bold px-3 py-2 rounded-xl bg-slate-900 text-white shadow-sm transition">Todos</button>
+          <button onclick="setHomeDbFilter('Montagem')" id="homeFilter_Montagem" class="text-xs font-bold px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition">🔧 Montagem</button>
+          <button onclick="setHomeDbFilter('Desmontagem')" id="homeFilter_Desmontagem" class="text-xs font-bold px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition">📦 Desmontagem</button>
+        </div>
+      </div>
+
+      <!-- Container da Lista de Atendimentos -->
+      <div id="homeDbListContainer" class="space-y-3">
+        <div class="text-center py-8 text-slate-400 text-xs flex items-center justify-center gap-2">
+          <i class="fa-solid fa-circle-notch fa-spin text-blue-500 text-base"></i>
+          <span>Carregando atendimentos salvos no banco de dados...</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Results Section (Visible after conversion) -->
     <div id="resultSection" class="hidden space-y-6">
 

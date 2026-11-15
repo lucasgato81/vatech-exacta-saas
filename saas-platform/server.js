@@ -267,10 +267,15 @@ app.get('/api/load-full-sequence', async (req, res) => {
  * - Step 6: Homologação (canvas touch signatures + GPS photo watermark)
  * Formats dynamically for PC (widescreen) and Mobile (fluid touch).
  */
+/**
+ * 2. GET /workflow/:id
+ * Official 1:1 Responsive Digital Workflow.
+ */
 app.get('/workflow/:id', (req, res) => {
-  const batch = storage.getBatchById(req.params.id);
+  const batch = storage.getBatchById(req.params.id) || storage.getAttendanceById(req.params.id);
   const attendanceData = batch?.attendanceData || extractAttendanceData('');
-  const html = renderMasterWorkflowHtml(attendanceData);
+  const savedPayload = batch?.savedPayload || batch?.payload;
+  const html = renderMasterWorkflowHtml(attendanceData, { savedPayload });
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.send(html);
 });
@@ -280,9 +285,10 @@ app.get('/workflow/:id', (req, res) => {
  * Direct single form view (serves official master workflow)
  */
 app.get('/app/:id', (req, res) => {
-  const batch = storage.getBatchById(req.params.id);
+  const batch = storage.getBatchById(req.params.id) || storage.getAttendanceById(req.params.id);
   const attendanceData = batch?.attendanceData || extractAttendanceData('');
-  const html = renderMasterWorkflowHtml(attendanceData);
+  const savedPayload = batch?.savedPayload || batch?.payload;
+  const html = renderMasterWorkflowHtml(attendanceData, { savedPayload });
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.send(html);
 });
@@ -292,11 +298,97 @@ app.get('/app/:id', (req, res) => {
  * Official A4 PDF preview modal / layout
  */
 app.get('/pdf-preview/:id', (req, res) => {
-  const batch = storage.getBatchById(req.params.id);
+  const batch = storage.getBatchById(req.params.id) || storage.getAttendanceById(req.params.id);
   const attendanceData = batch?.attendanceData || extractAttendanceData('');
-  const html = renderMasterWorkflowHtml(attendanceData);
+  const savedPayload = batch?.savedPayload || batch?.payload;
+  const html = renderMasterWorkflowHtml(attendanceData, { savedPayload });
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.send(html);
+});
+
+/**
+ * ============================================================================
+ * 5. ROTAS DO BANCO DE DADOS DE ATENDIMENTOS E CLIENTES
+ * Salva e mantém cada preenchimento organizado com o nome do cliente.
+ * ============================================================================
+ */
+
+// 5.1 Salvar Atendimento Completo no Banco de Dados
+app.post('/api/save-attendance', (req, res) => {
+  try {
+    const payload = req.body;
+    if (!payload) {
+      return res.status(400).json({ success: false, error: 'Payload de atendimento vazio ou inválido.' });
+    }
+
+    const record = storage.saveAttendance(payload);
+    res.json({
+      success: true,
+      id: record.id,
+      idAtendimento: record.idAtendimento,
+      clienteNome: record.clienteNome,
+      tipoServico: record.tipoServico,
+      workflowUrl: `/workflow/os_${record.idAtendimento}`,
+      message: `Atendimento de "${record.clienteNome}" salvo com sucesso no banco de dados!`
+    });
+  } catch (err) {
+    console.error('[Save Attendance Error]', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 5.2 Listar todos os atendimentos do Banco de Dados (com busca opcional por cliente/OS)
+app.get('/api/attendances', (req, res) => {
+  try {
+    const query = req.query.q || '';
+    const list = storage.getAttendances(query);
+    res.json({
+      success: true,
+      count: list.length,
+      attendances: list
+    });
+  } catch (err) {
+    console.error('[Get Attendances Error]', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 5.3 Obter um atendimento específico com payload completo
+app.get('/api/attendance/:id', (req, res) => {
+  try {
+    const record = storage.getAttendanceById(req.params.id);
+    if (!record) {
+      return res.status(404).json({ success: false, error: 'Atendimento não encontrado no banco de dados.' });
+    }
+    res.json({ success: true, attendance: record });
+  } catch (err) {
+    console.error('[Get Attendance Error]', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 5.4 Excluir um atendimento do Banco de Dados
+app.delete('/api/attendance/:id', (req, res) => {
+  try {
+    storage.deleteAttendance(req.params.id);
+    res.json({ success: true, message: 'Atendimento excluído com sucesso.' });
+  } catch (err) {
+    console.error('[Delete Attendance Error]', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 5.5 Exportar cópia de segurança completa do Banco de Dados (Backup JSON)
+app.get('/api/export-database', (req, res) => {
+  try {
+    const list = storage.getAttendances();
+    res.setHeader('Content-Disposition', 'attachment; filename=banco_dados_clientes_vatech.json');
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(list, null, 2));
+  } catch (err) {
+    console.error('[Export Database Error]', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 function getLocalIp() {

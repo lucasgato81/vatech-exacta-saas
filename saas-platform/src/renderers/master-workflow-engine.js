@@ -78,10 +78,14 @@ function renderMasterWorkflowHtml(attendanceData = {}, options = {}) {
     observacoes: attendanceData.observacoes || 'Manter contato com pós venda e tirar duvidas antes de qualquer circunstância.'
   };
 
+  const savedScript = (options.savedPayload || attendanceData.savedPayload)
+    ? `\n    window.SAVED_PAYLOAD = ${JSON.stringify(options.savedPayload || attendanceData.savedPayload)};`
+    : '';
+
   const dataScript = `
   <script>
     window.INITIAL_DATA = ${JSON.stringify(safeData, null, 2)};
-    window.INITIAL_TICKET_ID = ${JSON.stringify(safeData.idAtendimento)};
+    window.INITIAL_TICKET_ID = ${JSON.stringify(safeData.idAtendimento)};${savedScript}
   </script>`;
 
   let html = baseHtml.replace(
