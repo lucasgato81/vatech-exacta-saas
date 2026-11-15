@@ -1055,13 +1055,13 @@
         <span style="font-size: 13px; font-weight: 700; color: #64748b;">| EXACTA</span>
       </div>
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-        <!-- SELETOR GLOBAL DE SERVIÇO (INSTALAÇÃO / DESMONTAGEM) -->
+        <!-- SELETOR GLOBAL DE SERVIÇO (DESMONTAGEM / MONTAGEM) -->
         <div style="display: inline-flex; background: #e2e8f0; padding: 2px; border-radius: 8px; gap: 2px; border: 1px solid #cbd5e1;">
-          <button type="button" id="topBtnInstalacao" onclick="app.setTipoServico('instalacao')" style="border: none; background: #2563eb; color: #ffffff; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;">
-            🔧 Instalação
-          </button>
-          <button type="button" id="topBtnDesmontagem" onclick="app.setTipoServico('desmontagem')" style="border: none; background: transparent; color: #475569; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;">
+          <button type="button" id="topBtnDesmontagem" onclick="app.setTipoServico('desmontagem')" style="border: none; background: transparent; color: #475569; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;" title="Modo Desmontagem de Equipamento">
             📦 Desmontagem
+          </button>
+          <button type="button" id="topBtnInstalacao" onclick="app.setTipoServico('montagem')" style="border: none; background: #2563eb; color: #ffffff; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;" title="Modo Montagem / Instalação de Equipamento">
+            🔧 Montagem
           </button>
         </div>
         <button type="button" class="btn-sig-action" style="background:#0f172a !important; color:#ffffff !important; border:none; padding:5px 12px; font-weight:700; font-size:12px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="app.abrirModalAdminNovaOS()" title="Cadastrar nova Ordem de Serviço e gerar link para o técnico">
@@ -1142,11 +1142,11 @@
           <div class="form-group" style="margin-top: 14px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
             <label class="form-label" style="font-weight: 800; color: #1e293b; font-size: 13px;">Tipo de Atendimento / Serviço</label>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
-              <button type="button" id="btnTipoInstalacao" onclick="app.setTipoServico('instalacao')" style="padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 12.5px; border: 2px solid #2563eb; background: #eff6ff; color: #1d4ed8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
-                🔧 Instalação de Equipamento
-              </button>
               <button type="button" id="btnTipoDesmontagem" onclick="app.setTipoServico('desmontagem')" style="padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 12.5px; border: 2px solid #cbd5e1; background: #ffffff; color: #475569; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
                 📦 Desmontagem de Equipamento
+              </button>
+              <button type="button" id="btnTipoInstalacao" onclick="app.setTipoServico('montagem')" style="padding: 10px 12px; border-radius: 8px; font-weight: 700; font-size: 12.5px; border: 2px solid #2563eb; background: #eff6ff; color: #1d4ed8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+                🔧 Montagem / Instalação
               </button>
             </div>
           </div>
@@ -2829,58 +2829,148 @@
     <!-- ABA 3: RELATÓRIO DE VISITA TÉCNICA                                  -->
     <!-- =================================================================== -->
     <section id="step3" class="step-section" style="display: none;">
-      <div class="card">
-        <div class="card-header">
-          <span>🕒 Período da Intervenção Técnica</span>
+      <!-- SELETOR DE RELATÓRIO DENTRO DO PASSO 3 (DESMONTAGEM / MONTAGEM) -->
+      <div style="display: flex; gap: 8px; margin-bottom: 16px; background: #e2e8f0; padding: 4px; border-radius: 10px;">
+        <button type="button" id="subTabRelDesmontagem" onclick="app.setSubRelatorio('desmontagem')" style="flex: 1; padding: 11px 14px; font-weight: 700; font-size: 13px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; background: #dc2626; color: #ffffff; box-shadow: 0 2px 4px rgba(220, 38, 38, 0.25);">
+          📦 1. Relatório de Desmontagem
+        </button>
+        <button type="button" id="subTabRelMontagem" onclick="app.setSubRelatorio('montagem')" style="flex: 1; padding: 11px 14px; font-weight: 700; font-size: 13px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; background: transparent; color: #475569;">
+          🔧 2. Relatório de Montagem
+        </button>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- PAINEL 1: RELATÓRIO DE DESMONTAGEM                                  -->
+      <!-- =================================================================== -->
+      <div id="painelRelDesmontagem">
+        <div class="card" style="border-left: 4px solid #dc2626;">
+          <div class="card-header" style="background: #fef2f2; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #991b1b; font-weight: 700;">🕒 Período da Intervenção Técnica - Desmontagem</span>
+            <span style="font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #fee2e2; color: #dc2626; font-weight: 700;">📦 Desmontagem Oficial</span>
+          </div>
+          <div class="card-body">
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Horário Inicial</label>
+                <input type="time" id="relHoraInicio_desm" class="form-input" value="09:00" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Data Inicial</label>
+                <input type="date" id="relDataInicio_desm" class="form-input" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Horário Final</label>
+                <input type="time" id="relHoraFim_desm" class="form-input" value="12:00" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Data Final</label>
+                <input type="date" id="relDataFim_desm" class="form-input" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Motivo do Chamado</label>
+                <input type="text" id="relMotivo_desm" class="form-input" value="DESMONTAGEM DE EQUIPAMENTO" readonly style="font-weight: 700; background: #f8fafc; color: #991b1b;">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Garantia</label>
+                <input type="text" id="relGarantia_desm" class="form-input" value="5 Anos" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">Horário Inicial</label>
-              <input type="time" id="relHoraInicio" class="form-input" value="09:00">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Data Inicial</label>
-              <input type="date" id="relDataInicio" class="form-input">
-            </div>
+
+        <div class="card" style="border-left: 4px solid #dc2626;">
+          <div class="card-header" style="background: #fef2f2; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #991b1b; font-weight: 700;">📝 Descrição Técnica Detalhada (Desmontagem)</span>
+            <button type="button" onclick="app.aplicarModeloTexto('desmontagem')" style="font-size: 11.5px; background: #ffffff; border: 1.5px solid #fca5a5; color: #b91c1c; padding: 4px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: all 0.2s;" title="Carregar texto técnico completo de desmontagem">
+              ✨ Preencher Texto Padrão
+            </button>
           </div>
-          <div class="grid-2">
+          <div class="card-body">
             <div class="form-group">
-              <label class="form-label">Horário Final</label>
-              <input type="time" id="relHoraFim" class="form-input" value="13:30">
+              <label class="form-label">Ações Executadas / Observações Técnicas da Desmontagem:</label>
+              <textarea id="relDescricao_desm" class="form-textarea" rows="8" placeholder="Descreva os passos da desmontagem, fotos do contador de imagens, modo embalagem, conferência de acessórios, recolhimento de licenças e despacho com transportadora." oninput="app.sincronizarCamposLegadosRelatorio()"></textarea>
             </div>
-            <div class="form-group">
-              <label class="form-label">Data Final</label>
-              <input type="date" id="relDataFim" class="form-input">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group">
-              <label class="form-label">Motivo do Chamado</label>
-              <input type="text" id="relMotivo" class="form-input" value="INSTALAÇÃO DE EQUIPAMENTO">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Garantia</label>
-              <input type="text" id="relGarantia" class="form-input" value="5 Anos">
+            <div style="background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 10px 12px; font-size: 13px; color: #991b1b;">
+              <b>Declaração de Desmontagem:</b> "Confirmo que constatei a desmontagem, conferência de itens e acondicionamento seguro do equipamento e acessórios."
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <span>📝 Descrição Técnica Detalhada</span>
-        </div>
-        <div class="card-body">
-          <div class="form-group">
-            <label class="form-label">Ações Executadas / Observações Técnicas:</label>
-            <textarea id="relDescricao" class="form-textarea" rows="8" placeholder="Descreva os passos executados, calibração, fixação, alinhamentos, configurações de rede, etc."></textarea>
+      <!-- =================================================================== -->
+      <!-- PAINEL 2: RELATÓRIO DE MONTAGEM                                     -->
+      <!-- =================================================================== -->
+      <div id="painelRelMontagem" style="display: none;">
+        <div class="card" style="border-left: 4px solid #2563eb;">
+          <div class="card-header" style="background: #eff6ff; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #1e40af; font-weight: 700;">🕒 Período da Intervenção Técnica - Montagem / Instalação</span>
+            <span style="font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #dbeafe; color: #1d4ed8; font-weight: 700;">🔧 Montagem Oficial</span>
           </div>
-          <div style="background-color: #f8fafc; border-left: 4px solid var(--primary); padding: 10px 12px; font-size: 13px; color: #475569;">
-            <b>Declaração:</b> "Confirmo que constatei o adequado funcionamento do equipamento após serviço técnico prestado."
+          <div class="card-body">
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Horário Inicial</label>
+                <input type="time" id="relHoraInicio_mont" class="form-input" value="09:00" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Data Inicial</label>
+                <input type="date" id="relDataInicio_mont" class="form-input" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Horário Final</label>
+                <input type="time" id="relHoraFim_mont" class="form-input" value="12:00" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Data Final</label>
+                <input type="date" id="relDataFim_mont" class="form-input" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Motivo do Chamado</label>
+                <input type="text" id="relMotivo_mont" class="form-input" value="MONTAGEM DE EQUIPAMENTO" readonly style="font-weight: 700; background: #f8fafc; color: #1e40af;">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Garantia</label>
+                <input type="text" id="relGarantia_mont" class="form-input" value="5 Anos" onchange="app.sincronizarCamposLegadosRelatorio()">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #2563eb;">
+          <div class="card-header" style="background: #eff6ff; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #1e40af; font-weight: 700;">📝 Descrição Técnica Detalhada (Montagem)</span>
+            <button type="button" onclick="app.aplicarModeloTexto('montagem')" style="font-size: 11.5px; background: #ffffff; border: 1.5px solid #bfdbfe; color: #1e40af; padding: 4px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: all 0.2s;" title="Carregar texto técnico completo de montagem">
+              ✨ Preencher Texto Padrão
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Ações Executadas / Observações Técnicas da Montagem:</label>
+              <textarea id="relDescricao_mont" class="form-textarea" rows="8" placeholder="Descreva os passos da montagem, fixação na parede/base, conexões elétricas, alinhamento laser, calibração e testes de aquisição." oninput="app.sincronizarCamposLegadosRelatorio()"></textarea>
+            </div>
+            <div style="background-color: #f8fafc; border-left: 4px solid var(--primary); padding: 10px 12px; font-size: 13px; color: #475569;">
+              <b>Declaração de Montagem:</b> "Confirmo que constatei o adequado funcionamento do equipamento após serviço técnico prestado."
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- CAMPOS OCULTOS DE COMPATIBILIDADE RETROATIVA -->
+      <input type="hidden" id="relHoraInicio" value="09:00">
+      <input type="hidden" id="relDataInicio">
+      <input type="hidden" id="relHoraFim" value="12:00">
+      <input type="hidden" id="relDataFim">
+      <input type="hidden" id="relMotivo" value="DESMONTAGEM DE EQUIPAMENTO">
+      <input type="hidden" id="relGarantia" value="5 Anos">
+      <input type="hidden" id="relDescricao">
     
       <!-- REGISTRO FOTOGRÁFICO ADICIONAL DE CAMPO -->
       <div class="card">
@@ -3544,22 +3634,28 @@
       <!-- BARRA DE ABAS DOS DOCUMENTOS (NUNCA ENCOLHE) -->
       <div class="previa-tabs-bar">
         <button type="button" id="tabPrevia_dossie" class="btn-previa-tab active" onclick="app.trocarDocPrevia('dossie')">
-          📑 Dossiê Completo (PDF Único)
+          📑 Dossiê Completo
+        </button>
+        <button type="button" id="tabPrevia_relatorio_desm" class="btn-previa-tab" onclick="app.trocarDocPrevia('relatorio_desm')">
+          📄 Relatório Visita (Desmontagem)
+        </button>
+        <button type="button" id="tabPrevia_relatorio_mont" class="btn-previa-tab" onclick="app.trocarDocPrevia('relatorio_mont')">
+          📄 Relatório Visita (Montagem)
+        </button>
+        <button type="button" id="tabPrevia_checklist_desm" class="btn-previa-tab" onclick="app.trocarDocPrevia('checklist_desm')">
+          📋 Checklist Desmontagem (40 Itens)
         </button>
         <button type="button" id="tabPrevia_checklist" class="btn-previa-tab" onclick="app.trocarDocPrevia('checklist')">
-          📋 1. Checklist Pós-Instalação (61 Itens)
-        </button>
-        <button type="button" id="tabPrevia_relatorio" class="btn-previa-tab" onclick="app.trocarDocPrevia('relatorio')">
-          📄 2. Relatório de Visita Técnica
+          📋 Checklist Montagem (61 Itens)
         </button>
         <button type="button" id="tabPrevia_garantia" class="btn-previa-tab" onclick="app.trocarDocPrevia('garantia')">
-          🛡️ 3. Termo de Garantia
+          🛡️ Termo de Garantia
         </button>
         <button type="button" id="tabPrevia_feedback" class="btn-previa-tab" onclick="app.trocarDocPrevia('feedback')">
-          ⭐ 4. Feedback do Cliente
+          ⭐ Feedback do Cliente
         </button>
         <button type="button" id="tabPrevia_fotos" class="btn-previa-tab" onclick="app.trocarDocPrevia('fotos')">
-          📸 5. Anexo Fotográfico (GPS)
+          📸 Anexo Fotográfico (GPS)
         </button>
       </div>
 
@@ -3938,9 +4034,84 @@ const app = {
   tipoServico: 'instalacao',
   desmontagemData: {},
 
+  subRelatorioAtivo: 'desmontagem',
+
+  setSubRelatorio(tipo) {
+    this.subRelatorioAtivo = tipo;
+    const isDesm = (tipo === 'desmontagem');
+
+    const tabDesm = document.getElementById('subTabRelDesmontagem');
+    const tabMont = document.getElementById('subTabRelMontagem');
+    const pDesm = document.getElementById('painelRelDesmontagem');
+    const pMont = document.getElementById('painelRelMontagem');
+
+    if (tabDesm && tabMont) {
+      if (isDesm) {
+        tabDesm.style.background = '#dc2626';
+        tabDesm.style.color = '#ffffff';
+        tabDesm.style.boxShadow = '0 2px 4px rgba(220, 38, 38, 0.25)';
+        tabMont.style.background = 'transparent';
+        tabMont.style.color = '#475569';
+        tabMont.style.boxShadow = 'none';
+      } else {
+        tabDesm.style.background = 'transparent';
+        tabDesm.style.color = '#475569';
+        tabDesm.style.boxShadow = 'none';
+        tabMont.style.background = '#2563eb';
+        tabMont.style.color = '#ffffff';
+        tabMont.style.boxShadow = '0 2px 4px rgba(37, 99, 235, 0.25)';
+      }
+    }
+
+    if (pDesm) pDesm.style.display = isDesm ? 'block' : 'none';
+    if (pMont) pMont.style.display = isDesm ? 'none' : 'block';
+
+    this.sincronizarCamposLegadosRelatorio();
+    this.salvarRascunho();
+  },
+
+  sincronizarCamposLegadosRelatorio() {
+    const isDesm = (this.subRelatorioAtivo === 'desmontagem');
+    const sufixo = isDesm ? '_desm' : '_mont';
+    const fields = ['relHoraInicio', 'relHoraFim', 'relDataInicio', 'relDataFim', 'relMotivo', 'relGarantia', 'relDescricao'];
+    fields.forEach(f => {
+      const src = document.getElementById(f + sufixo);
+      const tgt = document.getElementById(f);
+      if (src && tgt) tgt.value = src.value;
+    });
+  },
+
+  aplicarModeloTexto(tipo) {
+    if (tipo === 'desmontagem') {
+      const el = document.getElementById('relDescricao_desm');
+      if (el) {
+        el.value = `Cheguei no cliente às 09:00 e comecei solicitando tudo que era do PaX-i, enquanto isso fui tirando foto para registro do equipamento, foto da quantidade de exames realizados e coloquei o equipamento em modo de embalagem.
+Realizado o backup do banco de imagens e a remoção das licenças no software EzDent-i.
+Executada a desmontagem física completa: desacoplamento do suporte de fixação de parede, fixação dos parafusos de trava de transporte do Rotator, remoção da unidade Rotator, desacoplamento da coluna e remoção da base de apoio.
+Todos os módulos, posicionadores, apoios e cabos foram conferidos e acondicionados em suas embalagens apropriadas.
+Com a chegada da transportadora, foram conferidas as ordens de transporte e o alinhamento da carga, sendo entregues todos os volumes lacrados juntamente com o checklist de desmontagem devidamente assinado. Desmontagem concluída e liberada para transporte às 12:00.`;
+        el.dispatchEvent(new Event('input'));
+      }
+    } else {
+      const el = document.getElementById('relDescricao_mont');
+      if (el) {
+        el.value = `Chegada ao cliente às 09:00. Realizada inspeção de recebimento dos volumes e integridade física de todas as embalagens, carenagens e componentes do equipamento Vatech PaX-i.
+Iniciada a montagem mecânica: posicionamento e nivelamento da base de solo, elevação e ancoragem mecânica da coluna, fixação do suporte estrutural de parede conforme especificações técnicas do fabricante.
+Instalação e acoplamento da unidade Rotator e conjunto cabeçote/sensor, com retirada das travas de transporte.
+Montagem do computador de aquisição, conexões elétricas e verificação da rede de alimentação (Fase-Neutro: 220V, Neutro-Terra < 3V).
+Instalação dos softwares e restauração das licenças (EzDent-i).
+Realizados alinhamentos dos feixes laser (sagital, coronal e Frankfurt), calibração do sensor e aquisição de radiografias panorâmicas de teste.
+Equipamento montado, testado e calibrado com sucesso, com excelente padrão de imagem radiográfica. Serviço concluído e equipamento liberado para operação clínica às 12:00.`;
+        el.dispatchEvent(new Event('input'));
+      }
+    }
+    this.sincronizarCamposLegadosRelatorio();
+    this.salvarRascunho();
+  },
+
   setTipoServico(tipo) {
-    this.tipoServico = tipo;
-    this.modoDesmontagem = (tipo === 'desmontagem');
+    this.tipoServico = (tipo === 'desmontagem') ? 'desmontagem' : 'montagem';
+    this.modoDesmontagem = (this.tipoServico === 'desmontagem');
     this.totalPassos = this.modoDesmontagem ? 4 : 6;
 
     const btnInst = document.getElementById('btnTipoInstalacao');
@@ -3985,14 +4156,14 @@ const app = {
         sc.innerHTML = `
           <div class="step-tab ${this.passoAtual===1?'active':''}" onclick="app.navegarPara(1)">1. OS & Dados</div>
           <div class="step-tab ${this.passoAtual===2?'active':''}" onclick="app.navegarPara(2)">2. Checklist Desmontagem (40 Itens)</div>
-          <div class="step-tab ${this.passoAtual===3?'active':''}" onclick="app.navegarPara(3)">3. Relatório Visita</div>
+          <div class="step-tab ${this.passoAtual===3?'active':''}" onclick="app.navegarPara(3)">3. Relatório Visita (Desmontagem)</div>
           <div class="step-tab ${this.passoAtual===4?'active':''}" onclick="app.navegarPara(4)">4. Assinaturas</div>
         `;
       } else {
         sc.innerHTML = `
           <div class="step-tab ${this.passoAtual===1?'active':''}" onclick="app.navegarPara(1)">1. OS & Dados</div>
-          <div class="step-tab ${this.passoAtual===2?'active':''}" onclick="app.navegarPara(2)">2. Checklist (61 Itens)</div>
-          <div class="step-tab ${this.passoAtual===3?'active':''}" onclick="app.navegarPara(3)">3. Relatório Visita</div>
+          <div class="step-tab ${this.passoAtual===2?'active':''}" onclick="app.navegarPara(2)">2. Checklist Montagem (61 Itens)</div>
+          <div class="step-tab ${this.passoAtual===3?'active':''}" onclick="app.navegarPara(3)">3. Relatório Visita (Montagem)</div>
           <div class="step-tab ${this.passoAtual===4?'active':''}" onclick="app.navegarPara(4)">4. Garantia</div>
           <div class="step-tab ${this.passoAtual===5?'active':''}" onclick="app.navegarPara(5)">5. Feedback Cliente</div>
           <div class="step-tab ${this.passoAtual===6?'active':''}" onclick="app.navegarPara(6)">6. Assinaturas</div>
@@ -4000,14 +4171,8 @@ const app = {
       }
     }
 
-    const relMotivo = document.getElementById('relMotivo');
-    if (relMotivo) {
-      if (this.modoDesmontagem) {
-        relMotivo.value = 'DESMONTAGEM DE EQUIPAMENTO';
-      } else if (!relMotivo.value || relMotivo.value === 'DESMONTAGEM DE EQUIPAMENTO') {
-        relMotivo.value = 'INSTALAÇÃO DE EQUIPAMENTO';
-      }
-    }
+    // Ativa o sub-relatório correspondente no Passo 3
+    this.setSubRelatorio(this.modoDesmontagem ? 'desmontagem' : 'montagem');
 
     if (this.passoAtual > this.totalPassos) {
       this.navegarPara(this.totalPassos);
@@ -4078,10 +4243,10 @@ const app = {
     this.sigCliente = new SmoothSignaturePad('canvasCliente', 'watermarkCliente', 'badgeClienteStatus', () => onSigDraw('canvasCliente'));
 
     const hojeStr = new Date().toISOString().slice(0, 10);
-    const campoDataIni = document.getElementById('relDataInicio');
-    const campoDataFim = document.getElementById('relDataFim');
-    if (campoDataIni && !campoDataIni.value) campoDataIni.value = hojeStr;
-    if (campoDataFim && !campoDataFim.value) campoDataFim.value = hojeStr;
+    ['relDataInicio', 'relDataFim', 'relDataInicio_desm', 'relDataFim_desm', 'relDataInicio_mont', 'relDataFim_mont'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.value) el.value = hojeStr;
+    });
 
     // Limpa rascunhos de testes anteriores que continham valores falsos
     try {
@@ -4091,12 +4256,24 @@ const app = {
         localStorage.removeItem(draftKey);
       }
     } catch(e) {}
+
     if (this.dados && (/DESMONTAGEM/i.test(this.dados.servico) || this.dados.tipoServico === 'desmontagem')) {
       this.setTipoServico('desmontagem');
     } else {
-      this.setTipoServico('instalacao');
+      this.setTipoServico('montagem');
     }
     this.restaurarRascunho();
+
+    // Se os campos de descrição estiverem vazios após restaurar rascunho, preenche com os textos oficiais
+    const descDesm = document.getElementById('relDescricao_desm');
+    if (descDesm && !descDesm.value.trim()) {
+      this.aplicarModeloTexto('desmontagem');
+    }
+    const descMont = document.getElementById('relDescricao_mont');
+    if (descMont && !descMont.value.trim()) {
+      this.aplicarModeloTexto('montagem');
+    }
+    this.sincronizarCamposLegadosRelatorio();
     this.atualizarProgresso();
 
     document.querySelectorAll('input, textarea, select').forEach(el => {
@@ -5119,15 +5296,27 @@ const app = {
       q63_entregue_para: getVal('q63_entregue_para')
     };
 
-    const relatorio = {
-      horaInicial: getVal('relHoraInicio'),
-      dataInicial: getVal('relDataInicio'),
-      horaFinal: getVal('relHoraFim'),
-      dataFinal: getVal('relDataFim'),
-      motivo: getVal('relMotivo'),
-      garantia: getVal('relGarantia'),
-      descricaoTecnica: getVal('relDescricao')
+    const relatorioDesm = {
+      horaInicial: getVal('relHoraInicio_desm') || getVal('relHoraInicio') || '09:00',
+      dataInicial: getVal('relDataInicio_desm') || getVal('relDataInicio'),
+      horaFinal: getVal('relHoraFim_desm') || getVal('relHoraFim') || '12:00',
+      dataFim: getVal('relDataFim_desm') || getVal('relDataFim'),
+      motivo: 'DESMONTAGEM DE EQUIPAMENTO',
+      garantia: getVal('relGarantia_desm') || '5 Anos',
+      descricaoTecnica: getVal('relDescricao_desm') || getVal('relDescricao')
     };
+
+    const relatorioMont = {
+      horaInicial: getVal('relHoraInicio_mont') || getVal('relHoraInicio') || '09:00',
+      dataInicial: getVal('relDataInicio_mont') || getVal('relDataInicio'),
+      horaFinal: getVal('relHoraFim_mont') || getVal('relHoraFim') || '12:00',
+      dataFim: getVal('relDataFim_mont') || getVal('relDataFim'),
+      motivo: 'MONTAGEM DE EQUIPAMENTO',
+      garantia: getVal('relGarantia_mont') || '5 Anos',
+      descricaoTecnica: getVal('relDescricao_mont') || getVal('relDescricao')
+    };
+
+    const relatorio = (this.modoDesmontagem) ? relatorioDesm : relatorioMont;
 
     const garantia = {
       aceite: getChk('chkAceiteGarantia'),
@@ -5181,11 +5370,13 @@ const app = {
 
     return {
       idAtendimento: this.dados ? this.dados.idAtendimento : '260930092200',
-      tipoServico: this.tipoServico || (this.modoDesmontagem ? 'desmontagem' : 'instalacao'),
+      tipoServico: this.tipoServico || (this.modoDesmontagem ? 'desmontagem' : 'montagem'),
       dadosAtendimento: this.dados || (typeof this.mockDados === 'function' ? this.mockDados() : {}),
       checklist: checklist,
       desmontagem: (typeof this.coletarDesmontagem === 'function') ? this.coletarDesmontagem() : {},
       relatorio: relatorio,
+      relatorio_desmontagem: relatorioDesm,
+      relatorio_montagem: relatorioMont,
       garantia: garantia,
       feedback: feedback,
       assinaturas: assinaturas,
@@ -5311,15 +5502,16 @@ const app = {
       }
     }
 
-    // 3. Relatório Técnico (ambos)
-    const relDesc = document.getElementById('relDescricao');
+    // 3. Relatório Técnico
+    const activeDescId = this.modoDesmontagem ? 'relDescricao_desm' : 'relDescricao_mont';
+    const relDesc = document.getElementById(activeDescId) || document.getElementById('relDescricao');
     if (relDesc && (!relDesc.value.trim() || relDesc.value.trim().length < 10)) {
       pendencias.push({
         tipo: 'input',
-        id: 'relDescricao',
+        id: relDesc.id,
         step: 3,
-        categoria: '3. Relatório de Visita Técnica',
-        titulo: 'Descrição Técnica dos serviços executados',
+        categoria: this.modoDesmontagem ? '3. Relatório Visita (Desmontagem)' : '3. Relatório Visita (Montagem)',
+        titulo: this.modoDesmontagem ? 'Descrição Técnica da Desmontagem' : 'Descrição Técnica da Montagem',
         element: relDesc
       });
     }
@@ -5621,27 +5813,40 @@ const app = {
     const payload = this.coletarPayload(false);
     const d = (this.dados) ? JSON.parse(JSON.stringify(this.dados)) : (typeof this.mockDados === 'function' ? this.mockDados() : {});
     const c = payload.checklist;
-    const rel = payload.relatorio;
+    const relDesm = payload.relatorio_desmontagem || {};
+    const relMont = payload.relatorio_montagem || {};
     const gar = payload.garantia;
     const fb = payload.feedback;
     const sigs = payload.assinaturas;
     const fotos = payload.fotos || this.fotos || {};
-
     const desm = payload.desmontagem || {};
+
     let html = '';
     if (typeof gerarHtmlDossieCompleto === 'function') {
-      if (this.modoDesmontagem) {
-        if (docTipo === 'dossie') html = gerarHtmlDossieCompleto(d, c, rel, gar, fb, sigs, fotos, desm);
-        else if (docTipo === 'checklist') html = gerarHtmlChecklistDesmontagem(d, desm, sigs);
-        else if (docTipo === 'relatorio') html = gerarHtmlRelatorio(d, rel, sigs);
-        else html = gerarHtmlDossieCompleto(d, c, rel, gar, fb, sigs, fotos, desm);
+      if (docTipo === 'relatorio_desm') {
+        html = gerarHtmlRelatorio(d, relDesm, sigs);
+      } else if (docTipo === 'relatorio_mont') {
+        html = gerarHtmlRelatorio(d, relMont, sigs);
+      } else if (docTipo === 'checklist_desm') {
+        html = gerarHtmlChecklistDesmontagem(d, desm, sigs);
+      } else if (docTipo === 'checklist') {
+        html = this.modoDesmontagem ? gerarHtmlChecklistDesmontagem(d, desm, sigs) : gerarHtmlChecklist(d, c, sigs);
+      } else if (docTipo === 'relatorio') {
+        html = this.modoDesmontagem ? gerarHtmlRelatorio(d, relDesm, sigs) : gerarHtmlRelatorio(d, relMont, sigs);
+      } else if (docTipo === 'garantia') {
+        html = gerarHtmlGarantia(d, gar, sigs);
+      } else if (docTipo === 'feedback') {
+        html = gerarHtmlFeedback(d, fb, sigs);
+      } else if (docTipo === 'fotos') {
+        html = gerarHtmlAnexoFotos(d, fotos, sigs);
+      } else if (docTipo === 'dossie') {
+        if (this.modoDesmontagem) {
+          html = gerarHtmlDossieCompleto(d, c, relDesm, gar, fb, sigs, fotos, desm);
+        } else {
+          html = gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm);
+        }
       } else {
-        if (docTipo === 'dossie') html = gerarHtmlDossieCompleto(d, c, rel, gar, fb, sigs, fotos, desm);
-        else if (docTipo === 'checklist') html = gerarHtmlChecklist(d, c, sigs);
-        else if (docTipo === 'relatorio') html = gerarHtmlRelatorio(d, rel, sigs);
-        else if (docTipo === 'garantia') html = gerarHtmlGarantia(d, gar, sigs);
-        else if (docTipo === 'feedback') html = gerarHtmlFeedback(d, fb, sigs);
-        else if (docTipo === 'fotos') html = gerarHtmlAnexoFotos(d, fotos, sigs);
+        html = gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm);
       }
     }
     return html;
@@ -5688,24 +5893,34 @@ const app = {
     const btnGar = document.getElementById('tabPrevia_garantia');
     const btnFb = document.getElementById('tabPrevia_feedback');
     const btnFt = document.getElementById('tabPrevia_fotos');
-    const btnChk = document.getElementById('tabPrevia_checklist');
+    const btnChkMont = document.getElementById('tabPrevia_checklist');
+    const btnChkDesm = document.getElementById('tabPrevia_checklist_desm');
+    const btnRelMont = document.getElementById('tabPrevia_relatorio_mont');
+    const btnRelDesm = document.getElementById('tabPrevia_relatorio_desm');
     const btnDos = document.getElementById('tabPrevia_dossie');
 
     if (this.modoDesmontagem) {
       if (btnGar) btnGar.style.display = 'none';
       if (btnFb) btnFb.style.display = 'none';
       if (btnFt) btnFt.style.display = 'none';
-      if (btnChk) btnChk.textContent = 'Checklist Desmontagem';
-      if (btnDos) btnDos.textContent = 'Dossiê Desmontagem (2 Págs)';
+      if (btnChkMont) btnChkMont.style.display = 'none';
+      if (btnChkDesm) btnChkDesm.style.display = '';
+      if (btnRelMont) btnRelMont.style.display = '';
+      if (btnRelDesm) btnRelDesm.style.display = '';
+      if (btnDos) btnDos.textContent = '📑 Dossiê Desmontagem (2 Págs)';
     } else {
       if (btnGar) btnGar.style.display = '';
       if (btnFb) btnFb.style.display = '';
       if (btnFt) btnFt.style.display = '';
-      if (btnChk) btnChk.textContent = 'Checklist';
-      if (btnDos) btnDos.textContent = 'Dossiê Completo';
+      if (btnChkMont) btnChkMont.style.display = '';
+      if (btnChkDesm) btnChkDesm.style.display = 'none';
+      if (btnRelMont) btnRelMont.style.display = '';
+      if (btnRelDesm) btnRelDesm.style.display = '';
+      if (btnDos) btnDos.textContent = '📑 Dossiê Completo';
     }
 
-    ['dossie', 'checklist', 'relatorio', 'garantia', 'feedback', 'fotos'].forEach(t => {
+    const allTabs = ['dossie', 'checklist', 'checklist_desm', 'relatorio_mont', 'relatorio_desm', 'relatorio', 'garantia', 'feedback', 'fotos'];
+    allTabs.forEach(t => {
       const btn = document.getElementById('tabPrevia_' + t);
       if (btn) btn.classList.toggle('active', t === tipo);
     });
