@@ -1739,35 +1739,70 @@ function gerarHtmlAnexoFotos(dados, fotos, sigs) {
  * 6. DOSSIÊ COMPLETO CONSOLIDADO (PDF ÚNICO COM TODOS OS DOCUMENTOS E FOTOS)
  * ============================================================================
  */
-function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos, desm) {
+/**
+ * ============================================================================
+ * 6A. DOSSIÊ DE DESMONTAGEM (EXATAMENTE 2 PÁGINAS)
+ * Folha 1: Relatório de Visita Técnica (Desmontagem)
+ * Folha 2: Checklist de Desmontagem (40 Itens)
+ * ============================================================================
+ */
+function gerarHtmlDossieDesmontagem(dados, desm, relDesm, sigs) {
   function extrairCorpo(html) {
     const m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
     return m ? m[1] : html;
   }
 
-  const isDesmontagem = (dados && (dados.servico === 'DESMONTAGEM DE EQUIPAMENTO' || dados.tipoServico === 'desmontagem')) ||
-                        (rel && /DESMONTAGEM/i.test(rel.motivo));
+  dados = dados || {};
+  relDesm = relDesm || (dados ? dados.relatorio_desmontagem : null) || {};
+  if (!relDesm.motivo) relDesm.motivo = 'DESMONTAGEM DE EQUIPAMENTO';
+  desm = desm || (dados ? dados.desmontagem : null) || {};
+  sigs = sigs || (dados ? dados.assinaturas : null) || {};
 
-  if (isDesmontagem) {
-    const hDesm = extrairCorpo(gerarHtmlChecklistDesmontagem(dados, desm || chk, sigs));
-    const hRel = extrairCorpo(gerarHtmlRelatorio(dados, rel, sigs));
-    return `<!DOCTYPE html>
+  const hRel = extrairCorpo(gerarHtmlRelatorio(dados, relDesm, sigs));
+  const hDesm = extrairCorpo(gerarHtmlChecklistDesmontagem(dados, desm, sigs));
+
+  return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vatech Exacta - Desmontagem de Equipamento</title>
+<title>Vatech Exacta - Dossiê de Desmontagem (${dados && dados.idAtendimento ? dados.idAtendimento : ''})</title>
 <style>${PDF_GLOBAL_STYLE}</style>
 </head>
 <body>
-  ${hDesm}
-  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
   ${hRel}
+  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
+  ${hDesm}
 </body>
 </html>`;
+}
+
+/**
+ * ============================================================================
+ * 6B. DOSSIÊ DE MONTAGEM (COMPLETO)
+ * Folha 1: Relatório de Visita Técnica (Montagem)
+ * Folhas 2 e 3: Checklist de Montagem (61 Itens)
+ * Folha 4: Termo de Garantia (16 Cláusulas)
+ * Folha 5: Feedback do Cliente
+ * Folha 6: Anexo Fotográfico com GPS
+ * ============================================================================
+ */
+function gerarHtmlDossieMontagem(dados, chk, relMont, gar, fb, sigs, fotos) {
+  function extrairCorpo(html) {
+    const m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+    return m ? m[1] : html;
   }
 
+  dados = dados || {};
+  relMont = relMont || (dados ? dados.relatorio_montagem : null) || {};
+  if (!relMont.motivo) relMont.motivo = 'MONTAGEM DE EQUIPAMENTO';
+  chk = chk || (dados ? dados.checklist : null) || {};
+  gar = gar || (dados ? dados.garantia : null) || {};
+  fb = fb || (dados ? dados.feedback : null) || {};
+  sigs = sigs || (dados ? dados.assinaturas : null) || {};
+  fotos = fotos || (dados ? dados.fotos : null) || {};
+
+  const hRel = extrairCorpo(gerarHtmlRelatorio(dados, relMont, sigs));
   const hChk = extrairCorpo(gerarHtmlChecklist(dados, chk, sigs));
-  const hRel = extrairCorpo(gerarHtmlRelatorio(dados, rel, sigs));
   const hGar = extrairCorpo(gerarHtmlGarantia(dados, gar, sigs));
   const hFb = extrairCorpo(gerarHtmlFeedback(dados, fb, sigs));
 
@@ -1785,17 +1820,32 @@ function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos, desm) {
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vatech Exacta - Atendimento Técnico</title>
+<title>Vatech Exacta - Dossiê de Montagem (${dados && dados.idAtendimento ? dados.idAtendimento : ''})</title>
 <style>${PDF_GLOBAL_STYLE}</style>
 </head>
 <body>
-  ${hChk}
-  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
   ${hRel}
+  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
+  ${hChk}
   <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
   ${hGar}
   <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
   ${hFb}${hFotos}
 </body>
 </html>`;
+}
+
+/**
+ * ============================================================================
+ * 6C. DOSSIÊ CONSOLIDADO (ROTEIA AUTOMATICAMENTE PARA DESMONTAGEM OU MONTAGEM)
+ * ============================================================================
+ */
+function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos, desm) {
+  const isDesmontagem = (dados && (dados.servico === 'DESMONTAGEM DE EQUIPAMENTO' || dados.tipoServico === 'desmontagem')) ||
+                        (rel && /DESMONTAGEM/i.test(rel.motivo));
+
+  if (isDesmontagem) {
+    return gerarHtmlDossieDesmontagem(dados, desm || chk, rel, sigs);
+  }
+  return gerarHtmlDossieMontagem(dados, chk, rel, gar, fb, sigs, fotos);
 }

@@ -3569,13 +3569,17 @@
         </p>
       </div>
 
-      <!-- BOTÃO PRINCIPAL EM DESTAQUE: BAIXAR PDF ÚNICO CONSOLIDADO -->
-      <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px; margin-bottom: 14px; text-align: center;">
-        <div style="font-size: 11.5px; font-weight: 700; color: #1e40af; text-transform: uppercase; margin-bottom: 4px;">📄 Dossiê Técnico Completo (Arquivo PDF Único)</div>
-        <div style="font-size: 12.5px; color: #334155; margin-bottom: 10px;">Todos os documentos técnicos e fotos consolidados em 1 único arquivo PDF sequencial.</div>
-        <button type="button" id="btnBaixarDossiePdf" class="btn btn-primary" style="width: 100%; min-height: 48px; font-size: 14.5px; font-weight: 700; background: #2563eb; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none;" onclick="app.baixarDossiePdf()">
-          📥 BAIXAR DOSSIÊ COMPLETO EM PDF ÚNICO
-        </button>
+      <!-- BOTÕES PRINCIPAIS EM DESTAQUE: IMPRIMIR / BAIXAR DOSSIÊS SEPARADOS -->
+      <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; margin-bottom: 14px; text-align: center;">
+        <div style="font-size: 11.5px; font-weight: 700; color: #334155; text-transform: uppercase; margin-bottom: 8px;">📄 Dossiês Oficiais Vatech (PDF / Impressão Separada)</div>
+        <div style="display: flex; gap: 8px; flex-direction: column;">
+          <button type="button" class="btn" style="width: 100%; min-height: 44px; font-size: 14px; font-weight: 700; background: #dc2626 !important; color: #ffffff !important; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; border-radius: 8px;" onclick="app.imprimirDossie('desmontagem')">
+            📦 IMPRIMIR DOSSIÊ DESMONTAGEM (2 PÁGS)
+          </button>
+          <button type="button" class="btn" style="width: 100%; min-height: 44px; font-size: 14px; font-weight: 700; background: #2563eb !important; color: #ffffff !important; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; border-radius: 8px;" onclick="app.imprimirDossie('montagem')">
+            🔧 IMPRIMIR DOSSIÊ MONTAGEM (COMPLETO)
+          </button>
+        </div>
       </div>
 
       <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 14px;">
@@ -3618,11 +3622,17 @@
             Layout 100% idêntico aos arquivos originais de Limeira. Role o documento para conferir todos os campos, assinaturas e fotos com GPS.
           </p>
         </div>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <button type="button" class="btn-sig-action" onclick="app.imprimirDocPrevia()" style="font-size: 12px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" title="Imprimir ou Salvar em PDF">
-            🖨️ Imprimir / Salvar PDF
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="btn-sig-action" onclick="app.imprimirDossie('desmontagem')" style="background: #dc2626 !important; color: #ffffff !important; font-size: 11.5px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px; border: none; font-weight: 700; border-radius: 6px; cursor: pointer;" title="Imprimir Dossiê de Desmontagem (Relatório + Checklist 40 Itens)">
+            🖨️ Imprimir Desmontagem
           </button>
-          <button type="button" class="btn-sig-action" onclick="app.abrirDocNovaJanela()" style="font-size: 12px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" title="Abrir em tela cheia numa nova aba do navegador">
+          <button type="button" class="btn-sig-action" onclick="app.imprimirDossie('montagem')" style="background: #2563eb !important; color: #ffffff !important; font-size: 11.5px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px; border: none; font-weight: 700; border-radius: 6px; cursor: pointer;" title="Imprimir Dossiê de Montagem (Relatório + Checklist 61 Itens + Garantia + Feedback)">
+            🖨️ Imprimir Montagem
+          </button>
+          <button type="button" class="btn-sig-action" onclick="app.imprimirDocPrevia()" style="font-size: 11.5px; padding: 6px 10px; display: inline-flex; align-items: center; gap: 4px; border-radius: 6px; cursor: pointer;" title="Imprimir o documento aberto nesta visualização">
+            🖨️ Imprimir Este
+          </button>
+          <button type="button" class="btn-sig-action" onclick="app.abrirDocNovaJanela()" style="font-size: 11.5px; padding: 6px 10px; display: inline-flex; align-items: center; gap: 4px; border-radius: 6px; cursor: pointer;" title="Abrir em tela cheia numa nova aba do navegador">
             ↗️ Nova Aba
           </button>
           <button type="button" class="btn-sig-action btn-close-modal" onclick="document.getElementById('modalPrevia').style.display='none'">
@@ -3631,19 +3641,22 @@
         </div>
       </div>
 
-      <!-- BARRA DE ABAS DOS DOCUMENTOS (NUNCA ENCOLHE) -->
+      <!-- BARRA DE ABAS DOS DOCUMENTOS (SEPARADA EM DESMONTAGEM E MONTAGEM) -->
       <div class="previa-tabs-bar">
-        <button type="button" id="tabPrevia_dossie" class="btn-previa-tab active" onclick="app.trocarDocPrevia('dossie')">
-          📑 Dossiê Completo
+        <button type="button" id="tabPrevia_dossie_desm" class="btn-previa-tab" onclick="app.trocarDocPrevia('dossie_desm')" style="border-left: 3px solid #dc2626; font-weight: 700;">
+          📦 Dossiê Desmontagem (2 Págs)
+        </button>
+        <button type="button" id="tabPrevia_dossie_mont" class="btn-previa-tab active" onclick="app.trocarDocPrevia('dossie_mont')" style="border-left: 3px solid #2563eb; font-weight: 700;">
+          🔧 Dossiê Montagem (Completo)
         </button>
         <button type="button" id="tabPrevia_relatorio_desm" class="btn-previa-tab" onclick="app.trocarDocPrevia('relatorio_desm')">
           📄 Relatório Visita (Desmontagem)
         </button>
-        <button type="button" id="tabPrevia_relatorio_mont" class="btn-previa-tab" onclick="app.trocarDocPrevia('relatorio_mont')">
-          📄 Relatório Visita (Montagem)
-        </button>
         <button type="button" id="tabPrevia_checklist_desm" class="btn-previa-tab" onclick="app.trocarDocPrevia('checklist_desm')">
           📋 Checklist Desmontagem (40 Itens)
+        </button>
+        <button type="button" id="tabPrevia_relatorio_mont" class="btn-previa-tab" onclick="app.trocarDocPrevia('relatorio_mont')">
+          📄 Relatório Visita (Montagem)
         </button>
         <button type="button" id="tabPrevia_checklist" class="btn-previa-tab" onclick="app.trocarDocPrevia('checklist')">
           📋 Checklist Montagem (61 Itens)
@@ -5823,14 +5836,26 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
 
     let html = '';
     if (typeof gerarHtmlDossieCompleto === 'function') {
-      if (docTipo === 'relatorio_desm') {
+      if (docTipo === 'dossie_desm') {
+        html = (typeof gerarHtmlDossieDesmontagem === 'function')
+          ? gerarHtmlDossieDesmontagem(d, desm, relDesm, sigs)
+          : gerarHtmlDossieCompleto(d, c, relDesm, gar, fb, sigs, fotos, desm);
+      } else if (docTipo === 'dossie_mont') {
+        html = (typeof gerarHtmlDossieMontagem === 'function')
+          ? gerarHtmlDossieMontagem(d, c, relMont, gar, fb, sigs, fotos)
+          : gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm);
+      } else if (docTipo === 'dossie') {
+        html = this.modoDesmontagem
+          ? (typeof gerarHtmlDossieDesmontagem === 'function' ? gerarHtmlDossieDesmontagem(d, desm, relDesm, sigs) : gerarHtmlDossieCompleto(d, c, relDesm, gar, fb, sigs, fotos, desm))
+          : (typeof gerarHtmlDossieMontagem === 'function' ? gerarHtmlDossieMontagem(d, c, relMont, gar, fb, sigs, fotos) : gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm));
+      } else if (docTipo === 'relatorio_desm') {
         html = gerarHtmlRelatorio(d, relDesm, sigs);
       } else if (docTipo === 'relatorio_mont') {
         html = gerarHtmlRelatorio(d, relMont, sigs);
       } else if (docTipo === 'checklist_desm') {
         html = gerarHtmlChecklistDesmontagem(d, desm, sigs);
       } else if (docTipo === 'checklist') {
-        html = this.modoDesmontagem ? gerarHtmlChecklistDesmontagem(d, desm, sigs) : gerarHtmlChecklist(d, c, sigs);
+        html = gerarHtmlChecklist(d, c, sigs);
       } else if (docTipo === 'relatorio') {
         html = this.modoDesmontagem ? gerarHtmlRelatorio(d, relDesm, sigs) : gerarHtmlRelatorio(d, relMont, sigs);
       } else if (docTipo === 'garantia') {
@@ -5839,20 +5864,19 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
         html = gerarHtmlFeedback(d, fb, sigs);
       } else if (docTipo === 'fotos') {
         html = gerarHtmlAnexoFotos(d, fotos, sigs);
-      } else if (docTipo === 'dossie') {
-        if (this.modoDesmontagem) {
-          html = gerarHtmlDossieCompleto(d, c, relDesm, gar, fb, sigs, fotos, desm);
-        } else {
-          html = gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm);
-        }
       } else {
-        html = gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm);
+        html = (typeof gerarHtmlDossieMontagem === 'function')
+          ? gerarHtmlDossieMontagem(d, c, relMont, gar, fb, sigs, fotos)
+          : gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm);
       }
     }
     return html;
   },
 
   abrirModalPreviaHtml(docInicial = 'dossie') {
+    if (docInicial === 'dossie') {
+      docInicial = this.modoDesmontagem ? 'dossie_desm' : 'dossie_mont';
+    }
     this.docPreviaAtual = docInicial;
     const modal = document.getElementById('modalPrevia');
     if (!modal) return;
@@ -5888,38 +5912,17 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
   },
 
   trocarDocPrevia(tipo) {
+    if (tipo === 'dossie') {
+      tipo = this.modoDesmontagem ? 'dossie_desm' : 'dossie_mont';
+    }
     this.docPreviaAtual = tipo;
 
-    const btnGar = document.getElementById('tabPrevia_garantia');
-    const btnFb = document.getElementById('tabPrevia_feedback');
-    const btnFt = document.getElementById('tabPrevia_fotos');
-    const btnChkMont = document.getElementById('tabPrevia_checklist');
-    const btnChkDesm = document.getElementById('tabPrevia_checklist_desm');
-    const btnRelMont = document.getElementById('tabPrevia_relatorio_mont');
-    const btnRelDesm = document.getElementById('tabPrevia_relatorio_desm');
-    const btnDos = document.getElementById('tabPrevia_dossie');
-
-    if (this.modoDesmontagem) {
-      if (btnGar) btnGar.style.display = 'none';
-      if (btnFb) btnFb.style.display = 'none';
-      if (btnFt) btnFt.style.display = 'none';
-      if (btnChkMont) btnChkMont.style.display = 'none';
-      if (btnChkDesm) btnChkDesm.style.display = '';
-      if (btnRelMont) btnRelMont.style.display = '';
-      if (btnRelDesm) btnRelDesm.style.display = '';
-      if (btnDos) btnDos.textContent = '📑 Dossiê Desmontagem (2 Págs)';
-    } else {
-      if (btnGar) btnGar.style.display = '';
-      if (btnFb) btnFb.style.display = '';
-      if (btnFt) btnFt.style.display = '';
-      if (btnChkMont) btnChkMont.style.display = '';
-      if (btnChkDesm) btnChkDesm.style.display = 'none';
-      if (btnRelMont) btnRelMont.style.display = '';
-      if (btnRelDesm) btnRelDesm.style.display = '';
-      if (btnDos) btnDos.textContent = '📑 Dossiê Completo';
-    }
-
-    const allTabs = ['dossie', 'checklist', 'checklist_desm', 'relatorio_mont', 'relatorio_desm', 'relatorio', 'garantia', 'feedback', 'fotos'];
+    const allTabs = [
+      'dossie_desm', 'dossie_mont', 'dossie',
+      'checklist_desm', 'checklist',
+      'relatorio_desm', 'relatorio_mont', 'relatorio',
+      'garantia', 'feedback', 'fotos'
+    ];
     allTabs.forEach(t => {
       const btn = document.getElementById('tabPrevia_' + t);
       if (btn) btn.classList.toggle('active', t === tipo);
@@ -5939,6 +5942,15 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
       this.ultimoHtmlPrevia = html;
       iframe.srcdoc = html;
     }
+  },
+
+  imprimirDossie(tipo) {
+    const isDesm = (tipo === 'desmontagem' || tipo === 'desm');
+    const docTipo = isDesm ? 'dossie_desm' : 'dossie_mont';
+    this.trocarDocPrevia(docTipo);
+    setTimeout(() => {
+      this.imprimirDocPrevia();
+    }, 350);
   },
 
   imprimirDocPrevia() {
@@ -7796,39 +7808,68 @@ function gerarHtmlAnexoFotos(dados, fotos, sigs) {
 
 /**
  * ============================================================================
- * 6. DOSSIÊ COMPLETO CONSOLIDADO (PDF ÚNICO COM TODOS OS DOCUMENTOS E FOTOS)
+ * 6A. DOSSIÊ DE DESMONTAGEM (EXATAMENTE 2 PÁGINAS)
+ * Folha 1: Relatório de Visita Técnica (Desmontagem)
+ * Folha 2: Checklist de Desmontagem (40 Itens)
  * ============================================================================
  */
-function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos, desm) {
+function gerarHtmlDossieDesmontagem(dados, desm, relDesm, sigs) {
   function extrairCorpo(html) {
     const m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
     return m ? m[1] : html;
   }
 
-  const isDesmontagem = (dados && (dados.servico === 'DESMONTAGEM DE EQUIPAMENTO' || dados.tipoServico === 'desmontagem')) ||
-                        (rel && /DESMONTAGEM/i.test(rel.motivo)) ||
-                        (typeof app !== 'undefined' && app.modoDesmontagem);
+  dados = dados || {};
+  relDesm = relDesm || (dados ? dados.relatorio_desmontagem : null) || {};
+  if (!relDesm.motivo) relDesm.motivo = 'DESMONTAGEM DE EQUIPAMENTO';
+  desm = desm || (dados ? dados.desmontagem : null) || {};
+  sigs = sigs || (dados ? dados.assinaturas : null) || {};
 
-  if (isDesmontagem) {
-    const hDesm = extrairCorpo(gerarHtmlChecklistDesmontagem(dados, desm || chk, sigs));
-    const hRel = extrairCorpo(gerarHtmlRelatorio(dados, rel, sigs));
-    return `<!DOCTYPE html>
+  const hRel = extrairCorpo(gerarHtmlRelatorio(dados, relDesm, sigs));
+  const hDesm = extrairCorpo(gerarHtmlChecklistDesmontagem(dados, desm, sigs));
+
+  return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vatech Exacta - Desmontagem de Equipamento</title>
+<title>Vatech Exacta - Dossiê de Desmontagem (${dados && dados.idAtendimento ? dados.idAtendimento : ''})</title>
 <style>${PDF_GLOBAL_STYLE}</style>
 </head>
 <body>
-  ${hDesm}
-  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
   ${hRel}
+  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
+  ${hDesm}
 </body>
 </html>`;
+}
+
+/**
+ * ============================================================================
+ * 6B. DOSSIÊ DE MONTAGEM (COMPLETO)
+ * Folha 1: Relatório de Visita Técnica (Montagem)
+ * Folhas 2 e 3: Checklist de Montagem (61 Itens)
+ * Folha 4: Termo de Garantia (16 Cláusulas)
+ * Folha 5: Feedback do Cliente
+ * Folha 6: Anexo Fotográfico com GPS
+ * ============================================================================
+ */
+function gerarHtmlDossieMontagem(dados, chk, relMont, gar, fb, sigs, fotos) {
+  function extrairCorpo(html) {
+    const m = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+    return m ? m[1] : html;
   }
 
+  dados = dados || {};
+  relMont = relMont || (dados ? dados.relatorio_montagem : null) || {};
+  if (!relMont.motivo) relMont.motivo = 'MONTAGEM DE EQUIPAMENTO';
+  chk = chk || (dados ? dados.checklist : null) || {};
+  gar = gar || (dados ? dados.garantia : null) || {};
+  fb = fb || (dados ? dados.feedback : null) || {};
+  sigs = sigs || (dados ? dados.assinaturas : null) || {};
+  fotos = fotos || (dados ? dados.fotos : null) || {};
+
+  const hRel = extrairCorpo(gerarHtmlRelatorio(dados, relMont, sigs));
   const hChk = extrairCorpo(gerarHtmlChecklist(dados, chk, sigs));
-  const hRel = extrairCorpo(gerarHtmlRelatorio(dados, rel, sigs));
   const hGar = extrairCorpo(gerarHtmlGarantia(dados, gar, sigs));
   const hFb = extrairCorpo(gerarHtmlFeedback(dados, fb, sigs));
 
@@ -7846,19 +7887,35 @@ function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos, desm) {
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vatech Exacta - Atendimento Técnico</title>
+<title>Vatech Exacta - Dossiê de Montagem (${dados && dados.idAtendimento ? dados.idAtendimento : ''})</title>
 <style>${PDF_GLOBAL_STYLE}</style>
 </head>
 <body>
-  ${hChk}
-  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
   ${hRel}
+  <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
+  ${hChk}
   <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
   ${hGar}
   <div class="page-break-always" style="page-break-after: always; break-after: page;"></div>
   ${hFb}${hFotos}
 </body>
 </html>`;
+}
+
+/**
+ * ============================================================================
+ * 6C. DOSSIÊ CONSOLIDADO (ROTEIA AUTOMATICAMENTE PARA DESMONTAGEM OU MONTAGEM)
+ * ============================================================================
+ */
+function gerarHtmlDossieCompleto(dados, chk, rel, gar, fb, sigs, fotos, desm) {
+  const isDesmontagem = (dados && (dados.servico === 'DESMONTAGEM DE EQUIPAMENTO' || dados.tipoServico === 'desmontagem')) ||
+                        (rel && /DESMONTAGEM/i.test(rel.motivo)) ||
+                        (typeof app !== 'undefined' && app.modoDesmontagem);
+
+  if (isDesmontagem) {
+    return gerarHtmlDossieDesmontagem(dados, desm || chk, rel, sigs);
+  }
+  return gerarHtmlDossieMontagem(dados, chk, rel, gar, fb, sigs, fotos);
 }
 
 </script>
