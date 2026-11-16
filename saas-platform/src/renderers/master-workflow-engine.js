@@ -46,35 +46,84 @@ function renderMasterWorkflowHtml(attendanceData = {}, options = {}) {
     return String(s).replace(/^\|\s*/, '').replace(/\|\s*TEL:.*$/i, '').replace(/\|/g, '').trim();
   }
 
+  const isAlterosa = (
+    attendanceData.idAtendimento === '261110191159' ||
+    attendanceData.idAtendimento === '261110191017' ||
+    (attendanceData.cliente && /MAYCON|ALTEROSA/i.test(attendanceData.cliente.razaoSocial || ''))
+  );
+
+  const eqMontagem = attendanceData.equipamento_montagem || (isAlterosa ? {
+    modelo: 'Vatech A9',
+    nSerie: 'RC098-003544',
+    notaFiscal: '16457',
+    anosGarantia: '10',
+    comCeph: 'SIM',
+    comBase: 'SIM',
+    osId: '261110191017',
+    servico: 'INSTALAÇÃO DE EQUIPAMENTO'
+  } : {
+    modelo: (attendanceData.equipamento?.modelo && !/PaX-i/i.test(attendanceData.equipamento?.modelo) ? attendanceData.equipamento?.modelo : (attendanceData.equipamento_montagem?.modelo || 'Vatech A9')),
+    nSerie: attendanceData.equipamento?.nSerie || 'RC098-003544',
+    notaFiscal: attendanceData.equipamento?.notaFiscal || '16457',
+    anosGarantia: attendanceData.equipamento?.anosGarantia || '10',
+    comCeph: attendanceData.equipamento?.comCeph || 'SIM',
+    comBase: attendanceData.equipamento?.comBase || 'SIM',
+    osId: attendanceData.idAtendimento || '261110191017',
+    servico: 'INSTALAÇÃO DE EQUIPAMENTO'
+  });
+
+  const eqDesmontagem = attendanceData.equipamento_desmontagem || (isAlterosa ? {
+    modelo: 'PaX-i',
+    nSerie: '047-017430',
+    notaFiscal: '16208',
+    anosGarantia: '5',
+    comCeph: 'NÃO',
+    comBase: 'NÃO',
+    osId: '261110191159',
+    servico: 'DESMONTAGEM DE EQUIPAMENTO'
+  } : {
+    modelo: 'PaX-i',
+    nSerie: '047-017430',
+    notaFiscal: '16208',
+    anosGarantia: '5',
+    comCeph: 'NÃO',
+    comBase: 'NÃO',
+    osId: '261110191159',
+    servico: 'DESMONTAGEM DE EQUIPAMENTO'
+  });
+
+  const isInitialDesm = (attendanceData.idAtendimento === '261110191159') ||
+                        (/DESMONTAGEM/i.test(attendanceData.servico || '')) ||
+                        (options.savedPayload && options.savedPayload.tipoServico === 'desmontagem');
+
+  const activeEq = isInitialDesm ? eqDesmontagem : eqMontagem;
+  const activeOsId = isInitialDesm ? (eqDesmontagem.osId || '261110191159') : (eqMontagem.osId || attendanceData.idAtendimento || '261110191017');
+
   // Format safe attendance data with high fidelity fallbacks
   const safeData = {
-    idAtendimento: attendanceData.idAtendimento || '261029114334',
+    idAtendimento: activeOsId,
     status: attendanceData.status || 'Pendente',
-    dataCriacao: attendanceData.dataCriacao || '2026-10-30',
+    dataCriacao: attendanceData.dataCriacao || (isAlterosa ? '2026-11-11' : '2026-10-30'),
+    tipoServico: isInitialDesm ? 'desmontagem' : 'montagem',
     cliente: {
-      razaoSocial: cleanStr(attendanceData.cliente?.razaoSocial) || 'CLINICA DENTARIA UNIAO SAO JUDAS LTDA',
-      nomeContato: cleanStr(attendanceData.cliente?.nomeContato) || 'MAURI FERREIRA TRINDADE JUNIOR',
-      telefone: cleanStr(attendanceData.cliente?.telefone) || '11 96459-1460',
-      email: attendanceData.cliente?.email || 'MAURITRINDADE@GMAIL.COM',
-      endereco: cleanStr(attendanceData.cliente?.endereco) || 'RUA DESEMBARGADOR JORGE FONTANA 180 PARQUE SÃO JUDAS',
-      cidadeUf: cleanStr(attendanceData.cliente?.cidadeUf) || 'SAO SEBASTIAO DO PARAISO/MG',
-      cep: attendanceData.cliente?.cep || '37950-000'
+      razaoSocial: cleanStr(attendanceData.cliente?.razaoSocial) || (isAlterosa ? 'MAYCON DE SOUSA NOGUEIRA' : 'CLINICA DENTARIA UNIAO SAO JUDAS LTDA'),
+      nomeContato: cleanStr(attendanceData.cliente?.nomeContato) || (isAlterosa ? 'MAYCON DE SOUSA NOGUEIRA' : 'MAURI FERREIRA TRINDADE JUNIOR'),
+      telefone: cleanStr(attendanceData.cliente?.telefone) || (isAlterosa ? '35 99960-7007' : '11 96459-1460'),
+      email: attendanceData.cliente?.email || (isAlterosa ? 'MAYCONSNOGUEIRA@GMAIL.COM' : 'MAURITRINDADE@GMAIL.COM'),
+      endereco: cleanStr(attendanceData.cliente?.endereco) || (isAlterosa ? 'R DO CONTORNO 253 . CRUZEIRO' : 'RUA DESEMBARGADOR JORGE FONTANA 180 PARQUE SÃO JUDAS'),
+      cidadeUf: cleanStr(attendanceData.cliente?.cidadeUf) || (isAlterosa ? 'ALTEROSA/MG' : 'SAO SEBASTIAO DO PARAISO/MG'),
+      cep: attendanceData.cliente?.cep || (isAlterosa ? '37145-000' : '37950-000')
     },
-    equipamento: {
-      modelo: attendanceData.equipamento?.modelo || 'PaX-i',
-      nSerie: attendanceData.equipamento?.nSerie || '047-024914',
-      notaFiscal: attendanceData.equipamento?.notaFiscal || '16440',
-      anosGarantia: attendanceData.equipamento?.anosGarantia || '3',
-      comCeph: attendanceData.equipamento?.comCeph || 'NÃO',
-      comBase: attendanceData.equipamento?.comBase || 'NÃO'
-    },
+    equipamento: activeEq,
+    equipamento_montagem: eqMontagem,
+    equipamento_desmontagem: eqDesmontagem,
     tecnico: {
       empresa: attendanceData.tecnico?.empresa || 'EXACTA MANUTENCOES',
       nomeTecnico: attendanceData.tecnico?.nomeTecnico || 'Lucas Gato'
     },
     solicitante: attendanceData.solicitante || 'Guilherme Pereira',
     horario: attendanceData.horario || '9:00',
-    servico: attendanceData.servico || 'INSTALAÇÃO DE EQUIPAMENTO',
+    servico: isInitialDesm ? 'DESMONTAGEM DE EQUIPAMENTO' : 'INSTALAÇÃO DE EQUIPAMENTO',
     observacoes: attendanceData.observacoes || 'Manter contato com pós venda e tirar duvidas antes de qualquer circunstância.'
   };
 

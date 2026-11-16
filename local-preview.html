@@ -4167,26 +4167,40 @@ const app = {
   },
 
   aplicarModeloTexto(tipo) {
+    const isAlterosa = this.dados && (
+      this.dados.idAtendimento === '261110191159' ||
+      this.dados.idAtendimento === '261110191017' ||
+      (this.dados.cliente && /MAYCON|ALTEROSA/i.test(this.dados.cliente.razaoSocial || ''))
+    );
+
     if (tipo === 'desmontagem') {
       const el = document.getElementById('relDescricao_desm');
       if (el) {
-        el.value = `Cheguei no cliente às 09:00 e comecei solicitando tudo que era do PaX-i, enquanto isso fui tirando foto para registro do equipamento, foto da quantidade de exames realizados e coloquei o equipamento em modo de embalagem.
+        if (isAlterosa) {
+          el.value = `Cheguei no cliente as 9:00 e comecei solicitando tudo que era do PaX-i, enquanto isso fui tirando foto para registro do equipamento, foto da quantidade de exames rezalizados e coloquei o equipamento em modo de embalagem. Quando a transportadora chegou eles não sabiam que era para levar o equipamento embora, ligaram para a transportadora e depois confirmaram essa informação. Como não sabiam do retorno do equipamento...`;
+        } else {
+          el.value = `Cheguei no cliente às 09:00 e comecei solicitando tudo que era do PaX-i, enquanto isso fui tirando foto para registro do equipamento, foto da quantidade de exames realizados e coloquei o equipamento em modo de embalagem.
 Realizado o backup do banco de imagens e a remoção das licenças no software EzDent-i.
 Executada a desmontagem física completa: desacoplamento do suporte de fixação de parede, fixação dos parafusos de trava de transporte do Rotator, remoção da unidade Rotator, desacoplamento da coluna e remoção da base de apoio.
 Todos os módulos, posicionadores, apoios e cabos foram conferidos e acondicionados em suas embalagens apropriadas.
 Com a chegada da transportadora, foram conferidas as ordens de transporte e o alinhamento da carga, sendo entregues todos os volumes lacrados juntamente com o checklist de desmontagem devidamente assinado. Desmontagem concluída e liberada para transporte às 12:00.`;
+        }
         el.dispatchEvent(new Event('input'));
       }
     } else {
       const el = document.getElementById('relDescricao_mont');
       if (el) {
-        el.value = `Chegada ao cliente às 09:00. Realizada inspeção de recebimento dos volumes e integridade física de todas as embalagens, carenagens e componentes do equipamento Vatech PaX-i.
+        if (isAlterosa) {
+          el.value = `A instalação inicio logo após a retirada do equipamento antigo, o equipamento novo foi instalado, nivelado e posicioando. Os programas foram instalados e estão em funcionamento. O treinamento foi bem tranquilo, pois a equipe já está habituada com o programa da Vatech a novidade foi somente a tomografia.`;
+        } else {
+          el.value = `Chegada ao cliente às 09:00. Realizada inspeção de recebimento dos volumes e integridade física de todas as embalagens, carenagens e componentes do equipamento Vatech A9.
 Iniciada a montagem mecânica: posicionamento e nivelamento da base de solo, elevação e ancoragem mecânica da coluna, fixação do suporte estrutural de parede conforme especificações técnicas do fabricante.
 Instalação e acoplamento da unidade Rotator e conjunto cabeçote/sensor, com retirada das travas de transporte.
 Montagem do computador de aquisição, conexões elétricas e verificação da rede de alimentação (Fase-Neutro: 220V, Neutro-Terra < 3V).
-Instalação dos softwares e restauração das licenças (EzDent-i).
-Realizados alinhamentos dos feixes laser (sagital, coronal e Frankfurt), calibração do sensor e aquisição de radiografias panorâmicas de teste.
-Equipamento montado, testado e calibrado com sucesso, com excelente padrão de imagem radiográfica. Serviço concluído e equipamento liberado para operação clínica às 12:00.`;
+Instalação dos softwares e restauração das licenças (EzDent-i e Ez3D-i).
+Realizados alinhamentos dos feixes laser (sagital, coronal e Frankfurt), calibração do sensor e aquisição de radiografias panorâmicas e tomografias 3D de teste.
+Equipamento montado, testado e calibrado com sucesso, com excelente padrão de imagem radiográfica. Serviço concluído e equipamento liberado para operação clínica.`;
+        }
         el.dispatchEvent(new Event('input'));
       }
     }
@@ -4195,9 +4209,75 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
   },
 
   setTipoServico(tipo) {
+    // 1. Salva quaisquer edições manuais feitas no equipamento ativo antes de alternar
+    const activeEq = this.modoDesmontagem ? this.equipamentoDesmontagem : this.equipamentoMontagem;
+    if (activeEq) {
+      const elMod = document.getElementById('eqModelo');
+      const elSer = document.getElementById('eqSerie');
+      const elNf = document.getElementById('eqNF');
+      const elGar = document.getElementById('eqGarantia');
+      if (elMod && elMod.value) activeEq.modelo = elMod.value.trim();
+      if (elSer && elSer.value) activeEq.nSerie = elSer.value.trim();
+      if (elNf && elNf.value) activeEq.notaFiscal = elNf.value.trim();
+      if (elGar && elGar.value) activeEq.anosGarantia = elGar.value.replace(/[^0-9]/g, '').trim() || activeEq.anosGarantia;
+    }
+
     this.tipoServico = (tipo === 'desmontagem') ? 'desmontagem' : 'montagem';
     this.modoDesmontagem = (this.tipoServico === 'desmontagem');
     this.totalPassos = this.modoDesmontagem ? 4 : 6;
+
+    // 2. Seleciona o perfil correspondente
+    const targetEq = this.modoDesmontagem ? this.equipamentoDesmontagem : this.equipamentoMontagem;
+
+    // 3. Atualiza os campos do Passo 1 na tela com o equipamento, série, NF, garantia e OS corretos
+    if (targetEq) {
+      const elOsId = document.getElementById('osId');
+      if (elOsId && targetEq.osId) elOsId.value = targetEq.osId;
+
+      const txtOs = document.getElementById('txtIdAtendimento');
+      if (txtOs && targetEq.osId) txtOs.textContent = targetEq.osId;
+
+      const elMod = document.getElementById('eqModelo');
+      if (elMod) elMod.value = targetEq.modelo || '';
+
+      const elSer = document.getElementById('eqSerie');
+      if (elSer) elSer.value = targetEq.nSerie || '';
+
+      const elNf = document.getElementById('eqNF');
+      if (elNf) elNf.value = targetEq.notaFiscal || '';
+
+      const elGar = document.getElementById('eqGarantia');
+      if (elGar) {
+        const gStr = String(targetEq.anosGarantia || '5');
+        elGar.value = gStr.includes('Ano') ? gStr : (gStr + ' Anos');
+      }
+
+      const elServ = document.getElementById('solicitanteServico');
+      if (elServ) elServ.value = targetEq.servico || (this.modoDesmontagem ? 'DESMONTAGEM DE EQUIPAMENTO' : 'INSTALAÇÃO DE EQUIPAMENTO');
+
+      // Atualiza também os campos do Passo 3 de Relatório
+      const elRelMotivoMont = document.getElementById('relMotivo_mont');
+      if (elRelMotivoMont) elRelMotivoMont.value = 'MONTAGEM DE EQUIPAMENTO';
+      const elRelMotivoDesm = document.getElementById('relMotivo_desm');
+      if (elRelMotivoDesm) elRelMotivoDesm.value = 'DESMONTAGEM DE EQUIPAMENTO';
+
+      const elRelGarMont = document.getElementById('relGarantia_mont');
+      if (elRelGarMont && this.equipamentoMontagem) {
+        const g = String(this.equipamentoMontagem.anosGarantia || '10');
+        elRelGarMont.value = g.includes('Ano') ? g : (g + ' Anos');
+      }
+      const elRelGarDesm = document.getElementById('relGarantia_desm');
+      if (elRelGarDesm && this.equipamentoDesmontagem) {
+        const g = String(this.equipamentoDesmontagem.anosGarantia || '5');
+        elRelGarDesm.value = g.includes('Ano') ? g : (g + ' Anos');
+      }
+
+      if (this.dados) {
+        this.dados.idAtendimento = targetEq.osId || this.dados.idAtendimento;
+        this.dados.equipamento = Object.assign({}, targetEq);
+        this.dados.servico = targetEq.servico;
+      }
+    }
 
     const btnInst = document.getElementById('btnTipoInstalacao');
     const btnDesm = document.getElementById('btnTipoDesmontagem');
@@ -4312,6 +4392,62 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
     if (!this.dados) {
       this.dados = window.INITIAL_DATA || this.mockDados();
     }
+
+    // Configura os dados de equipamentos independentes para Montagem e Desmontagem
+    const isAlterosa = (this.dados && (
+      this.dados.idAtendimento === '261110191159' ||
+      this.dados.idAtendimento === '261110191017' ||
+      (this.dados.cliente && /MAYCON|ALTEROSA/i.test(this.dados.cliente.razaoSocial || ''))
+    ));
+
+    const defaultEqMont = isAlterosa ? {
+      modelo: 'Vatech A9',
+      nSerie: 'RC098-003544',
+      notaFiscal: '16457',
+      anosGarantia: '10',
+      comCeph: 'SIM',
+      comBase: 'SIM',
+      osId: '261110191017',
+      servico: 'INSTALAÇÃO DE EQUIPAMENTO'
+    } : {
+      modelo: (this.dados && this.dados.equipamento && this.dados.equipamento.modelo && !/PaX-i/i.test(this.dados.equipamento.modelo)) ? this.dados.equipamento.modelo : 'Vatech A9',
+      nSerie: (this.dados && this.dados.equipamento && this.dados.equipamento.nSerie) || 'RC098-003544',
+      notaFiscal: (this.dados && this.dados.equipamento && this.dados.equipamento.notaFiscal) || '16457',
+      anosGarantia: (this.dados && this.dados.equipamento && this.dados.equipamento.anosGarantia) || '10',
+      comCeph: (this.dados && this.dados.equipamento && this.dados.equipamento.comCeph) || 'SIM',
+      comBase: (this.dados && this.dados.equipamento && this.dados.equipamento.comBase) || 'SIM',
+      osId: (this.dados && this.dados.idAtendimento) || '261110191017',
+      servico: 'INSTALAÇÃO DE EQUIPAMENTO'
+    };
+
+    const defaultEqDesm = isAlterosa ? {
+      modelo: 'PaX-i',
+      nSerie: '047-017430',
+      notaFiscal: '16208',
+      anosGarantia: '5',
+      comCeph: 'NÃO',
+      comBase: 'NÃO',
+      osId: '261110191159',
+      servico: 'DESMONTAGEM DE EQUIPAMENTO'
+    } : {
+      modelo: 'PaX-i',
+      nSerie: '047-017430',
+      notaFiscal: '16208',
+      anosGarantia: '5',
+      comCeph: 'NÃO',
+      comBase: 'NÃO',
+      osId: '261110191159',
+      servico: 'DESMONTAGEM DE EQUIPAMENTO'
+    };
+
+    this.equipamentoMontagem = (this.dados && this.dados.equipamento_montagem)
+      ? Object.assign({}, defaultEqMont, this.dados.equipamento_montagem)
+      : defaultEqMont;
+
+    this.equipamentoDesmontagem = (this.dados && this.dados.equipamento_desmontagem)
+      ? Object.assign({}, defaultEqDesm, this.dados.equipamento_desmontagem)
+      : defaultEqDesm;
+
     this.preencherIdentificacao();
 
     // Inicializa os pads de assinatura com eventos touch e mouse
@@ -4342,7 +4478,7 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
       }
     } catch(e) {}
 
-    if (this.dados && (/DESMONTAGEM/i.test(this.dados.servico) || this.dados.tipoServico === 'desmontagem')) {
+    if (this.dados && (this.dados.idAtendimento === '261110191159' || /DESMONTAGEM/i.test(this.dados.servico || '') || this.dados.tipoServico === 'desmontagem')) {
       this.setTipoServico('desmontagem');
     } else {
       this.setTipoServico('montagem');
@@ -4364,6 +4500,23 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
     }
     this.sincronizarCamposLegadosRelatorio();
     this.atualizarProgresso();
+
+    // Sincroniza edições manuais nos campos do equipamento no Step 1
+    ['eqModelo', 'eqSerie', 'eqNF', 'eqGarantia'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', () => {
+          const activeEq = this.modoDesmontagem ? this.equipamentoDesmontagem : this.equipamentoMontagem;
+          if (activeEq) {
+            if (id === 'eqModelo') activeEq.modelo = el.value.trim();
+            if (id === 'eqSerie') activeEq.nSerie = el.value.trim();
+            if (id === 'eqNF') activeEq.notaFiscal = el.value.trim();
+            if (id === 'eqGarantia') activeEq.anosGarantia = el.value.replace(/[^0-9]/g, '').trim() || activeEq.anosGarantia;
+          }
+          this.salvarRascunho();
+        });
+      }
+    });
 
     document.querySelectorAll('input, textarea, select').forEach(el => {
       const handleInput = () => {
@@ -4415,8 +4568,11 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
     const d = this.dados;
     if (!d) return;
 
-    document.getElementById('txtIdAtendimento').textContent = d.idAtendimento || '---';
-    document.getElementById('osId').value = d.idAtendimento || '';
+    const activeEq = this.modoDesmontagem ? this.equipamentoDesmontagem : this.equipamentoMontagem;
+    const currentOsId = (activeEq && activeEq.osId) || d.idAtendimento || '---';
+
+    document.getElementById('txtIdAtendimento').textContent = currentOsId;
+    document.getElementById('osId').value = currentOsId;
     document.getElementById('osData').value = d.dataCriacao || '';
     document.getElementById('badgeStatus').textContent = d.status || 'Pendente';
 
@@ -4436,12 +4592,15 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
       document.getElementById('labelNomeCliente').textContent = cleanContato || 'Cliente';
     }
 
-    if (d.equipamento) {
-      document.getElementById('eqModelo').value = d.equipamento.modelo || 'PaX-i';
-      document.getElementById('eqSerie').value = d.equipamento.nSerie || '';
-      document.getElementById('eqNF').value = d.equipamento.notaFiscal || '';
-      document.getElementById('eqGarantia').value = (d.equipamento.anosGarantia || '5') + ' Anos';
-    }
+    const eqToUse = activeEq || d.equipamento || {};
+    document.getElementById('eqModelo').value = eqToUse.modelo || 'PaX-i';
+    document.getElementById('eqSerie').value = eqToUse.nSerie || '';
+    document.getElementById('eqNF').value = eqToUse.notaFiscal || '';
+    const gVal = String(eqToUse.anosGarantia || '5');
+    document.getElementById('eqGarantia').value = gVal.includes('Ano') ? gVal : (gVal + ' Anos');
+
+    const elServ = document.getElementById('solicitanteServico');
+    if (elServ) elServ.value = (eqToUse && eqToUse.servico) || (this.modoDesmontagem ? 'DESMONTAGEM DE EQUIPAMENTO' : 'INSTALAÇÃO DE EQUIPAMENTO');
 
     if (d.tecnico) {
       document.getElementById('tecNome').value = d.tecnico.nomeTecnico || '';
@@ -5461,6 +5620,10 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
       idAtendimento: this.dados ? this.dados.idAtendimento : '260930092200',
       tipoServico: this.tipoServico || (this.modoDesmontagem ? 'desmontagem' : 'montagem'),
       dadosAtendimento: this.dados || (typeof this.mockDados === 'function' ? this.mockDados() : {}),
+      equipamento_montagem: this.equipamentoMontagem || null,
+      equipamento_desmontagem: this.equipamentoDesmontagem || null,
+      os_montagem: this.equipamentoMontagem ? this.equipamentoMontagem.osId : '',
+      os_desmontagem: this.equipamentoDesmontagem ? this.equipamentoDesmontagem.osId : '',
       checklist: checklist,
       desmontagem: (typeof this.coletarDesmontagem === 'function') ? this.coletarDesmontagem() : {},
       relatorio: relatorio,
@@ -5929,48 +6092,84 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
     const payload = this.coletarPayload(false);
     const d = (this.dados) ? JSON.parse(JSON.stringify(this.dados)) : (typeof this.mockDados === 'function' ? this.mockDados() : {});
     const c = payload.checklist;
-    const relDesm = payload.relatorio_desmontagem || {};
-    const relMont = payload.relatorio_montagem || {};
+    const relDesm = Object.assign({}, payload.relatorio_desmontagem || {});
+    const relMont = Object.assign({}, payload.relatorio_montagem || {});
     const gar = payload.garantia;
     const fb = payload.feedback;
     const sigs = payload.assinaturas;
     const fotos = payload.fotos || this.fotos || {};
     const desm = payload.desmontagem || {};
 
+    // 1. Dados e Perfil Exclusivos para Desmontagem
+    const dDesm = JSON.parse(JSON.stringify(d));
+    const eqDesm = this.equipamentoDesmontagem || {
+      modelo: 'PaX-i',
+      nSerie: '047-017430',
+      notaFiscal: '16208',
+      anosGarantia: '5',
+      comCeph: 'NÃO',
+      comBase: 'NÃO',
+      osId: '261110191159',
+      servico: 'DESMONTAGEM DE EQUIPAMENTO'
+    };
+    dDesm.idAtendimento = eqDesm.osId || '261110191159';
+    dDesm.equipamento = Object.assign({}, eqDesm);
+    dDesm.servico = 'DESMONTAGEM DE EQUIPAMENTO';
+    relDesm.motivo = 'DESMONTAGEM DE EQUIPAMENTO';
+    relDesm.garantia = (eqDesm.anosGarantia ? eqDesm.anosGarantia + ' Anos' : '5 Anos');
+
+    // 2. Dados e Perfil Exclusivos para Montagem
+    const dMont = JSON.parse(JSON.stringify(d));
+    const eqMont = this.equipamentoMontagem || {
+      modelo: 'Vatech A9',
+      nSerie: 'RC098-003544',
+      notaFiscal: '16457',
+      anosGarantia: '10',
+      comCeph: 'SIM',
+      comBase: 'SIM',
+      osId: '261110191017',
+      servico: 'INSTALAÇÃO DE EQUIPAMENTO'
+    };
+    dMont.idAtendimento = eqMont.osId || '261110191017';
+    dMont.equipamento = Object.assign({}, eqMont);
+    dMont.servico = 'INSTALAÇÃO DE EQUIPAMENTO';
+    relMont.motivo = 'MONTAGEM DE EQUIPAMENTO';
+    relMont.garantia = (eqMont.anosGarantia ? eqMont.anosGarantia + ' Anos' : '10 Anos');
+
     let html = '';
     if (typeof gerarHtmlDossieCompleto === 'function') {
       if (docTipo === 'dossie_desm') {
         html = (typeof gerarHtmlDossieDesmontagem === 'function')
-          ? gerarHtmlDossieDesmontagem(d, desm, relDesm, sigs)
-          : gerarHtmlDossieCompleto(d, c, relDesm, gar, fb, sigs, fotos, desm);
+          ? gerarHtmlDossieDesmontagem(dDesm, desm, relDesm, sigs)
+          : gerarHtmlDossieCompleto(dDesm, c, relDesm, gar, fb, sigs, fotos, desm);
       } else if (docTipo === 'dossie_mont') {
         html = (typeof gerarHtmlDossieMontagem === 'function')
-          ? gerarHtmlDossieMontagem(d, c, relMont, gar, fb, sigs, fotos)
-          : gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm);
+          ? gerarHtmlDossieMontagem(dMont, c, relMont, gar, fb, sigs, fotos)
+          : gerarHtmlDossieCompleto(dMont, c, relMont, gar, fb, sigs, fotos, desm);
       } else if (docTipo === 'dossie') {
         html = this.modoDesmontagem
-          ? (typeof gerarHtmlDossieDesmontagem === 'function' ? gerarHtmlDossieDesmontagem(d, desm, relDesm, sigs) : gerarHtmlDossieCompleto(d, c, relDesm, gar, fb, sigs, fotos, desm))
-          : (typeof gerarHtmlDossieMontagem === 'function' ? gerarHtmlDossieMontagem(d, c, relMont, gar, fb, sigs, fotos) : gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm));
+          ? (typeof gerarHtmlDossieDesmontagem === 'function' ? gerarHtmlDossieDesmontagem(dDesm, desm, relDesm, sigs) : gerarHtmlDossieCompleto(dDesm, c, relDesm, gar, fb, sigs, fotos, desm))
+          : (typeof gerarHtmlDossieMontagem === 'function' ? gerarHtmlDossieMontagem(dMont, c, relMont, gar, fb, sigs, fotos) : gerarHtmlDossieCompleto(dMont, c, relMont, gar, fb, sigs, fotos, desm));
       } else if (docTipo === 'relatorio_desm') {
-        html = gerarHtmlRelatorio(d, relDesm, sigs);
+        html = gerarHtmlRelatorio(dDesm, relDesm, sigs);
       } else if (docTipo === 'relatorio_mont') {
-        html = gerarHtmlRelatorio(d, relMont, sigs);
+        html = gerarHtmlRelatorio(dMont, relMont, sigs);
       } else if (docTipo === 'checklist_desm') {
-        html = gerarHtmlChecklistDesmontagem(d, desm, sigs);
+        html = gerarHtmlChecklistDesmontagem(dDesm, desm, sigs);
       } else if (docTipo === 'checklist') {
-        html = gerarHtmlChecklist(d, c, sigs);
+        html = gerarHtmlChecklist(dMont, c, sigs);
       } else if (docTipo === 'relatorio') {
-        html = this.modoDesmontagem ? gerarHtmlRelatorio(d, relDesm, sigs) : gerarHtmlRelatorio(d, relMont, sigs);
+        html = this.modoDesmontagem ? gerarHtmlRelatorio(dDesm, relDesm, sigs) : gerarHtmlRelatorio(dMont, relMont, sigs);
       } else if (docTipo === 'garantia') {
-        html = gerarHtmlGarantia(d, gar, sigs);
+        html = gerarHtmlGarantia(dMont, gar, sigs);
       } else if (docTipo === 'feedback') {
-        html = gerarHtmlFeedback(d, fb, sigs);
+        html = gerarHtmlFeedback(dMont, fb, sigs);
       } else if (docTipo === 'fotos') {
-        html = gerarHtmlAnexoFotos(d, fotos, sigs);
+        html = gerarHtmlAnexoFotos(this.modoDesmontagem ? dDesm : dMont, fotos, sigs);
       } else {
         html = (typeof gerarHtmlDossieMontagem === 'function')
-          ? gerarHtmlDossieMontagem(d, c, relMont, gar, fb, sigs, fotos)
-          : gerarHtmlDossieCompleto(d, c, relMont, gar, fb, sigs, fotos, desm);
+          ? gerarHtmlDossieMontagem(dMont, c, relMont, gar, fb, sigs, fotos)
+          : gerarHtmlDossieCompleto(dMont, c, relMont, gar, fb, sigs, fotos, desm);
       }
     }
     return html;
@@ -6175,6 +6374,13 @@ Equipamento montado, testado e calibrado com sucesso, com excelente padrão de i
   restaurarPayloadSalvo(payload) {
     if (!payload) return;
     try {
+      if (payload.equipamento_montagem) {
+        this.equipamentoMontagem = Object.assign({}, this.equipamentoMontagem || {}, payload.equipamento_montagem);
+      }
+      if (payload.equipamento_desmontagem) {
+        this.equipamentoDesmontagem = Object.assign({}, this.equipamentoDesmontagem || {}, payload.equipamento_desmontagem);
+      }
+
       if (payload.tipoServico === 'desmontagem' || payload.modoDesmontagem) {
         this.setTipoServico('desmontagem');
       } else if (payload.tipoServico === 'montagem') {

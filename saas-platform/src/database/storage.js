@@ -90,20 +90,21 @@ module.exports = {
   getAttendances(query = '') {
     let list = readJson(ATTENDANCES_FILE, null);
     if (!list) {
-      // Se attendances.json ainda não existe, importa os atendimentos existentes em batches.json
       list = [];
-      const batches = readJson(BATCHES_FILE, []);
-      const map = new Map();
+    }
 
-      // Atendimento de Desmontagem de referência (PaX-i 047-017430)
+    const map = new Map(list.map(item => [item.idAtendimento || item.id, item]));
+
+    // 1. Atendimento de Desmontagem de referência (PaX-i 047-017430)
+    if (!map.has('261110191159') || !map.get('261110191159').attendanceData) {
       map.set('261110191159', {
         id: 'att_261110191159',
         idAtendimento: '261110191159',
         clienteNome: 'MAYCON DE SOUSA NOGUEIRA',
-        clienteContato: 'com pós venda e tirar duvidas antes de qualquer circunstância.',
+        clienteContato: 'MAYCON DE SOUSA NOGUEIRA',
         clienteTelefone: '35 99960-7007',
         clienteCidadeUf: 'ALTEROSA/MG',
-        clienteEndereco: 'R DO CONTORNO 253 , CRUZEIRO',
+        clienteEndereco: 'R DO CONTORNO 253 . CRUZEIRO',
         clienteCep: '37145-000',
         equipamentoModelo: 'PaX-i',
         equipamentoSerie: '047-017430',
@@ -117,45 +118,165 @@ module.exports = {
         dataAtualizacao: new Date().toISOString(),
         temAssinaturas: true,
         temFotos: false,
+        attendanceData: {
+          idAtendimento: '261110191159',
+          servico: 'DESMONTAGEM DE EQUIPAMENTO',
+          tipoServico: 'desmontagem',
+          cliente: {
+            razaoSocial: 'MAYCON DE SOUSA NOGUEIRA',
+            nomeContato: 'MAYCON DE SOUSA NOGUEIRA',
+            telefone: '35 99960-7007',
+            email: 'MAYCONSNOGUEIRA@GMAIL.COM',
+            endereco: 'R DO CONTORNO 253 . CRUZEIRO',
+            cidadeUf: 'ALTEROSA/MG',
+            cep: '37145-000'
+          },
+          equipamento: {
+            modelo: 'PaX-i',
+            nSerie: '047-017430',
+            notaFiscal: '16208',
+            anosGarantia: '5',
+            comCeph: 'NÃO',
+            comBase: 'NÃO'
+          },
+          equipamento_desmontagem: {
+            modelo: 'PaX-i',
+            nSerie: '047-017430',
+            notaFiscal: '16208',
+            anosGarantia: '5',
+            comCeph: 'NÃO',
+            comBase: 'NÃO',
+            osId: '261110191159',
+            servico: 'DESMONTAGEM DE EQUIPAMENTO'
+          },
+          equipamento_montagem: {
+            modelo: 'Vatech A9',
+            nSerie: 'RC098-003544',
+            notaFiscal: '16457',
+            anosGarantia: '10',
+            comCeph: 'SIM',
+            comBase: 'SIM',
+            osId: '261110191017',
+            servico: 'INSTALAÇÃO DE EQUIPAMENTO'
+          },
+          tecnico: { empresa: 'EXACTA MANUTENCOES', nomeTecnico: 'Lucas Gato' },
+          solicitante: 'Guilherme Pereira',
+          horario: '9:00',
+          observacoes: 'Manter contato com pós venda e tirar duvidas antes de qualquer circunstância.'
+        },
         payload: null
       });
+    }
 
-      for (const b of batches) {
-        if (b && b.attendanceData) {
-          const ad = b.attendanceData;
-          const cliName = cleanClientName(ad.cliente?.razaoSocial);
-          const osId = ad.idAtendimento || '261029114334';
-          if (cliName && cliName !== '...' && !map.has(osId)) {
-            map.set(osId, {
-              id: b.id || ('att_' + osId),
-              idAtendimento: osId,
-              clienteNome: cliName,
-              clienteContato: cleanClientName(ad.cliente?.nomeContato),
-              clienteTelefone: cleanClientName(ad.cliente?.telefone),
-              clienteCidadeUf: cleanClientName(ad.cliente?.cidadeUf),
-              clienteEndereco: cleanClientName(ad.cliente?.endereco),
-              clienteCep: ad.cliente?.cep || '',
-              equipamentoModelo: ad.equipamento?.modelo || 'PaX-i',
-              equipamentoSerie: ad.equipamento?.nSerie || '',
-              equipamentoNF: ad.equipamento?.notaFiscal || '',
-              tipoServico: ad.servico && /DESMONTAGEM/i.test(ad.servico) ? 'Desmontagem' : 'Montagem',
-              dataAtendimento: ad.dataCriacao || new Date().toISOString().split('T')[0],
-              tecnicoNome: ad.tecnico?.nomeTecnico || 'Lucas Gato',
-              tecnicoEmpresa: ad.tecnico?.empresa || 'EXACTA MANUTENCOES',
-              status: 'Salvo',
-              dataCriacao: b.createdAt || new Date().toISOString(),
-              dataAtualizacao: b.createdAt || new Date().toISOString(),
-              temAssinaturas: false,
-              temFotos: false,
-              attendanceData: ad,
-              payload: b.savedPayload || null
-            });
-          }
+    // 2. Atendimento de Montagem de referência (Vatech A9 RC098-003544)
+    if (!map.has('261110191017') || !map.get('261110191017').attendanceData) {
+      map.set('261110191017', {
+        id: 'att_261110191017',
+        idAtendimento: '261110191017',
+        clienteNome: 'MAYCON DE SOUSA NOGUEIRA',
+        clienteContato: 'MAYCON DE SOUSA NOGUEIRA',
+        clienteTelefone: '35 99960-7007',
+        clienteCidadeUf: 'ALTEROSA/MG',
+        clienteEndereco: 'R DO CONTORNO 253 . CRUZEIRO',
+        clienteCep: '37145-000',
+        equipamentoModelo: 'Vatech A9',
+        equipamentoSerie: 'RC098-003544',
+        equipamentoNF: '16457',
+        tipoServico: 'Montagem',
+        dataAtendimento: '2026-11-15',
+        tecnicoNome: 'Lucas Gato',
+        tecnicoEmpresa: 'EXACTA MANUTENCOES',
+        status: 'Homologado',
+        dataCriacao: new Date().toISOString(),
+        dataAtualizacao: new Date().toISOString(),
+        temAssinaturas: true,
+        temFotos: false,
+        attendanceData: {
+          idAtendimento: '261110191017',
+          servico: 'INSTALAÇÃO DE EQUIPAMENTO',
+          tipoServico: 'montagem',
+          cliente: {
+            razaoSocial: 'MAYCON DE SOUSA NOGUEIRA',
+            nomeContato: 'MAYCON DE SOUSA NOGUEIRA',
+            telefone: '35 99960-7007',
+            email: 'MAYCONSNOGUEIRA@GMAIL.COM',
+            endereco: 'R DO CONTORNO 253 . CRUZEIRO',
+            cidadeUf: 'ALTEROSA/MG',
+            cep: '37145-000'
+          },
+          equipamento: {
+            modelo: 'Vatech A9',
+            nSerie: 'RC098-003544',
+            notaFiscal: '16457',
+            anosGarantia: '10',
+            comCeph: 'SIM',
+            comBase: 'SIM'
+          },
+          equipamento_montagem: {
+            modelo: 'Vatech A9',
+            nSerie: 'RC098-003544',
+            notaFiscal: '16457',
+            anosGarantia: '10',
+            comCeph: 'SIM',
+            comBase: 'SIM',
+            osId: '261110191017',
+            servico: 'INSTALAÇÃO DE EQUIPAMENTO'
+          },
+          equipamento_desmontagem: {
+            modelo: 'PaX-i',
+            nSerie: '047-017430',
+            notaFiscal: '16208',
+            anosGarantia: '5',
+            comCeph: 'NÃO',
+            comBase: 'NÃO',
+            osId: '261110191159',
+            servico: 'DESMONTAGEM DE EQUIPAMENTO'
+          },
+          tecnico: { empresa: 'EXACTA MANUTENCOES', nomeTecnico: 'Lucas Gato' },
+          solicitante: 'Guilherme Pereira',
+          horario: '9:00',
+          observacoes: 'Manter contato com pós venda e tirar duvidas antes de qualquer circunstância.'
+        },
+        payload: null
+      });
+    }
+
+    const batches = readJson(BATCHES_FILE, []);
+    for (const b of batches) {
+      if (b && b.attendanceData) {
+        const ad = b.attendanceData;
+        const cliName = cleanClientName(ad.cliente?.razaoSocial);
+        const osId = ad.idAtendimento || '261029114334';
+        if (cliName && cliName !== '...' && !map.has(osId)) {
+          map.set(osId, {
+            id: b.id || ('att_' + osId),
+            idAtendimento: osId,
+            clienteNome: cliName,
+            clienteContato: cleanClientName(ad.cliente?.nomeContato),
+            clienteTelefone: cleanClientName(ad.cliente?.telefone),
+            clienteCidadeUf: cleanClientName(ad.cliente?.cidadeUf),
+            clienteEndereco: cleanClientName(ad.cliente?.endereco),
+            clienteCep: ad.cliente?.cep || '',
+            equipamentoModelo: ad.equipamento?.modelo || 'PaX-i',
+            equipamentoSerie: ad.equipamento?.nSerie || '',
+            equipamentoNF: ad.equipamento?.notaFiscal || '',
+            tipoServico: ad.servico && /DESMONTAGEM/i.test(ad.servico) ? 'Desmontagem' : 'Montagem',
+            dataAtendimento: ad.dataCriacao || new Date().toISOString().split('T')[0],
+            tecnicoNome: ad.tecnico?.nomeTecnico || 'Lucas Gato',
+            tecnicoEmpresa: ad.tecnico?.empresa || 'EXACTA MANUTENCOES',
+            status: 'Salvo',
+            dataCriacao: b.createdAt || new Date().toISOString(),
+            dataAtualizacao: b.createdAt || new Date().toISOString(),
+            temAssinaturas: false,
+            temFotos: false,
+            attendanceData: ad,
+            payload: b.savedPayload || null
+          });
         }
       }
-      list = Array.from(map.values());
-      writeJson(ATTENDANCES_FILE, list);
     }
+    list = Array.from(map.values());
+    writeJson(ATTENDANCES_FILE, list);
 
     if (query) {
       const q = query.toLowerCase().trim();
@@ -163,6 +284,7 @@ module.exports = {
         (a.clienteNome && a.clienteNome.toLowerCase().includes(q)) ||
         (a.idAtendimento && a.idAtendimento.toLowerCase().includes(q)) ||
         (a.equipamentoSerie && a.equipamentoSerie.toLowerCase().includes(q)) ||
+        (a.equipamentoModelo && a.equipamentoModelo.toLowerCase().includes(q)) ||
         (a.clienteCidadeUf && a.clienteCidadeUf.toLowerCase().includes(q)) ||
         (a.tipoServico && a.tipoServico.toLowerCase().includes(q)) ||
         (a.tecnicoNome && a.tecnicoNome.toLowerCase().includes(q))
@@ -173,7 +295,14 @@ module.exports = {
 
   getAttendanceById(id) {
     const list = this.getAttendances();
-    return list.find(a => a.id === id || a.idAtendimento === id || ('os_' + a.idAtendimento) === id);
+    const cleanId = String(id).replace(/^(?:os_|att_)/, '');
+    return list.find(a =>
+      a.id === id ||
+      a.idAtendimento === id ||
+      a.idAtendimento === cleanId ||
+      ('os_' + a.idAtendimento) === id ||
+      ('att_' + a.idAtendimento) === id
+    );
   },
 
   saveAttendance(data) {

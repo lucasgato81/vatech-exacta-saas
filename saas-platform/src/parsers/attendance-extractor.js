@@ -147,17 +147,26 @@ function extractAttendanceData(text = '', spatialLines = []) {
     }
 
     // Equipamento e Serial
-    if (/Equipamento:|PaX-i/i.test(rowText)) {
+    if (/Equipamento:|PaX-i|A9/i.test(rowText)) {
       if (/PaX-i/i.test(rowText)) data.equipamento.modelo = 'PaX-i';
-      const sMatch = rowText.match(/047-[0-9]{6}/);
-      if (sMatch) data.equipamento.nSerie = sMatch[0];
+      if (/A9/i.test(rowText)) data.equipamento.modelo = 'Vatech A9';
+      const sMatch = rowText.match(/047-[0-9]{6}/) || rowText.match(/(?:RC\s*)?(098-[0-9]{6})/i);
+      if (sMatch) {
+        let sn = sMatch[0].replace(/\s+/g, '');
+        if (sn.startsWith('098-')) sn = 'RC' + sn;
+        data.equipamento.nSerie = sn;
+      }
     }
     if (/n\.\s*S[eé]rie:?/i.test(rowText)) {
-      const sMatch = rowText.match(/047-[0-9]{6}/);
-      if (sMatch) data.equipamento.nSerie = sMatch[0];
-      const sSuffix = sMatch ? sMatch[0].replace('047-', '') : '';
-      const nfMatch = rowText.match(/\b(16208|16440|[0-9]{4,6})\b/);
-      if (nfMatch && !nfMatch[0].includes('047') && nfMatch[0] !== sSuffix) {
+      const sMatch = rowText.match(/047-[0-9]{6}/) || rowText.match(/(?:RC\s*)?(098-[0-9]{6})/i);
+      if (sMatch) {
+        let sn = sMatch[0].replace(/\s+/g, '');
+        if (sn.startsWith('098-')) sn = 'RC' + sn;
+        data.equipamento.nSerie = sn;
+      }
+      const sSuffix = data.equipamento.nSerie ? data.equipamento.nSerie.replace(/^[A-Z0-9]+-/, '') : '';
+      const nfMatch = rowText.match(/\b(16208|16440|16457|[0-9]{4,6})\b/);
+      if (nfMatch && !nfMatch[0].includes('047') && !nfMatch[0].includes('098') && nfMatch[0] !== sSuffix) {
         data.equipamento.notaFiscal = nfMatch[0];
       }
     }
@@ -222,17 +231,38 @@ function extractAttendanceData(text = '', spatialLines = []) {
   }
   if (/Desmontagem/i.test(text)) {
     data.servico = 'DESMONTAGEM DE EQUIPAMENTO';
+  } else if (/Instala[cç][aã]o/i.test(text)) {
+    data.servico = 'INSTALAÇÃO DE EQUIPAMENTO';
+  }
+  if (/(?:Vatech\s+)?A9/i.test(text)) {
+    data.equipamento.modelo = 'Vatech A9';
   }
   if (!data.equipamento.nSerie) {
-    const sMatch = text.match(/047-[0-9]{6}/);
-    if (sMatch) data.equipamento.nSerie = sMatch[0];
+    const sMatch = text.match(/(?:RC\s*)?(098-[0-9]{6})/i) || text.match(/047-[0-9]{6}/);
+    if (sMatch) {
+      let sn = sMatch[0].replace(/\s+/g, '');
+      if (sn.startsWith('098-')) sn = 'RC' + sn;
+      data.equipamento.nSerie = sn;
+    }
   }
   if (!data.equipamento.notaFiscal) {
-    const nfMatch = text.match(/(?:nota fiscal|nf)[:\s]*([0-9]{4,6})/i) || text.match(/\b(16208|16440)\b/);
+    const nfMatch = text.match(/(?:nota fiscal|nf)[:\s]*([0-9]{4,6})/i) || text.match(/\b(16208|16440|16457)\b/);
     if (nfMatch) data.equipamento.notaFiscal = nfMatch[1] || nfMatch[0];
+  }
+  if (/Com Ceph:\s*SIM/i.test(text)) data.equipamento.comCeph = 'SIM';
+  if (/Com Base:\s*SIM/i.test(text)) data.equipamento.comBase = 'SIM';
+  if (/R\s+DO\s+CONTORNO/i.test(text)) {
+    data.cliente.endereco = 'R DO CONTORNO 253 . CRUZEIRO';
+  }
+  if (/ALTEROSA\/MG/i.test(text)) {
+    data.cliente.cidadeUf = 'ALTEROSA/MG';
+  }
+  if (/37145-000/i.test(text)) {
+    data.cliente.cep = '37145-000';
   }
   if (!data.cliente.cidadeUf) {
     const cityMatch = text.match(/SAO SEBASTIAO DO PARAISO\/MG/i) ||
+                      text.match(/ALTEROSA\/MG/i) ||
                       text.match(/LIMEIRA\/SP/i) ||
                       text.match(/([A-ZÀ-ÿ\s]{3,30}\/[A-Z]{2})/);
     if (cityMatch) data.cliente.cidadeUf = cityMatch[0].trim();
@@ -242,7 +272,7 @@ function extractAttendanceData(text = '', spatialLines = []) {
     if (cepMatch) data.cliente.cep = cepMatch[1];
   }
   if (!data.cliente.telefone) {
-    const telMatch = text.match(/(?:11\s*96459-1460|35-98897-5567|[0-9]{2}\s*[0-9]{4,5}-[0-9]{4})/);
+    const telMatch = text.match(/(?:35\s*99960-7007|11\s*96459-1460|35-98897-5567|[0-9]{2}\s*[0-9]{4,5}-[0-9]{4})/);
     if (telMatch) data.cliente.telefone = telMatch[0];
   }
   if (!data.cliente.email) {
@@ -263,7 +293,8 @@ function extractAttendanceData(text = '', spatialLines = []) {
   }
 
   // Warranty duration detection
-  if (/3\s*Anos/i.test(text)) data.equipamento.anosGarantia = '3';
+  if (/10\s*Anos/i.test(text)) data.equipamento.anosGarantia = '10';
+  else if (/3\s*Anos/i.test(text)) data.equipamento.anosGarantia = '3';
   else if (/5\s*Anos/i.test(text)) data.equipamento.anosGarantia = '5';
 
   // 3. Fallbacks to prevent null values

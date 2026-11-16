@@ -274,6 +274,22 @@ app.get('/api/load-full-sequence', async (req, res) => {
 app.get('/workflow/:id', (req, res) => {
   const batch = storage.getBatchById(req.params.id) || storage.getAttendanceById(req.params.id);
   const attendanceData = batch?.attendanceData || extractAttendanceData('');
+  if (batch) {
+    if (batch.idAtendimento) attendanceData.idAtendimento = batch.idAtendimento;
+    if (batch.tipoServico) attendanceData.tipoServico = batch.tipoServico.toLowerCase();
+    if (batch.equipamentoModelo) {
+      attendanceData.equipamento = attendanceData.equipamento || {};
+      attendanceData.equipamento.modelo = batch.equipamentoModelo;
+    }
+    if (batch.equipamentoSerie) {
+      attendanceData.equipamento = attendanceData.equipamento || {};
+      attendanceData.equipamento.nSerie = batch.equipamentoSerie;
+    }
+    if (batch.equipamentoNF) {
+      attendanceData.equipamento = attendanceData.equipamento || {};
+      attendanceData.equipamento.notaFiscal = batch.equipamentoNF;
+    }
+  }
   const savedPayload = batch?.savedPayload || batch?.payload;
   const html = renderMasterWorkflowHtml(attendanceData, { savedPayload });
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -287,6 +303,22 @@ app.get('/workflow/:id', (req, res) => {
 app.get('/app/:id', (req, res) => {
   const batch = storage.getBatchById(req.params.id) || storage.getAttendanceById(req.params.id);
   const attendanceData = batch?.attendanceData || extractAttendanceData('');
+  if (batch) {
+    if (batch.idAtendimento) attendanceData.idAtendimento = batch.idAtendimento;
+    if (batch.tipoServico) attendanceData.tipoServico = batch.tipoServico.toLowerCase();
+    if (batch.equipamentoModelo) {
+      attendanceData.equipamento = attendanceData.equipamento || {};
+      attendanceData.equipamento.modelo = batch.equipamentoModelo;
+    }
+    if (batch.equipamentoSerie) {
+      attendanceData.equipamento = attendanceData.equipamento || {};
+      attendanceData.equipamento.nSerie = batch.equipamentoSerie;
+    }
+    if (batch.equipamentoNF) {
+      attendanceData.equipamento = attendanceData.equipamento || {};
+      attendanceData.equipamento.notaFiscal = batch.equipamentoNF;
+    }
+  }
   const savedPayload = batch?.savedPayload || batch?.payload;
   const html = renderMasterWorkflowHtml(attendanceData, { savedPayload });
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
